@@ -21,4 +21,4 @@ others:
 
 ## License
 
-[GPLv2](license.txt)
+[MIT](license.txt)

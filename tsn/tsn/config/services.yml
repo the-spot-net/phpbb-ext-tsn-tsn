@@ -1,0 +1,78 @@
+imports:
+    - { resource: parameters.yml }
+
+services:
+    tsn.tsn.controller.main:
+        class: tsn\tsn\controller\main_controller
+        arguments:
+            - '@config'
+            - '@controller.helper'
+            - '@template'
+            - '@language'
+
+    tsn.tsn.controller.acp:
+        class: tsn\tsn\controller\acp_controller
+        arguments:
+            - '@config'
+            - '@language'
+            - '@log'
+            - '@request'
+            - '@template'
+            - '@user'
+
+    tsn.tsn.controller.mcp:
+        class: tsn\tsn\controller\mcp_controller
+        arguments:
+            - '@language'
+            - '@request'
+            - '@template'
+
+    tsn.tsn.controller.ucp:
+        class: tsn\tsn\controller\ucp_controller
+        arguments:
+            - '@dbal.conn'
+            - '@language'
+            - '@request'
+            - '@template'
+            - '@user'
+
+    tsn.tsn.service:
+        class: tsn\tsn\service
+        arguments:
+            - '@user'
+            - '%tsn.tsn.tables.tsn_table%'
+
+    tsn.tsn.listener:
+        class: tsn\tsn\event\main_listener
+        arguments:
+            - '@language'
+            - '@controller.helper'
+            - '@template'
+            - '%core.php_ext%'
+        tags:
+            - { name: event.listener }
+
+    tsn.tsn.command.sample:
+        class: tsn\tsn\console\command\sample
+        arguments:
+            - '@user'
+        tags:
+            - { name: console.command }
+
+    tsn.tsn.cron.task.sample:
+        class: tsn\tsn\cron\task\sample
+        arguments:
+            - '@config'
+        calls:
+            - [set_name, [tsn.tsn.cron.task.sample]]
+        tags:
+            - { name: cron.task }
+
+    tsn.tsn.notification.type.sample:
+        class: tsn\tsn\notification\type\sample
+        shared: false # service MUST not be shared for this to work!
+        parent: notification.type.base
+        calls:
+            - [set_controller_helper, ['@controller.helper']]
+        tags:
+            - { name: notification.type }

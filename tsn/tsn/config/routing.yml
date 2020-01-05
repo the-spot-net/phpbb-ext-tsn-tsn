@@ -1,0 +1,3 @@
+tsn_tsn_controller:
+    path: /demo/{name}
+    defaults: { _controller: tsn.tsn.controller.main:handle }

@@ -1,0 +1,2 @@
+parameters:
+    tsn.tsn.tables.tsn_table: '%core.table_prefix%tsn_tsn_table'

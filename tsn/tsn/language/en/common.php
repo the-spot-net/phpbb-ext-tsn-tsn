@@ -44,6 +44,9 @@ $lang = array_merge($lang, [
     'REGISTER'                               => 'Register',
     'SIGN_IN'                                => 'Sign In',
     'WELCOME_VISITOR'                        => 'Welcome!',
+    'TSN_VERSION'                            => 'tsn v9.0.0.328',
+    'TSN_VERSION_LINK'                       => 'https://github.com/the-spot-net/tsn8/releases/latest',
+    'COPYRIGHT_CREDITS'                      => '&copy; 2003 - ' . date('Y', time()) . ' <a href="https://the-spot.net" target="_blank">the-spot.net</a>. | Developed by <a href="https://thepizzy.net/blog" target="_blank">@neotsn</a> | Powered by <a href="https://www.phpbb.com" target="_blank">these guys</a>',
 
     // Need Verification: General
     'ABOUT'                                  => 'About',
@@ -52,7 +55,7 @@ $lang = array_merge($lang, [
     'BY'                                     => 'By',
     'CLICK_TO_CONFIRM'                       => 'Click to Confirm',
     'CONTINUE_READING'                       => 'Continue Reading',
-    'COPYRIGHT_CREDITS'                      => '&copy; Copyright ' . date('Y', time()) . ' <a href="https://the-spot.net" target="_blank">the-spot.net</a>. All Rights Reserved.<br />Developed by <a href="https://twitter.com/neotsn" target="_blank">@neotsn</a> of <a href="https://thepizzy.net/blog" target="_blank">thepizzy.net</a> | Powered by <a href="https://www.phpbb.com" target="_blank">these guys</a>',
+
     'DISABLE'                                => 'Disable',
     'ENABLE'                                 => 'Enable',
     'GROUP_LEADERS'                          => 'Group Leaders',
@@ -75,8 +78,7 @@ $lang = array_merge($lang, [
     'SMILIES'                                => 'Emojis',
     'SPECIAL_REPORT_VIEWS_COMMENTS_COUNT'    => 'This post has been viewed %1$s times with %2$s comments',
     'START_THE_CONVERSATION'                 => 'How about starting a new discussion in the forums?',
-    'TSN_VERSION'                            => 'tsn v9.0.0.328',
-    'TSN_VERSION_LINK'                       => 'https://github.com/the-spot-net/tsn8/releases/latest',
+
     'TSNBLOG'                                => 'tsnBlog',
     'TSNFORUMS'                              => 'tsnForums',
     'TSNSPECIALREPORT'                       => '#tsnSpecialReport',

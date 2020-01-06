@@ -41,6 +41,6 @@ if (empty($lang) || !is_array($lang)) {
 
 $lang = array_merge($lang, [
     'ACL_A_NEW_TSN_TSN' => 'Can use this the-spot.net admin feature',
-    'ACL_M_NEW_TSN_TSN' => 'Can use this the-spot.net moderator feature',
+//    'ACL_M_NEW_TSN_TSN' => 'Can use this the-spot.net moderator feature',
     //	'ACL_U_NEW_TSN_TSN'	=> 'Can use this the-spot.net user feature',
 ]);

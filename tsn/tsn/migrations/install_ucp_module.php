@@ -10,14 +10,14 @@
 
 namespace tsn\tsn\migrations;
 
-class install_mcp_module extends \phpbb\db\migration\migration
+class install_ucp_module extends \phpbb\db\migration\migration
 {
 	public function effectively_installed()
 	{
 		$sql = 'SELECT module_id
 			FROM ' . $this->table_prefix . "modules
-			WHERE module_class = 'mcp'
-				AND module_langname = 'MCP_TSN_TITLE'";
+			WHERE module_class = 'ucp'
+				AND module_langname = 'UCP_TSN_TITLE'";
 		$result = $this->db->sql_query($sql);
 		$module_id = $this->db->sql_fetchfield('module_id');
 		$this->db->sql_freeresult($result);
@@ -27,23 +27,23 @@ class install_mcp_module extends \phpbb\db\migration\migration
 
 	public static function depends_on()
 	{
-		return array('\phpbb\db\migration\data\v320\v320');
+		return array('\tsn\tsn\migrations\install_sample_schema');
 	}
 
 	public function update_data()
 	{
 		return array(
 			array('module.add', array(
-				'mcp',
+				'ucp',
 				0,
-				'MCP_TSN_TITLE'
+				'UCP_TSN_TITLE'
 			)),
 			array('module.add', array(
-				'mcp',
-				'MCP_TSN_TITLE',
+				'ucp',
+				'UCP_TSN_TITLE',
 				array(
-					'module_basename'	=> '\tsn\tsn\mcp\main_module',
-					'modes'				=> array('front'),
+					'module_basename'	=> '\tsn\tsn\ucp\main_module',
+					'modes'				=> array('settings'),
 				),
 			)),
 		);

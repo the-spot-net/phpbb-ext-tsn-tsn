@@ -35,6 +35,10 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'MCP_TSN'				=> 'Front',
-	'MCP_TSN_TITLE'		=> 'the-spot.net Module',
+	'UCP_TSN'				=> 'Settings',
+	'UCP_TSN_TITLE'		=> 'the-spot.net Module',
+	'UCP_TSN_USER'			=> 'the-spot.net user',
+	'UCP_TSN_USER_EXPLAIN'	=> 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+	'UCP_TSN_SAVED'		=> 'Settings have been saved successfully!',
+	'NOTIFICATION_TYPE_TSN'	=> 'Use the-spot.net notifications',
 ));

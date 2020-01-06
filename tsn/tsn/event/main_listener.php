@@ -83,7 +83,7 @@ class main_listener implements EventSubscriberInterface
         $permissions = $event['permissions'];
 
         $permissions['a_new_tsn_tsn'] = ['lang' => 'ACL_A_NEW_TSN_TSN', 'cat' => 'misc'];
-        $permissions['m_new_tsn_tsn'] = ['lang' => 'ACL_M_NEW_TSN_TSN', 'cat' => 'post_actions'];
+//        $permissions['m_new_tsn_tsn'] = ['lang' => 'ACL_M_NEW_TSN_TSN', 'cat' => 'post_actions'];
 //        $permissions['u_new_tsn_tsn'] = ['lang' => 'ACL_U_NEW_TSN_TSN', 'cat' => 'post'];
 
         $event['permissions'] = $permissions;

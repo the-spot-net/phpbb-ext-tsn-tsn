@@ -115,21 +115,21 @@ class install_sample_data extends migration
             // Add new permissions
             ['permission.add', ['a_new_tsn_tsn']], // New admin permission
             //            ['permission.add', ['m_new_tsn_tsn']], // New moderator permission
-            ['permission.add', ['u_new_tsn_tsn']], // New user permission
+            //            ['permission.add', ['u_new_tsn_tsn']], // New user permission
 
             // array('permission.add', array('a_copy', true, 'a_existing')), // New admin permission a_copy, copies permission settings from a_existing
 
             // Set our new permissions
             ['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_new_tsn_tsn']], // Give ROLE_ADMIN_FULL a_new_tsn_tsn permission
-//            ['permission.permission_set', ['ROLE_USER_FULL', 'u_new_tsn_tsn']], // Give ROLE_USER_FULL u_new_tsn_tsn permission
-//            ['permission.permission_set', ['ROLE_USER_STANDARD', 'u_new_tsn_tsn']], // Give ROLE_USER_STANDARD u_new_tsn_tsn permission
-//            ['permission.permission_set', ['REGISTERED', 'u_new_tsn_tsn', 'group']], // Give REGISTERED group u_new_tsn_tsn permission
-//            ['permission.permission_set', ['REGISTERED_COPPA', 'u_new_tsn_tsn', 'group', false]], // Set u_new_tsn_tsn to never for REGISTERED_COPPA
+            //            ['permission.permission_set', ['ROLE_USER_FULL', 'u_new_tsn_tsn']], // Give ROLE_USER_FULL u_new_tsn_tsn permission
+            //            ['permission.permission_set', ['ROLE_USER_STANDARD', 'u_new_tsn_tsn']], // Give ROLE_USER_STANDARD u_new_tsn_tsn permission
+            //            ['permission.permission_set', ['REGISTERED', 'u_new_tsn_tsn', 'group']], // Give REGISTERED group u_new_tsn_tsn permission
+            //            ['permission.permission_set', ['REGISTERED_COPPA', 'u_new_tsn_tsn', 'group', false]], // Set u_new_tsn_tsn to never for REGISTERED_COPPA
 
             // Add new permission roles
             ['permission.role_add', ['tsn admin role', 'a_', 'a new role for admins']], // New role "tsn admin role"
-                        ['permission.role_add', ['tsn moderator role', 'm_', 'a new role for moderators']], // New role "tsn moderator role"
-//            ['permission.role_add', ['tsn user role', 'u_', 'a new role for users']], // New role "tsn user role"
+            //            ['permission.role_add', ['tsn moderator role', 'm_', 'a new role for moderators']], // New role "tsn moderator role"
+            //            ['permission.role_add', ['tsn user role', 'u_', 'a new role for users']], // New role "tsn user role"
 
             // Call a custom callable function to perform more complex operations.
             //            ['custom', [[$this, 'sample_callable_install']]],

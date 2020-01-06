@@ -36,11 +36,11 @@ services:
             - '@template'
             - '@user'
 
-    tsn.tsn.service:
-        class: tsn\tsn\service
-        arguments:
-            - '@user'
-            - '%tsn.tsn.tables.tsn_table%'
+#    tsn.tsn.service:
+#        class: tsn\tsn\service
+#        arguments:
+#            - '@user'
+#            - '%tsn.tsn.tables.tsn_table%'
 
     tsn.tsn.listener:
         class: tsn\tsn\event\main_listener

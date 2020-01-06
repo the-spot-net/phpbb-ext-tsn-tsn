@@ -41,6 +41,7 @@
         <div class="mdc-list">
             {% EVENT navbar_header_quick_links_before %}
 
+            <!-- TODO All this needs to become navrow, similar to forumrow -->
             <a aria-current="page" class="mdc-list-item mdc-list-item--activated" href="{{ U_TSN_INDEX }}">
                 <i aria-hidden="true" class="material-icons mdc-list-item__graphic">home</i>
                 <span class="mdc-list-item__text">My Spot</span>
@@ -83,7 +84,7 @@
                     <h6 class="mdc-list-group__subheader">{{ row.FORUM_NAME }}</h6>
                 {% elseif row.S_IS_LINK %}
                     <a class="mdc-list-item" href="{{ row.U_VIEWFORUM }}" target="_blank">
-                        {% if row.FORUM_IMAGE_SRC %}<img alt="{{ FORUM_FOLDER_IMG_ALT }}" class="mdc-list-item__graphic tsn-navigation-image" src="{{ row.FORUM_IMAGE_SRC }}"/>{% endif %}
+                        {% if row.FORUM_IMAGE_SRC %}<img alt="{{ row.FORUM_FOLDER_IMG_ALT }}" class="mdc-list-item__graphic tsn-navigation-image" src="{{ row.FORUM_IMAGE_SRC }}"/>{% endif %}
                         <span class="mdc-list-item__text">{{ row.FORUM_NAME }}</span>
                         <i aria-hidden="true" class="material-icons mdc-list-item__meta">open_in_new</i>
                     </a>

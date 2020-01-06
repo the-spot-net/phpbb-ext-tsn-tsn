@@ -121,15 +121,15 @@ class install_sample_data extends migration
 
             // Set our new permissions
             ['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_new_tsn_tsn']], // Give ROLE_ADMIN_FULL a_new_tsn_tsn permission
-            ['permission.permission_set', ['ROLE_USER_FULL', 'u_new_tsn_tsn']], // Give ROLE_USER_FULL u_new_tsn_tsn permission
-            ['permission.permission_set', ['ROLE_USER_STANDARD', 'u_new_tsn_tsn']], // Give ROLE_USER_STANDARD u_new_tsn_tsn permission
-            ['permission.permission_set', ['REGISTERED', 'u_new_tsn_tsn', 'group']], // Give REGISTERED group u_new_tsn_tsn permission
-            ['permission.permission_set', ['REGISTERED_COPPA', 'u_new_tsn_tsn', 'group', false]], // Set u_new_tsn_tsn to never for REGISTERED_COPPA
+//            ['permission.permission_set', ['ROLE_USER_FULL', 'u_new_tsn_tsn']], // Give ROLE_USER_FULL u_new_tsn_tsn permission
+//            ['permission.permission_set', ['ROLE_USER_STANDARD', 'u_new_tsn_tsn']], // Give ROLE_USER_STANDARD u_new_tsn_tsn permission
+//            ['permission.permission_set', ['REGISTERED', 'u_new_tsn_tsn', 'group']], // Give REGISTERED group u_new_tsn_tsn permission
+//            ['permission.permission_set', ['REGISTERED_COPPA', 'u_new_tsn_tsn', 'group', false]], // Set u_new_tsn_tsn to never for REGISTERED_COPPA
 
             // Add new permission roles
             ['permission.role_add', ['tsn admin role', 'a_', 'a new role for admins']], // New role "tsn admin role"
-            //            ['permission.role_add', ['tsn moderator role', 'm_', 'a new role for moderators']], // New role "tsn moderator role"
-            ['permission.role_add', ['tsn user role', 'u_', 'a new role for users']], // New role "tsn user role"
+                        ['permission.role_add', ['tsn moderator role', 'm_', 'a new role for moderators']], // New role "tsn moderator role"
+//            ['permission.role_add', ['tsn user role', 'u_', 'a new role for users']], // New role "tsn user role"
 
             // Call a custom callable function to perform more complex operations.
             //            ['custom', [[$this, 'sample_callable_install']]],

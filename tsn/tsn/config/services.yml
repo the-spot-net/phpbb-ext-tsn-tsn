@@ -5,10 +5,17 @@ services:
     tsn.tsn.controller.main:
         class: tsn\tsn\controller\main_controller
         arguments:
+            - '@auth'
+            - '@auth.provider_collection'
+            - '@captcha.factory'
             - '@config'
+            - '@dbal.conn'
             - '@controller.helper'
-            - '@template'
             - '@language'
+            - '@path_helper'
+            - '@request'
+            - '@template'
+            - '@user'
 
     tsn.tsn.controller.acp:
         class: tsn\tsn\controller\acp_controller

@@ -2,7 +2,7 @@
 /**
  * the-spot.net. An extension for the phpBB Forum Software package.
  * @copyright (c) 2020, @neotsn, https://about.me/neotsn
- * @license       GNU General Public License, version 2 (GPL-2.0)
+ * @license       MIT
  */
 
 if (!defined('IN_PHPBB')) {
@@ -41,6 +41,6 @@ if (empty($lang) || !is_array($lang)) {
 
 $lang = array_merge($lang, [
     'ACL_A_NEW_TSN_TSN' => 'Can use this the-spot.net admin feature',
-//    'ACL_M_NEW_TSN_TSN' => 'Can use this the-spot.net moderator feature',
-    //	'ACL_U_NEW_TSN_TSN'	=> 'Can use this the-spot.net user feature',
+    //    'ACL_M_NEW_TSN_TSN' => 'Can use this the-spot.net moderator feature',
+    //    'ACL_U_NEW_TSN_TSN' => 'Can use this the-spot.net user feature',
 ]);

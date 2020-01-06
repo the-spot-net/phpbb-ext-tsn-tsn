@@ -1,3 +1,35 @@
 tsn_tsn_controller:
-    path: /demo/{name}
-    defaults: { _controller: tsn.tsn.controller.main:handle }
+    pattern: /tsn
+    defaults: { _controller: tsn.tsn.controller.main:doIndex }
+
+tsn_tsn_login:
+    pattern: /tsn/login
+    defaults: { _controller: tsn.tsn.controller:doLogin }
+
+#tsn_tsn_ajax:
+#    pattern: /tsn/ajax/{route}
+#    defaults: { _controller: tsn.tsn.controller:ajax, route: "index" }
+#
+#tsn_tsn_forum:
+#    pattern: /tsn/forum/{id}
+#    defaults: { _controller: tsn.tsn.controller:viewForum }
+#    requirements:
+#        id: \d+
+#
+#tsn_tsn_topic:
+#    pattern: /tsn/topic/{id}
+#    defaults: { _controller: tsn.tsn.controller:viewTopic }
+#    requirements:
+#        id: \d+
+#
+#tsn_tsn_user:
+#    pattern: /tsn/user/{id}
+#    defaults: { _controller: tsn.tsn.controller:viewProfile }
+#    requirements:
+#        id: \d+
+#
+#tsn_tsn_member:
+#    pattern: /tsn/member/{id}
+#    defaults: { _controller: tsn.tsn.controller:viewMember }
+#    requirements:
+#        id: \d+

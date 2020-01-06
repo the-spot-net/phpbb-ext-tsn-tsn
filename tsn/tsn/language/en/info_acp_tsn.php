@@ -1,21 +1,16 @@
 <?php
 /**
- *
  * the-spot.net. An extension for the phpBB Forum Software package.
- *
  * @copyright (c) 2020, @neotsn, https://about.me/neotsn
- * @license GNU General Public License, version 2 (GPL-2.0)
- *
+ * @license       MIT
  */
 
-if (!defined('IN_PHPBB'))
-{
-	exit;
+if (!defined('IN_PHPBB')) {
+    exit;
 }
 
-if (empty($lang) || !is_array($lang))
-{
-	$lang = array();
+if (empty($lang) || !is_array($lang)) {
+    $lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -34,9 +29,26 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 
-$lang = array_merge($lang, array(
-	'ACP_TSN_TITLE'	=> 'the-spot.net Module',
-	'ACP_TSN'			=> 'the-spot.net Settings',
+$lang = array_merge($lang, [
+    'ACP_TSN_TITLE' => 'the-spot.net Module',
+    'ACP_TSN'       => 'the-spot.net Settings',
 
-	'LOG_ACP_TSN_SETTINGS'		=> '<strong>the-spot.net settings updated</strong>',
-));
+    'LOG_ACP_TSN_SETTINGS'     => '<strong>the-spot.net settings updated</strong>',
+
+    // Updated Items: ACP
+    'ACP_TSN_PLUGIN_SETTINGS'  => 'tsn Feature Settings',
+    'ACP_TSN_ENABLE_EXTENSION' => 'Enable tsn Features',
+
+    'ACP_TSN_MYSPOT_SETTINGS'     => '"My Spot" Module Settings',
+    'ACP_TSN_ENABLE_MYSPOT'       => 'Display "My Spot" Module',
+    'ACP_TSN_ENABLE_NEW_POSTS'    => 'Display New Posts Module',
+    'ACP_TSN_ENABLE_MINI_FORUMS'  => 'Display Mini Forum Index Module',
+    'ACP_TSN_ENABLE_MINI_PROFILE' => 'Display Mini Profile Module',
+
+    'ACP_TSN_MYSPOT_SPECIAL_REPORT_SETTINGS' => '"My Spot :: Special Report" Module Settings',
+    'ACP_TSN_ENABLE_SPECIAL_REPORT'          => 'Display Special Report Module',
+    'ACP_TSN_SPECIAL_REPORT_FORUM_ID'        => 'Forum ID to use in "Special Report" feature',
+    'ACP_TSN_SPECIAL_REPORT_EXCERPT_WORDS'   => 'Word Limit for "Special Report" excerpt',
+
+    'ACP_TSN_SETTING_SAVED' => 'Settings have been saved successfully!',
+]);

@@ -2,7 +2,7 @@
 /**
  * the-spot.net. An extension for the phpBB Forum Software package.
  * @copyright (c) 2020, @neotsn, https://about.me/neotsn
- * @license       GNU General Public License, version 2 (GPL-2.0)
+ * @license       MIT
  */
 
 namespace tsn\tsn\migrations;
@@ -107,10 +107,10 @@ class install_sample_data extends migration
         return [
             // Add new config table settings
             ['config.add', ['tsn_tsn_sample_int', 0]],
-            ['config.add', ['tsn_tsn_sample_str', '']],
+            //            ['config.add', ['tsn_tsn_sample_str', '']],
 
             // Add a new config_text table setting
-            ['config_text.add', ['tsn_tsn_sample', '']],
+            //            ['config_text.add', ['tsn_tsn_sample', '']],
 
             // Add new permissions
             ['permission.add', ['a_new_tsn_tsn']], // New admin permission

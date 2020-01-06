@@ -52,12 +52,12 @@ services:
         tags:
             - { name: event.listener }
 
-    tsn.tsn.command.sample:
-        class: tsn\tsn\console\command\sample
-        arguments:
-            - '@user'
-        tags:
-            - { name: console.command }
+#    tsn.tsn.command.sample:
+#        class: tsn\tsn\console\command\sample
+#        arguments:
+#            - '@user'
+#        tags:
+#            - { name: console.command }
 
 #    tsn.tsn.cron.task.sample:
 #        class: tsn\tsn\cron\task\sample

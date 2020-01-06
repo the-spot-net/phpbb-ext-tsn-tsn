@@ -89,11 +89,10 @@
 {% include '@tsn_tsn/mdc_topAppBar.html' %}
 {% include '@tsn_tsn/mdc_leftNavigationDrawer.html' %}
 
-<div class="mdc-drawer-app-content mdc-top-app-bar--fixed-adjust">
-    <main class="main-content">
+<main class="mdc-drawer-app-content mdc-top-app-bar--fixed-adjust">
 
-        {% if S_USER_INACTIVE %}
-        <!--        <span class="tsn8_error_message"><b>{{ lang('USER_IS_INACTIVE') }}</b><br/>{{ lang('INACTIVE_REASON') }}: {{ USER_INACTIVE_REASON }}</span>-->
-        {% endif %}
+    {% if S_USER_INACTIVE %}
+    <!--        <span class="tsn8_error_message"><b>{{ lang('USER_IS_INACTIVE') }}</b><br/>{{ lang('INACTIVE_REASON') }}: {{ USER_INACTIVE_REASON }}</span>-->
+    {% endif %}
 
 

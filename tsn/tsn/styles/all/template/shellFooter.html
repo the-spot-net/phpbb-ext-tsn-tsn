@@ -1,22 +1,19 @@
 {% EVENT overall_footer_content_after %}
 <!-- @formatter:off -->
-    <div class="mdc-layout-grid">
-        <div class="mdc-layout-grid__inner">
-            <div class="mdc-layout-grid__cell">Bottom Left</div>
-            <div class="mdc-layout-grid__cell">Bottom Center</div>
-            <div class="mdc-layout-grid__cell">Bottom Right</div>
-        </div>
+    <div>
+        <a accesskey="z" class="anchor" id="bottom"></a>
+        {% if not S_IS_BOT %}{{ RUN_CRON_TASK }}{% endif %}
     </div>
-
-    </main>
-</div>
+</main>
+<footer class="mdc-typography--caption text-center">
+    <a href="{{ lang('TSN_VERSION_LINK') }}">{{ lang('TSN_VERSION') }}</a> | {{ lang('COPYRIGHT_CREDITS') }}
+</footer>
 <!-- @formatter:on -->
 
 {% EVENT overall_footer_page_body_after %}
 
 <!--<div class="page-footer" id="page-footer" role="contentinfo">-->
 <!--    &lt;!&ndash; INCLUDE navbar_footer.html &ndash;&gt;-->
-
 <!--    <div class="copyright">-->
 <!--        &lt;!&ndash; EVENT overall_footer_copyright_prepend &ndash;&gt;-->
 <!--        <p class="footer-row">-->
@@ -48,11 +45,9 @@
 <!--        </p>-->
 <!--        &lt;!&ndash; ENDIF &ndash;&gt;-->
 <!--    </div>-->
-
 <!--    <div class="darkenwrapper" data-ajax-error-text="{{ lang('AJAX_ERROR_TEXT') }}" data-ajax-error-text-abort="{{ lang('AJAX_ERROR_TEXT_ABORT') }}" data-ajax-error-text-parsererror="{{ lang('AJAX_ERROR_TEXT_PARSERERROR') }}" data-ajax-error-text-timeout="{{ lang('AJAX_ERROR_TEXT_TIMEOUT') }}" data-ajax-error-title="{{ lang('AJAX_ERROR_TITLE') }}" id="darkenwrapper">-->
 <!--        <div class="darken" id="darken">&nbsp;</div>-->
 <!--    </div>-->
-
 <!--    <div class="phpbb_alert" data-l-err="{{ lang('ERROR') }}" data-l-timeout-processing-req="{{ lang('TIMEOUT_PROCESSING_REQ') }}" id="phpbb_alert">-->
 <!--        <a class="alert_close" href="#">-->
 <!--            <i aria-hidden="true" class="icon fa-times-circle fa-fw"></i>-->
@@ -67,20 +62,12 @@
 <!--        <div class="alert_text"></div>-->
 <!--    </div>-->
 <!--</div>-->
-
 <!--</div>-->
-
-<div>
-    <a accesskey="z" class="anchor" id="bottom"></a>
-    {% if not S_IS_BOT %}{{ RUN_CRON_TASK }}{% endif %}
-</div>
-
-<script src="{{ T_JQUERY_LINK }}"></script>
-
+<!--<script src="{{ T_JQUERY_LINK }}"></script>-->
 <!--{% if S_ALLOW_CDN %}-->
 <!--<script>window.jQuery || document.write('\x3Cscript src="{{ T_ASSETS_PATH }}/javascript/jquery.min.js?assets_version={{ T_ASSETS_VERSION }}">\x3C/script>');</script>-->
 <!--{% endif %}-->
-<script src="{{ T_ASSETS_PATH }}/javascript/core.js?assets_version={{ T_ASSETS_VERSION }}"></script>
+<!--<script src="{{ T_ASSETS_PATH }}/javascript/core.js?assets_version={{ T_ASSETS_VERSION }}"></script>-->
 
 <!-- IINCLUDEJS forum_fn.js -->
 <!-- IINCLUDEJS ajax.js -->

@@ -59,14 +59,14 @@ services:
         tags:
             - { name: console.command }
 
-    tsn.tsn.cron.task.sample:
-        class: tsn\tsn\cron\task\sample
-        arguments:
-            - '@config'
-        calls:
-            - [set_name, [tsn.tsn.cron.task.sample]]
-        tags:
-            - { name: cron.task }
+#    tsn.tsn.cron.task.sample:
+#        class: tsn\tsn\cron\task\sample
+#        arguments:
+#            - '@config'
+#        calls:
+#            - [set_name, [tsn.tsn.cron.task.sample]]
+#        tags:
+#            - { name: cron.task }
 
 #    tsn.tsn.notification.type.sample:
 #        class: tsn\tsn\notification\type\sample

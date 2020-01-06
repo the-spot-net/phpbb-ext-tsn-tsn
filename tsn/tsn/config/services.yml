@@ -20,21 +20,21 @@ services:
             - '@template'
             - '@user'
 
-    tsn.tsn.controller.mcp:
-        class: tsn\tsn\controller\mcp_controller
-        arguments:
-            - '@language'
-            - '@request'
-            - '@template'
+#    tsn.tsn.controller.mcp:
+#        class: tsn\tsn\controller\mcp_controller
+#        arguments:
+#            - '@language'
+#            - '@request'
+#            - '@template'
 
-    tsn.tsn.controller.ucp:
-        class: tsn\tsn\controller\ucp_controller
-        arguments:
-            - '@dbal.conn'
-            - '@language'
-            - '@request'
-            - '@template'
-            - '@user'
+#    tsn.tsn.controller.ucp:
+#        class: tsn\tsn\controller\ucp_controller
+#        arguments:
+#            - '@dbal.conn'
+#            - '@language'
+#            - '@request'
+#            - '@template'
+#            - '@user'
 
 #    tsn.tsn.service:
 #        class: tsn\tsn\service

@@ -1,21 +1,16 @@
 <?php
 /**
- *
  * the-spot.net. An extension for the phpBB Forum Software package.
- *
  * @copyright (c) 2020, @neotsn, https://about.me/neotsn
- * @license GNU General Public License, version 2 (GPL-2.0)
- *
+ * @license       GNU General Public License, version 2 (GPL-2.0)
  */
 
-if (!defined('IN_PHPBB'))
-{
-	exit;
+if (!defined('IN_PHPBB')) {
+    exit;
 }
 
-if (empty($lang) || !is_array($lang))
-{
-	$lang = array();
+if (empty($lang) || !is_array($lang)) {
+    $lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -35,18 +30,17 @@ if (empty($lang) || !is_array($lang))
 //
 
 /**
-*	EXTENSION-DEVELOPERS PLEASE NOTE
-*
-*	You are able to put your permission sets into your extension.
-*	The permissions logic should be added via the 'core.permissions' event.
-*	You can easily add new permission categories, types and permissions, by
-*	simply merging them into the respective arrays.
-*	The respective language strings should be added into a language file, that
-*	start with 'permissions_', so they are automatically loaded within the ACP.
-*/
+ *    EXTENSION-DEVELOPERS PLEASE NOTE
+ *    You are able to put your permission sets into your extension.
+ *    The permissions logic should be added via the 'core.permissions' event.
+ *    You can easily add new permission categories, types and permissions, by
+ *    simply merging them into the respective arrays.
+ *    The respective language strings should be added into a language file, that
+ *    start with 'permissions_', so they are automatically loaded within the ACP.
+ */
 
-$lang = array_merge($lang, array(
-	'ACL_A_NEW_TSN_TSN'	=> 'Can use this the-spot.net admin feature',
-	'ACL_M_NEW_TSN_TSN'	=> 'Can use this the-spot.net moderator feature',
-	'ACL_U_NEW_TSN_TSN'	=> 'Can use this the-spot.net user feature',
-));
+$lang = array_merge($lang, [
+    'ACL_A_NEW_TSN_TSN' => 'Can use this the-spot.net admin feature',
+    'ACL_M_NEW_TSN_TSN' => 'Can use this the-spot.net moderator feature',
+    //	'ACL_U_NEW_TSN_TSN'	=> 'Can use this the-spot.net user feature',
+]);

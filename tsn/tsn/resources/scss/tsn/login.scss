@@ -1,0 +1,15 @@
+.tsn-login-form {
+
+  hgroup {
+    margin-top: $double-vertical;
+  }
+
+  .tsn-login-fieldset {
+    width: 350px;
+    margin-top: $full-vertical;
+    margin-bottom: $full-vertical;
+    padding: $double-vertical $double-side;
+    background-color: $white;
+    color: $mdc-theme-on-surface;
+  }
+}

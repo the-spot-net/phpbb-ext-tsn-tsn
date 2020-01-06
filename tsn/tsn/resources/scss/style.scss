@@ -10,6 +10,7 @@
 // wrapped in an ID tag so they override anything from external templates
 #tsn {
   @import "tsn/core";
-  @import "tsn/assets";
+  @import "tsn/shell";
+  @import "tsn/login";
 }
 

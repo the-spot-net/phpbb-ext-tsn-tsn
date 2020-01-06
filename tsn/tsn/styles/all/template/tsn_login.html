@@ -1,5 +1,110 @@
 {% include '@tsn_tsn/shellHeader.html' %}
 
-Login Page
+<!-- IF LOGIN_ERROR --><{LOGIN_ERROR}<!-- ENDIF -->
+<form class="grid-x grid-padding-y grid-padding-x tsn-login-form" action="{{ S_LOGIN_ACTION }}" method="post">
+    <div class="cell text-center">
+        <hgroup>
+            <h2 class="mdc-typography--headline2">{{ lang('WELCOME_VISITOR') }}</h2>
+            <p class="mdc-typography--headline4">We're glad you made it</p>
+        </hgroup>
+    </div>
+    <div class="cell shrink float-center">
+        <div class="tsn-login-fieldset mdc-elevation--z1">
+            <div class="grid-x grid-padding-y grid-padding-x">
+                <div class="cell text-center">
+                    <div class="mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+                        <input type="text" tabindex="1" name="{{ USERNAME_CREDENTIAL }}" id="{{ USERNAME_CREDENTIAL }}" class="mdc-text-field__input">
+                        <div class="mdc-notched-outline">
+                            <div class="mdc-notched-outline__leading"></div>
+                            <div class="mdc-notched-outline__notch">
+                                <label for="{{ USERNAME_CREDENTIAL }}" class="mdc-floating-label">{{ lang('USERNAME') }}</label>
+                            </div>
+                            <div class="mdc-notched-outline__trailing"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell text-center">
+                    <div class="mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+                        <input type="password" tabindex="2" id="{{ PASSWORD_CREDENTIAL }}" name="{{ PASSWORD_CREDENTIAL }}" class="mdc-text-field__input">
+                        <div class="mdc-notched-outline">
+                            <div class="mdc-notched-outline__leading"></div>
+                            <div class="mdc-notched-outline__notch">
+                                <label for="{{ PASSWORD_CREDENTIAL }}" class="mdc-floating-label">{{ lang('PASSWORD') }}</label>
+                            </div>
+                            <div class="mdc-notched-outline__trailing"></div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if CAPTCHA_TEMPLATE and S_CONFIRM_CODE %}
+                <div class="cell text-center">
+                    {% DEFINE CAPTCHA_TAB_INDEX = 3 %}
+                    {% include '{{ CAPTCHA_TEMPLATE }}' %}
+                </div>
+                {% endif %}
+
+                <!-- @formatter:off -->
+                {% if S_DISPLAY_FULL_LOGIN %}
+                    <div class="cell text-left">
+                        {% if S_AUTOLOGIN_ENABLED %}
+                        <div class="mdc-form-field">
+                            <div class="mdc-checkbox mdc-checkbox--touch">
+                                <input type="checkbox" class="mdc-checkbox__native-control" tabindex="4" id="autologin" name="autologin" />
+                                <div class="mdc-checkbox__background">
+                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                        <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                                    </svg>
+                                    <div class="mdc-checkbox__mixedmark"></div>
+                                </div>
+                                <div class="mdc-checkbox__ripple"></div>
+                            </div>
+                            <label for="autologin" class="mdc-typography--body2">{{ lang('LOG_ME_IN') }}</label>
+                        </div>
+                        {% endif %}
+                        <div class="mdc-form-field">
+                            <div class="mdc-checkbox mdc-checkbox--touch">
+                                <input type="checkbox" class="mdc-checkbox__native-control" tabindex="5" id="viewonline" name="viewonline" />
+                                <div class="mdc-checkbox__background">
+                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                        <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                                    </svg>
+                                    <div class="mdc-checkbox__mixedmark"></div>
+                                </div>
+                                <div class="mdc-checkbox__ripple"></div>
+                            </div>
+                            <label for="viewonline" class="mdc-typography--body2">{{ lang('HIDE_ME') }}</label>
+                        </div>
+                    </div>
+                {% endif %}
+                <!-- @formatter:on -->
+
+                <div class="cell text-center">
+                    <div class="mdc-touch-target-wrapper">
+                        <a class="mdc-button mdc-button--touch mdc-button--raised" href="{{ U_TSN_LOGIN }}">
+                            <div class="mdc-button__ripple"></div>
+                            <span class="mdc-button__label">{{ lang('SIGN_IN') }}</span>
+                            <div class="mdc-button__touch"></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ S_LOGIN_REDIRECT }}
+    {{ S_FORM_TOKEN_LOGIN }}
+    {{ S_HIDDEN_FIELDS }}
+
+    {% if not S_ADMIN_AUTH and PROVIDER_TEMPLATE_FILE %}
+    {% include '{{ PROVIDER_TEMPLATE_FILE }}' %}
+    {% endif %}
+
+    {% if S_DISPLAY_FULL_LOGIN and (U_SEND_PASSWORD or U_RESEND_ACTIVATION) %}
+    <div class="cell text-center">
+        {% if U_SEND_PASSWORD %}<a class="mdc-typography--body2" href="{{ U_SEND_PASSWORD }}">{{ lang('FORGOT_PASS') }}</a><br>{% endif %}
+        {% if U_RESEND_ACTIVATION %}<a class="mdc-typography--body2" href="{{ U_RESEND_ACTIVATION }}">{{ lang('RESEND_ACTIVATION') }}</a>{% endif %}
+    </div>
+    {% endif %}
+</form>
 
 {% include '@tsn_tsn/shellFooter.html' %}

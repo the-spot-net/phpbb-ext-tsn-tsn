@@ -16,11 +16,6 @@
 /*
  * Styles for the Content of the page
  */
-.main-content {
-  overflow: auto;
-  height: 100%;
-}
-
 .mdc-card,
 .mdc-card--outlined {
   @include mdc-card-fill-color($white);

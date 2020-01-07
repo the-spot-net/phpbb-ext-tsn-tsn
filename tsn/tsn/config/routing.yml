@@ -1,4 +1,4 @@
-tsn_tsn_controller:
+tsn_tsn_index:
     pattern: /tsn
     defaults: { _controller: tsn.tsn.controller.main:doIndex }
 

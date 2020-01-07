@@ -192,8 +192,8 @@ class main_controller
 
             'T_EXT_PATH' => '/phorums/ext/tsn/tsn/styles/all/theme',
 
-            'U_TSN_INDEX' => append_sid(self::$phpbbRootPath . url::ROUTE_INDEX),
-            'U_TSN_LOGIN' => append_sid(self::$phpbbRootPath . url::ROUTE_LOGIN),
+            'U_TSN_INDEX' => $this->helper->route('tsn_tsn_index'),append_sid(self::$phpbbRootPath . url::ROUTE_INDEX),
+            'U_TSN_LOGIN' => $this->helper->route('tsn_tsn_login'),
         ]);
 
         // Setup constant shell data...
@@ -295,10 +295,6 @@ class main_controller
         $s_hidden_fields = [
             'sid' => $this->user->session_id,
         ];
-
-        if ($redirect) {
-            $s_hidden_fields['redirect'] = $redirect;
-        }
 
         // Skip Admin login hidden fields
 

@@ -134,7 +134,7 @@ class main_listener implements EventSubscriberInterface
 //    public function add_page_header_link()
 //    {
 //        $this->template->assign_vars([
-//            'U_TSN_PAGE' => $this->helper->route('tsn_tsn_controller', ['name' => 'world']),
+//            'U_TSN_PAGE' => $this->helper->route('tsn_tsn_index', ['name' => 'world']),
 //        ]);
 //    }
 
@@ -200,7 +200,7 @@ class main_listener implements EventSubscriberInterface
 //    {
 //        if ($event['on_page'][1] === 'app' && strrpos($event['row']['session_page'], 'app.' . $this->php_ext . '/demo') === 0) {
 //            $event['location'] = $this->language->lang('VIEWING_TSN_TSN');
-//            $event['location_url'] = $this->helper->route('tsn_tsn_controller', ['name' => 'world']);
+//            $event['location_url'] = $this->helper->route('tsn_tsn_index', ['name' => 'world']);
 //        }
 //    }
 }

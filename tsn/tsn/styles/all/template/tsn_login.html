@@ -1,14 +1,14 @@
 {% include '@tsn_tsn/shellHeader.html' %}
 
-<!-- IF LOGIN_ERROR --><{LOGIN_ERROR}<!-- ENDIF -->
-<form class="grid-x grid-padding-y grid-padding-x tsn-login-form" action="{{ S_LOGIN_ACTION }}" method="post">
+{% if LOGIN_ERROR %}{LOGIN_ERROR}{% endif %}
+<form class="grid-x grid-padding-y grid-padding-x tsn-login-form" method="post">
     <div class="cell text-center">
         <hgroup>
             <h2 class="mdc-typography--headline2">{{ lang('WELCOME_VISITOR') }}</h2>
-            <p class="mdc-typography--headline4">We're glad you made it</p>
+            <h4 class="mdc-typography--headline4">We're glad you made it</h4>
         </hgroup>
     </div>
-    <div class="cell shrink float-center">
+    <div class="cell shrink float-center text-center">
         <div class="tsn-login-fieldset mdc-elevation--z1">
             <div class="grid-x grid-padding-y grid-padding-x">
                 <div class="cell text-center">
@@ -80,15 +80,17 @@
 
                 <div class="cell text-center">
                     <div class="mdc-touch-target-wrapper">
-                        <a class="mdc-button mdc-button--touch mdc-button--raised" href="{{ U_TSN_LOGIN }}">
+                        <button class="mdc-button mdc-button--touch mdc-button--raised" type="submit"  name="login" tabindex="6" value="{L_LOGIN}">
                             <div class="mdc-button__ripple"></div>
                             <span class="mdc-button__label">{{ lang('SIGN_IN') }}</span>
-                            <div class="mdc-button__touch"></div>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+
+        {% if S_DISPLAY_FULL_LOGIN and U_SEND_PASSWORD %}<a class="mdc-typography--body2" href="{{ U_SEND_PASSWORD }}">{{ lang('FORGOT_PASS') }}</a><br>{% endif %}
+        {% if S_DISPLAY_FULL_LOGIN and U_RESEND_ACTIVATION %}<a class="mdc-typography--body2" href="{{ U_RESEND_ACTIVATION }}">{{ lang('RESEND_ACTIVATION') }}</a>{% endif %}
     </div>
 
     {{ S_LOGIN_REDIRECT }}
@@ -97,13 +99,6 @@
 
     {% if not S_ADMIN_AUTH and PROVIDER_TEMPLATE_FILE %}
     {% include '{{ PROVIDER_TEMPLATE_FILE }}' %}
-    {% endif %}
-
-    {% if S_DISPLAY_FULL_LOGIN and (U_SEND_PASSWORD or U_RESEND_ACTIVATION) %}
-    <div class="cell text-center">
-        {% if U_SEND_PASSWORD %}<a class="mdc-typography--body2" href="{{ U_SEND_PASSWORD }}">{{ lang('FORGOT_PASS') }}</a><br>{% endif %}
-        {% if U_RESEND_ACTIVATION %}<a class="mdc-typography--body2" href="{{ U_RESEND_ACTIVATION }}">{{ lang('RESEND_ACTIVATION') }}</a>{% endif %}
-    </div>
     {% endif %}
 </form>
 

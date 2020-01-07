@@ -1,6 +1,7 @@
 import { MDCTextField } from '@material/textfield/component';
 import { MDCCheckbox } from '@material/checkbox/component';
 import { MDCFormField } from '@material/form-field/component';
+import { MDCRipple } from '@material/ripple';
 import tsnHeader from './tsn/tsnHeader';
 
 $(document).ready(function () {
@@ -29,7 +30,8 @@ $(document).ready(function () {
     }
   });
 
-  // TODO Hook up the Login form in its own class so the checkboxes/switches can be turned into form fields
-  // const formField = new MDCFormField(document.querySelector('.mdc-form-field'));
-  // formField.input = checkbox;
+  $('.mdc-button').each(function (i, obj) {
+    // eslint-disable-next-line no-new
+    new MDCRipple(obj);
+  });
 });

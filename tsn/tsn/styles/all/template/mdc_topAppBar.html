@@ -6,8 +6,10 @@
         </section>
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
             <button aria-label="Search" class="material-icons mdc-top-app-bar__action-item mdc-icon-button">search</button>
+            {% if S_USER_LOGGED_IN %}
             <button aria-label="Notifications" class="material-icons mdc-top-app-bar__action-item mdc-icon-button">notifications_none</button>
             <button aria-label="Messages" class="material-icons mdc-top-app-bar__action-item mdc-icon-button">mail_outline</button>
+            {% endif %}
         </section>
     </div>
 </header>

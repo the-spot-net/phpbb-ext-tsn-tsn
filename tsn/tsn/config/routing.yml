@@ -22,14 +22,16 @@ tsn_tsn_login:
 #    requirements:
 #        id: \d+
 #
-#tsn_tsn_user:
-#    pattern: /tsn/user/{id}
+tsn_tsn_user:
+    pattern: /tsn/user/{id}
 #    defaults: { _controller: tsn.tsn.controller.user:viewProfile }
-#    requirements:
-#        id: \d+
-#
-#tsn_tsn_member:
-#    pattern: /tsn/member/{id}
+    defaults: { _controller: tsn.tsn.controller.main:doIndex }
+    requirements:
+        id: \d+
+
+tsn_tsn_member:
+    pattern: /tsn/member/{id}
 #    defaults: { _controller: tsn.tsn.controller.member:viewMember }
-#    requirements:
-#        id: \d+
+    defaults: { _controller: tsn.tsn.controller.main:doIndex }
+    requirements:
+        id: \d+

@@ -20,13 +20,13 @@ class url
     const DIR_AJAX = self::DIR_TSN . 'ajax/';
 
     // URI Base Routes
-    const ROUTE_INDEX = 'tsn';
+    const ROUTE_INDEX = 'tsn_tsn_index';
     const ROUTE_FORUM = self::DIR_TSN . 'forum';
     const ROUTE_GROUP = self::DIR_TSN . 'group';
-    const ROUTE_LOGIN = self::DIR_TSN . 'login';
-    const ROUTE_MEMBER = self::DIR_TSN . 'member';
+    const ROUTE_LOGIN = 'tsn_tsn_login';
+    const ROUTE_MEMBER = 'tsn_tsn_member';
     const ROUTE_TOPIC = self::DIR_TSN . 'topic';
-    const ROUTE_USER = self::DIR_TSN . 'user';
+    const ROUTE_USER = 'tsn_tsn_user';
 
     // AJAX Slugs for use in switch & routes
     const SLUG_SPECIAL_REPORT = 'special-report';
@@ -34,24 +34,25 @@ class url
     // URI AJAX Routes
     const ROUTE_AJAX_SPECIAL_REPORT = self::DIR_AJAX . self::SLUG_SPECIAL_REPORT;
 
-//    /**
-//     * @param       $routeUriConstant
-//     * @param array $appendedIds   Ordered array of IDs to append to the URL (.../list, [forumId, topicId])
-//     * @param array $requestParams Field-value pairs to pass to url;::makeUrlParams()
-//     *
-//     * @return string
-//     * @uses \tsn\tsn\controller\url::makeUrlParams()
-//     */
+    /**
+     * @param       $routeUriConstant
+     * @param array $appendedIds Ordered array of IDs to append to the URL (.../list, [forumId, topicId])
+     *                           //param array $requestParams Field-value pairs to pass to url;::makeUrlParams()
+     *
+     * @return string
+     * @uses \tsn\tsn\controller\url::makeUrlParams()
+     */
 //    public static function make($routeUriConstant, $appendedIds = [], $requestParams = [])
-//    {
-//         implode(array_filter([
-//                $routeUriConstant,
-//                ($appendedIds) ? '/' . implode('/', $appendedIds) : '',
-//                ($requestParams) ? self::makeUrlParams($requestParams) : '',
-//            ]
-//        ));
-//    }
-//
+    public static function make($routeUriConstant, $appendedIds = [])
+    {
+        return implode(array_filter([
+                $routeUriConstant,
+                ($appendedIds) ? '/' . implode('/', $appendedIds) : '',
+                // ($requestParams) ? self::makeUrlParams($requestParams) : '',
+            ]
+        ));
+    }
+
 //    /**
 //     * @param array $params  Field-value pairs to generate the query string
 //     * @param null  $urlHash URL Hash to jump to an anchor or trigger something to open

@@ -86,7 +86,7 @@ class main_controller
         $this->template = $template;
         $this->user = $user;
 
-        self::$phpbbRootPath = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : $this->pathHelper->get_web_root_path();
+        self::$phpbbRootPath = $this->getConfig('script_path');
         self::$phpEx = substr(strrchr(__FILE__, '.'), 1);
         self::$boardUrl = generate_board_url() . '/';
     }
@@ -126,7 +126,8 @@ class main_controller
     {
         $this->initUserAuthentication();
 
-        // TODO Render the miniforums
+        $this->moduleStatistics();
+
         $this->template->assign_vars([
             'S_ALLOW_MINI_PROFILE'   => !empty($this->config['tsn8_activate_mini_profile']),
             'S_ALLOW_MYSPOT_LOGIN'   => !empty($this->config['tsn8_activate_myspot_login']),
@@ -136,7 +137,7 @@ class main_controller
             'S_USER_ID'              => $this->user->data['user_id'],
         ]);
 
-        return $this->helper->render('@tsn_tsn/tsn_myspot.html', $this->language->lang('MYSPOT'));
+        return $this->helper->render('@tsn_tsn/tsn_myspot.html', $this->language->lang('MYSPOT'), 200, true);
     }
 
     /**
@@ -145,12 +146,12 @@ class main_controller
     public function doLogin()
     {
         if ($this->user->data['is_registered']) {
-            redirect(append_sid(self::$phpbbRootPath . url::ROUTE_INDEX));
+            redirect(append_sid($this->helper->route(url::ROUTE_INDEX)));
         }
 
         $this->initUserAuthentication();
 
-        return $this->moduleLogin($this->request->variable('redirect', self::$phpbbRootPath . url::ROUTE_INDEX));
+        return $this->moduleLogin($this->request->variable('redirect', $this->helper->route(url::ROUTE_INDEX)));
     }
 
     /**
@@ -176,6 +177,30 @@ class main_controller
     }
 
     /**
+     * Run the submodule work for a User Avatar
+     *
+     * @param int $userId
+     *
+     * @return string
+     */
+    private function generateUserAvatar(int $userId)
+    {
+        $avatarImage = '';
+        if ($avatarRow = query::getUserAvatar($this, $userId)) {
+
+            // Prepare the avatar image...
+            $avatarImage = preg_replace('/(\.\.\/)+?/', './', phpbb_get_user_avatar([
+                'avatar'        => $avatarRow['user_avatar'],
+                'avatar_type'   => $avatarRow['user_avatar_type'],
+                'avatar_width'  => $avatarRow['user_avatar_width'],
+                'avatar_height' => $avatarRow['user_avatar_height'],
+            ]));
+        }
+
+        return $avatarImage;
+    }
+
+    /**
      * Sets up user permissions commonly for all pages & modules
      */
     private function initUserAuthentication()
@@ -190,10 +215,10 @@ class main_controller
             'SERVER_DOMAIN'   => $this->config['server_name'],
             'SERVER_PORT'     => (!in_array((int)$this->config['server_port'], [0, 80, 443])) ? ':' . $this->config['server_port'] : '',
 
-            'T_EXT_PATH' => '/phorums/ext/tsn/tsn/styles/all/theme',
+            'T_EXT_PATH' => $this->getConfig('script_path') . '/ext/tsn/tsn/styles/all/theme',
 
-            'U_TSN_INDEX' => $this->helper->route('tsn_tsn_index'),append_sid(self::$phpbbRootPath . url::ROUTE_INDEX),
-            'U_TSN_LOGIN' => $this->helper->route('tsn_tsn_login'),
+            'U_TSN_INDEX' => $this->helper->route(url::ROUTE_INDEX),
+            'U_TSN_LOGIN' => $this->helper->route(url::ROUTE_LOGIN),
         ]);
 
         // Setup constant shell data...
@@ -249,7 +274,7 @@ class main_controller
                 }
 
                 // append/replace SID (may change during the session for AOL users)
-                redirect(reapply_sid($this->request->variable('redirect', self::$phpbbRootPath . url::ROUTE_INDEX)));
+                redirect(reapply_sid($this->request->variable('redirect', $this->helper->route(url::ROUTE_INDEX))));
 
             } else {
                 // Something failed, determine what...
@@ -362,10 +387,6 @@ class main_controller
 
         display_forums('', $this->config['load_moderators']);
 
-        $this->submoduleUserGroupLegend();
-        $this->submoduleUserBirthdays();
-        $this->submoduleUsersOnline();
-
         $this->template->assign_vars([
             'TOTAL_POSTS'             => $this->language->lang('TOTAL_POSTS_COUNT', (int)$this->getConfig('num_posts')),
             'TOTAL_FORUM_POSTS'       => number_format((int)$this->getConfig('num_posts'), 0),
@@ -384,7 +405,7 @@ class main_controller
                 : '',
             'S_DISPLAY_BIRTHDAY_LIST' => (bool)$this->getConfig('load_birthdays'),
             'S_INDEX'                 => true, // Not sure what this is for...
-            'S_MYSPOT_LOGIN_REDIRECT' => '<input type="hidden" name="redirect" value="' . append_sid(self::$phpbbRootPath . url::ROUTE_INDEX, '', true, $this->user->session_id) . '">',
+            // 'S_MYSPOT_LOGIN_REDIRECT' => '<input type="hidden" name="redirect" value="' . $this->helper->route(url::ROUTE_INDEX) . '">',
             'U_MARK_FORUMS'           => ($this->user->data['is_registered'] || $this->getConfig('load_anon_lastread'))
                 ? append_sid(self::$phpbbRootPath . 'index.' . self::$phpEx, 'hash=' . generate_link_hash('global') . '&amp;mark=forums&amp;mark_time=' . time())
                 : '',
@@ -511,7 +532,9 @@ class main_controller
                 // Prepare the post content; Replaces UIDs with BBCode and then convert the Post Content to an excerpt...
                 $words = explode(' ', generate_text_for_display($topicRow['post_text'], $topicRow['bbcode_uid'], $topicRow['bbcode_bitfield'], 1));
 
-                $this->template->assign_vars([
+                $this->template->assign_block_vars('specialreport', [
+                    'I_AVATAR_IMG' => $this->generateUserAvatar($topicRow['topic_poster']),
+
                     'L_HEADLINE'         => censor_text($topicRow['topic_title']),
                     'L_POST_AUTHOR'      => get_username_string('full', $topicRow['topic_poster'], $topicRow['username'], $topicRow['user_colour']),
                     'L_POST_BODY'        => (count($words) > $this->config['tsn_specialreport_excerpt_words'])
@@ -525,8 +548,6 @@ class main_controller
                     'U_USER_PROFILE'     => append_sid(self::$phpbbRootPath . 'memberlist.' . self::$phpEx, "mode=viewprofile&u=" . $topicRow['topic_poster']),
                 ]);
 
-                $this->submoduleUserAvatar($topicRow['topic_poster']);
-
                 $output = $this->helper->render('@tsn_tsn/tsn_special_report.html', $this->language->lang('TSNSPECIALREPORT'));
 
             } else {
@@ -537,6 +558,16 @@ class main_controller
         }
 
         return $output;
+    }
+
+    /**
+     * Call the submodules for Statistics sidebar
+     */
+    private function moduleStatistics()
+    {
+        $this->submoduleUserBirthdays();
+        $this->submoduleUsersOnline();
+        $this->submoduleUserGroupLegend();
     }
 
     /**
@@ -558,31 +589,6 @@ class main_controller
     }
 
     /**
-     * Run the submodule work for a User Avatar
-     *
-     * @param int $userId
-     */
-    private function submoduleUserAvatar(int $userId)
-    {
-        if ($avatarRow = query::getUserAvatar($this, $userId)) {
-
-            // Prepare the avatar image...
-            $avatarImage = preg_replace('/(\.\.\/)+?/', './', phpbb_get_user_avatar([
-                'avatar'        => $avatarRow['user_avatar'],
-                'avatar_type'   => $avatarRow['user_avatar_type'],
-                'avatar_width'  => $avatarRow['user_avatar_width'],
-                'avatar_height' => $avatarRow['user_avatar_height'],
-            ]));
-
-            $this->template->assign_vars([
-                'I_AVATAR_IMG' => $avatarImage,
-            ]);
-//        } else {
-//             new Response('Unable to find user avatar settings', 200);
-        }
-    }
-
-    /**
      * Generates the Birthday List, if required.
      */
     private function submoduleUserBirthdays()
@@ -598,17 +604,14 @@ class main_controller
                 $birthday_year = (int)substr($userRow['user_birthday'], -4);
 
                 $this->template->assign_block_vars('birthdays', [
-                    'USERNAME' => get_username_string('full', $userRow['user_id'], $userRow['username'], $userRow['user_colour']),
-                    'AGE'      => ($birthday_year)
-                        ? max(0, (int)$time->format('Y') - $birthday_year)
-                        : '',
+                    'AGE'          => ($birthday_year) ? max(0, (int)$time->format('Y') - $birthday_year) : '',
+                    'I_AVATAR_IMG' => $this->generateUserAvatar($userRow['user_id']),
+                    'NAME'         => $userRow['username'],
+                    'COLOR'        => ($userRow['user_colour']) ? '#' . $userRow['user_colour'] : '',
+                    'URL'          => $this->helper->route(url::make(url::ROUTE_MEMBER, [$userRow['user_id']])),
                 ]);
-
-                // 3.0 Compatibility... maybe a CSV?
-//                if ($age = (int)substr($row['user_birthday'], -4)) {
-//                    $birthday_list[] = $birthday_username . (($birthday_year) ? ' (' . $birthday_age . ')' : '');
-//                }
             }
+
             query::freeCursor($this, $cursor);
         }
     }
@@ -622,10 +625,10 @@ class main_controller
 
         while ($userGroupRow = $this->db->sql_fetchrow($cursor)) {
 
-            $showUrl = ($userGroupRow['group_name'] != 'BOTS' && $this->user->data['user_id'] == ANONYMOUS && $this->auth->acl_get('u_viewprofile'));
+            $showUrl = ($userGroupRow['group_name'] != 'BOTS' && ($this->user->data['user_id'] != ANONYMOUS && $this->auth->acl_get('u_viewprofile')));
 
             // Add the User Group Legends to a block var in a loop
-            $this->template->assign_block_vars('groupLegend', [
+            $this->template->assign_block_vars('usergroups', [
                 'COLOR' => ($userGroupRow['group_colour']) ? '#' . $userGroupRow['group_colour'] : '',
                 'NAME'  => ($userGroupRow['group_type'] == GROUP_SPECIAL)
                     ? $this->language->lang('G_' . $userGroupRow['group_name'])
@@ -650,6 +653,9 @@ class main_controller
             'VISIBLE_USERS_VALUE' => $online_users['visible_online'],
             'HIDDEN_USERS_VALUE'  => $online_users['hidden_online'],
             'GUEST_USERS_VALUE'   => $online_users['guests_online'],
+
+            'ONLINE_RECORD_COUNT' => $this->getConfig('record_online_users'),
+            'ONLINE_RECORD_DATE'  => $this->user->format_date($this->getConfig('record_online_date'), false, true),
         ]);
     }
 }

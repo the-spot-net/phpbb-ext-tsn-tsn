@@ -19,3 +19,10 @@
     height: $double-vertical;
   }
 }
+
+.mdc-chip {
+  .avatar {
+    @extend .mdc-chip__icon;
+    @extend .mdc-chip__icon--leading;
+  }
+}

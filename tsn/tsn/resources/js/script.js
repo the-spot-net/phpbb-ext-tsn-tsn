@@ -2,6 +2,7 @@ import { MDCTextField } from '@material/textfield/component';
 import { MDCCheckbox } from '@material/checkbox/component';
 import { MDCFormField } from '@material/form-field/component';
 import { MDCRipple } from '@material/ripple';
+import { MDCChipSet } from '@material/chips';
 import tsnHeader from './tsn/tsnHeader';
 
 $(document).ready(function () {
@@ -33,5 +34,10 @@ $(document).ready(function () {
   $('.mdc-button').each(function (i, obj) {
     // eslint-disable-next-line no-new
     new MDCRipple(obj);
+  });
+
+  $('.mdc-chip-set').each(function (i, obj) {
+    // eslint-disable-next-line no-new
+    new MDCChipSet(obj);
   });
 });

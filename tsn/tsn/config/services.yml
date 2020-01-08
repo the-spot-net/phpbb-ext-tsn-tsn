@@ -26,6 +26,17 @@ services:
             - '@request'
             - '@template'
             - '@user'
+    tsn.tsn.listener:
+        class: tsn\tsn\event\main_listener
+        arguments:
+            - '@auth'
+            - '@language'
+            - '@controller.helper'
+            - '@template'
+            - '%core.php_ext%'
+            - '@user'
+        tags:
+            - { name: event.listener }
 
 #    tsn.tsn.controller.mcp:
 #        class: tsn\tsn\controller\mcp_controller
@@ -48,16 +59,6 @@ services:
 #        arguments:
 #            - '@user'
 #            - '%tsn.tsn.tables.tsn_table%'
-
-    tsn.tsn.listener:
-        class: tsn\tsn\event\main_listener
-        arguments:
-            - '@language'
-            - '@controller.helper'
-            - '@template'
-            - '%core.php_ext%'
-        tags:
-            - { name: event.listener }
 
 #    tsn.tsn.command.sample:
 #        class: tsn\tsn\console\command\sample

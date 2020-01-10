@@ -394,7 +394,6 @@ class main_controller
             'TOTAL_FORUM_TOPICS'      => number_format((int)$this->getConfig('num_topics'), 0),
             'TOTAL_USERS'             => $this->language->lang('TOTAL_USERS', (int)$this->getConfig('num_users')),
             'TOTAL_FORUM_USERS'       => number_format((int)$this->getConfig('num_users'), 0),
-            'NEWEST_USER'             => $this->language->lang('NEWEST_USER', get_username_string('full', $this->getConfig('newest_user_id'), $this->getConfig('newest_username'), $this->getConfig('newest_user_colour'))),
             'FORUM_IMG'               => $this->user->img('forum_read', 'NO_UNREAD_POSTS'),
             'FORUM_UNREAD_IMG'        => $this->user->img('forum_unread', 'UNREAD_POSTS'),
             'FORUM_LOCKED_IMG'        => $this->user->img('forum_read_locked', 'NO_UNREAD_POSTS_LOCKED'),
@@ -548,7 +547,7 @@ class main_controller
                     'U_USER_PROFILE'     => append_sid(self::$phpbbRootPath . 'memberlist.' . self::$phpEx, "mode=viewprofile&u=" . $topicRow['topic_poster']),
                 ]);
 
-                $output = $this->helper->render('@tsn_tsn/tsn_special_report.html', $this->language->lang('TSNSPECIALREPORT'));
+                $output = $this->helper->render('@tsn_tsn/tsn_special_report.html', $this->language->lang('MYSPOT_SPECIAL_REPORT'));
 
             } else {
                 $output = new Response('Could not find topic with the requested topic ID', 200);
@@ -653,6 +652,9 @@ class main_controller
             'VISIBLE_USERS_VALUE' => $online_users['visible_online'],
             'HIDDEN_USERS_VALUE'  => $online_users['hidden_online'],
             'GUEST_USERS_VALUE'   => $online_users['guests_online'],
+
+            'NEWEST_USER_AVATAR' => $this->generateUserAvatar($this->getConfig('newest_user_id')),
+            'NEWEST_USER_NAME'   => get_username_string('full', $this->getConfig('newest_user_id'), $this->getConfig('newest_username'), $this->getConfig('newest_user_colour')),
 
             'ONLINE_RECORD_COUNT' => $this->getConfig('record_online_users'),
             'ONLINE_RECORD_DATE'  => $this->user->format_date($this->getConfig('record_online_date'), false, true),

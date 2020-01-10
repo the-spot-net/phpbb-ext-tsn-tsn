@@ -11,7 +11,7 @@
             </div>
         </div>
         {% else %}
-        <img alt="site logo" class="tsn-drawer-logo" src="{{ T_EXT_PATH }}/images/tsn-13.png">
+        <img alt="site logo" class="tsn-image--drawer-header-logo" src="{{ T_EXT_PATH }}/images/tsn-13.png">
         <span class="mdc-drawer__title mdc-typography--headline6">{{ lang('WELCOME_VISITOR') }}</span>
         <span class="mdc-drawer__subtitle mdc-typography--body2">{{ lang('JOIN_THE_DISCUSSION') }}</span>
         <div class="grid-x grid-padding-y text-center">
@@ -84,7 +84,7 @@
                     <h6 class="mdc-list-group__subheader">{{ row.FORUM_NAME }}</h6>
                 {% elseif row.S_IS_LINK %}
                     <a class="mdc-list-item" href="{{ row.U_VIEWFORUM }}" target="_blank">
-                        {% if row.FORUM_IMAGE_SRC %}<img alt="{{ row.FORUM_FOLDER_IMG_ALT }}" class="mdc-list-item__graphic tsn-navigation-image" src="{{ row.FORUM_IMAGE_SRC }}"/>{% endif %}
+                        {% if row.FORUM_IMAGE_SRC %}<img alt="{{ row.FORUM_FOLDER_IMG_ALT }}" class="mdc-list-item__graphic tsn-image--navigation" src="{{ row.FORUM_IMAGE_SRC }}"/>{% endif %}
                         <span class="mdc-list-item__text">{{ row.FORUM_NAME }}</span>
                         <i aria-hidden="true" class="material-icons mdc-list-item__meta">open_in_new</i>
                     </a>

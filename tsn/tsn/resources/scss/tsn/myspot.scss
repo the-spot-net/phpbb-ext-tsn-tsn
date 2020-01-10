@@ -1,4 +1,4 @@
-.tsn-login-cta {
+.tsn-card--login-cta {
   padding: 0;
 
   .mdc-card__media {
@@ -15,7 +15,7 @@
   }
 }
 
-.tsn-stat-card.tsn-stat-new-user {
+.tsn-card--stat.tsn-card--new-user {
   position: relative;
 
   .avatar {
@@ -24,5 +24,24 @@
     right: $full-vertical;
     border-radius: 50%;
     max-width: rem-calc(40px);
+  }
+}
+
+.tsn-card--specialreport {
+  position: relstive;
+
+  .tsn-card--specialreport__content {
+    margin-right: rem-calc(112px);
+  }
+
+  .tsn-card--specialreport__excerpt {
+    margin-top: $half-vertical;
+  }
+
+  .avatar {
+    position: absolute;
+    top: $full-vertical;
+    right: $full-side;
+    width: rem-calc(80px);
   }
 }

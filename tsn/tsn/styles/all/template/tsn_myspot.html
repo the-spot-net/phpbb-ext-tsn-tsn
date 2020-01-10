@@ -1,21 +1,18 @@
 {% include '@tsn_tsn/shellHeader.html' %}
 
-{{ IMG_PATH }}
 <div class="mdc-layout-grid">
     <div class="mdc-layout-grid__inner">
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9-desktop mdc-layout-grid__cell--span-5-tablet mdc-layout-grid__cell--span-12-phone">
             <div class="mdc-layout-grid__inner">
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                    <div class="mdc-card">
-                        <h6 class="mdc-typography--headline6">{{ lang('MYSPOT_SPECIAL_REPORT') }}</h6>
-                        <span class="mdc-typography--body2">New Topics & Replies since your last visit</span>
-                        <div class="mdc-list">
-                            Inject What's New Here
-                        </div>
-                    </div>
-                </div>
+
+                {% if specialreport %}
+                    {% for topic in specialreport %}
+                        {% include '@tsn_tsn/partials/tsn_special_report.html' %}
+                    {% endfor %}
+                {% endif %}
+
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
-                    <div class="mdc-card">
+                    <div class="mdc-card tsn-card">
                         <h6 class="mdc-typography--headline6">What's New!</h6>
                         <span class="mdc-typography--body2">New Topics & Replies since your last visit</span>
                         <div class="mdc-list">
@@ -24,7 +21,7 @@
                     </div>
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
-                    <div class="mdc-card">
+                    <div class="mdc-card tsn-card">
                         <h6 class="mdc-typography--headline6">Unread Posts</h6>
                         <span class="mdc-typography--body2">Topics & Replies you haven't seen yet</span>
 
@@ -35,7 +32,7 @@
                 </div>
 
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
-                    <div class="mdc-card">
+                    <div class="mdc-card tsn-card">
                         <h6 class="mdc-typography--headline6">Unanswered Posts</h6>
                         <span class="mdc-typography--body2">Topics awaiting their first reply</span>
 
@@ -45,7 +42,7 @@
                     </div>
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
-                    <div class="mdc-card">
+                    <div class="mdc-card tsn-card">
                         <h6 class="mdc-typography--headline6">Active Topics</h6>
                         <span class="mdc-typography--body2">Popular topics that have everyone talking</span>
 
@@ -57,100 +54,10 @@
             </div>
         </div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-3-tablet mdc-layout-grid__cell--span-12-phone">
-            {% if not S_USER_LOGGED_IN %}
-                <div class="mdc-card tsn-login-cta">
-                    <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{{ T_EXT_PATH }}/images/tsn-13.png');">
-                        <div class="mdc-card__media-content">
-                            <h4 class="mdc-typography--headline4">{{ lang('WELCOME_VISITOR') }}</h4>
-                            <span class="mdc-typography--body2">{{ lang('JOIN_THE_DISCUSSION') }}</span>
-                        </div>
-                    </div>
-                    <div class="mdc-card__actions">
-                        <div class="mdc-card__action-buttons">
-                            <a class="mdc-button mdc-button--touch mdc-button--unelevated mdc-card__action mdc-card__action--button" href="{{ U_TSN_REGISTER }}">
-                                <div class="mdc-button__ripple"></div>
-                                <span class="mdc-button__label">{{ lang('REGISTER') }}</span>
-                                <div class="mdc-button__touch"></div>
-                            </a>
-                            <a class="mdc-button mdc-button--touch mdc-card__action mdc-card__action--button" href="{{ U_TSN_LOGIN }}">
-                                <div class="mdc-button__ripple"></div>
-                                <span class="mdc-button__label">{{ lang('SIGN_IN') }}</span>
-                                <div class="mdc-button__touch"></div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
 
-            {% if birthdays %}
-                <div class="mdc-card mdc-card--outlined tsn-stat-card">
-                    <span class="mdc-typography--overline">{{ lang('BIRTHDAYS') }}</span>
-                    <div class="mdc-chip-set" role="grid">
-                        {% for user in birthdays %}
-                            <a class="mdc-chip" role="row" href="{{ user.URL }}" title="{{ user.NAME }} ({{ user.AGE }})">
-                                <div class="mdc-chip__ripple"></div>
-                                {{ user.I_AVATAR_IMG }}
-                                <span role="gridcell">
-                                        <span role="button" {% if user.COLOR %} style="color:{{ user.COLOR }}" {% endif %} class="mdc-chip__text">{{ user.NAME }} ({{ user.AGE }})</span>
-                                    </span>
-                            </a>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
+            {% include '@tsn_tsn/partials/tsn_login_cta.html' %}
 
-            {% if online_avatars %}
-                <div class="mdc-card mdc-card--outlined tsn-stat-card">
-                    <span class="mdc-typography--overline">{{ lang('ONLINE_NOW') }}</span>
-                    <p class="text-left">
-                        {% for user in online_avatars %}
-                            {{ user.I_AVATAR_IMG }}
-                        {% endfor %}
-                    </p>
-                </div>
-            {% endif %}
-
-            <div class="mdc-card mdc-card--outlined tsn-stat-card">
-                <span class="mdc-typography--overline">{{ lang('MYSPOT_RECORD') }}</span>
-                <h4 class="mdc-typography--headline4">{{ ONLINE_RECORD_COUNT }}</h4>
-                <p class="mdc-typography--body2">{{ lang('ON') }} {{ ONLINE_RECORD_DATE }}</p>
-            </div>
-
-            <div class="mdc-card mdc-card--outlined tsn-stat-card tsn-stat-new-user">
-                {{ NEWEST_USER_AVATAR }}
-                <div class="mdc-layout-grid__inner">
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8 mdc-layout-grid__cell--align-top">
-                        <span class="mdc-typography--overline">{{ lang('MYSPOT_NEWEST_USER') }}</span>
-                        <h5 class="mdc-typography--headline5">{{ NEWEST_USER_NAME }}</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mdc-card mdc-card--outlined tsn-stat-card">
-                <span class="mdc-typography--overline">{{ lang('STATISTICS') }}</span>
-                <h4 class="mdc-typography--headline4">{{ TOTAL_FORUM_TOPICS }}</h4>
-                <p class="mdc-typography--body2">{{ lang('TOPICS') }}</p>
-
-                <h4 class="mdc-typography--headline4">{{ TOTAL_FORUM_POSTS }}</h4>
-                <p class="mdc-typography--body2">{{ lang('POSTS') }}</p>
-                <h4 class="mdc-typography--headline4">{{ TOTAL_FORUM_USERS }}</h4>
-                <p class="mdc-typography--body2">{{ lang('USERS') }}</p>
-            </div>
-
-            <div class="mdc-card mdc-card--outlined tsn-stat-card">
-                <span class="mdc-typography--overline">{{ lang('MYSPOT_LEGEND') }}</span>
-                <div class="mdc-chip-set" role="grid">
-                    {% for usergroup in usergroups %}
-                        <a href="{{ usergroup.URL }}" class="mdc-chip" role="row" title="{{ usergroup.NAME }}">
-                            <div class="mdc-chip__ripple"></div>
-                            <i class="material-icons mdc-chip__icon mdc-chip__icon--leading" style="color:{{ usergroup.COLOR }}">group</i>
-                            <span role="gridcell">
-                                    <span role="button" class="mdc-chip__text">{{ usergroup.NAME }}</span>
-                                </span>
-                        </a>
-                    {% endfor %}
-                </div>
-            </div>
+            {%  include '@tsn_tsn/partials/tsn_myspot_statistics.html' %}
         </div>
     </div>
 </div>

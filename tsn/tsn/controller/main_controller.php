@@ -101,9 +101,6 @@ class main_controller
     {
 
         switch ($route) {
-            case url::SLUG_SPECIAL_REPORT:
-                $output = $this->moduleSpecialReport();
-                break;
             default:
                 $output = new Response('Unsupported route', 404);
                 break;
@@ -127,6 +124,7 @@ class main_controller
         $this->initUserAuthentication();
 
         $this->moduleStatistics();
+        $this->moduleSpecialReport();
 
         $this->template->assign_vars([
             'S_ALLOW_MINI_PROFILE'   => !empty($this->config['tsn8_activate_mini_profile']),
@@ -486,12 +484,9 @@ class main_controller
 
     /**
      * Handles the render of the Special Report AJAX request from tsn/special-report
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     private function moduleSpecialReport()
     {
-        $this->initUserAuthentication();
-
         // Get the minimal Latest Topic Info, if any
         if ($topicRow = query::checkForSpecialReportLatestTopic($this)) {
 
@@ -501,6 +496,8 @@ class main_controller
 
                 /**
                  * Available Variable List:
+                 * $topicRow['forum_name'];
+                 * $topicRow['forum_id'];
                  * $topicRow['topic_id'];
                  * $topicRow['post_id'];
                  * $topicRow['topic_title'];
@@ -529,34 +526,30 @@ class main_controller
                 $isUnreadTopic = (isset($topicTrackingInfo[$topicRow['topic_id']]) && $topicRow['topic_time'] > $topicTrackingInfo[$topicRow['topic_id']]);
 
                 // Prepare the post content; Replaces UIDs with BBCode and then convert the Post Content to an excerpt...
-                $words = explode(' ', generate_text_for_display($topicRow['post_text'], $topicRow['bbcode_uid'], $topicRow['bbcode_bitfield'], 1));
+                $postBody = generate_text_for_display($topicRow['post_text'], $topicRow['bbcode_uid'], $topicRow['bbcode_bitfield'], 1);
+                $postWords = explode(' ', strip_tags($postBody));
 
                 $this->template->assign_block_vars('specialreport', [
-                    'I_AVATAR_IMG' => $this->generateUserAvatar($topicRow['topic_poster']),
-
-                    'L_HEADLINE'         => censor_text($topicRow['topic_title']),
-                    'L_POST_AUTHOR'      => get_username_string('full', $topicRow['topic_poster'], $topicRow['username'], $topicRow['user_colour']),
-                    'L_POST_BODY'        => (count($words) > $this->config['tsn_specialreport_excerpt_words'])
-                        ? implode(' ', array_slice($words, 0, $this->config['tsn_specialreport_excerpt_words'])) . '... '
-                        : implode(' ', $words),
-                    'L_POST_DATE'        => $this->user->format_date($topicRow['topic_time']),
-                    'L_POST_META'        => $this->language->lang('SPECIAL_REPORT_VIEWS_COMMENTS_COUNT', $topicRow['topic_views'], (int)$topicRow['topic_posts_approved'] - 1),
+                    'FORUM_NAME'         => $topicRow['forum_name'],
+                    'TOPIC_ID'           => $topicRow['topic_id'],
+                    'HEADLINE'           => censor_text($topicRow['topic_title']),
+                    'I_AVATAR_IMG'       => $this->generateUserAvatar($topicRow['topic_poster']),
+                    // TODO Update this to use new route URL
+                    'POST_AUTHOR'        => get_username_string('full', $topicRow['topic_poster'], $topicRow['username'], $topicRow['user_colour']),
+                    'POST_EXCERPT'       => (count($postWords) > $this->config['tsn_specialreport_excerpt_words'])
+                        ? implode(' ', array_slice($postWords, 0, $this->config['tsn_specialreport_excerpt_words'])) . '... '
+                        : implode(' ', $postWords),
+                    'POST_BODY'          => $postBody,
+                    'POST_DATE'          => $this->user->format_date($topicRow['topic_time']),
+                    'POST_META'          => $this->language->lang('SPECIAL_REPORT_VIEWS_COMMENTS_COUNT', $topicRow['topic_views'], (int)$topicRow['topic_posts_approved'] - 1),
                     'S_UNREAD_TOPIC'     => $isUnreadTopic,
-                    'U_CONTINUE_READING' => append_sid(self::$phpbbRootPath . 'viewtopic.' . self::$phpEx, "p=" . $topicRow['post_id']),
-                    'U_HEADLINE'         => append_sid(self::$phpbbRootPath . 'viewtopic.' . self::$phpEx, "p=" . $topicRow['post_id']),
-                    'U_USER_PROFILE'     => append_sid(self::$phpbbRootPath . 'memberlist.' . self::$phpEx, "mode=viewprofile&u=" . $topicRow['topic_poster']),
+                    'U_CONTINUE_READING' => $this->helper->route(url::ROUTE_POST, ['id' => $topicRow['post_id']]),
+                    'U_FORUM'            => $this->helper->route(url::ROUTE_FORUM, ['id' => $topicRow['forum_id']]),
+                    //                    'U_HEADLINE'         => append_sid(self::$phpbbRootPath . 'viewtopic.' . self::$phpEx, "p=" . $topicRow['post_id']),
+                    //                    'U_USER_PROFILE'     => append_sid(self::$phpbbRootPath . 'memberlist.' . self::$phpEx, "mode=viewprofile&u=" . $topicRow['topic_poster']),
                 ]);
-
-                $output = $this->helper->render('@tsn_tsn/tsn_special_report.html', $this->language->lang('MYSPOT_SPECIAL_REPORT'));
-
-            } else {
-                $output = new Response('Could not find topic with the requested topic ID', 200);
             }
-        } else {
-            $output = new Response('No topics posted to the Special Report forum', 200);
         }
-
-        return $output;
     }
 
     /**

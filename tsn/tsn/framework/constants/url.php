@@ -21,11 +21,12 @@ class url
 
     // URI Base Routes
     const ROUTE_INDEX = 'tsn_tsn_index';
-    const ROUTE_FORUM = self::DIR_TSN . 'forum';
-    const ROUTE_GROUP = self::DIR_TSN . 'group';
+    const ROUTE_FORUM = 'tsn_tsn_forum';
+//    const ROUTE_GROUP = self::DIR_TSN . 'group';
     const ROUTE_LOGIN = 'tsn_tsn_login';
     const ROUTE_MEMBER = 'tsn_tsn_member';
-    const ROUTE_TOPIC = self::DIR_TSN . 'topic';
+    const ROUTE_TOPIC = 'tsn_tsn_topic';
+    const ROUTE_POST = 'tsn_tsn_post';
     const ROUTE_USER = 'tsn_tsn_user';
 
     // AJAX Slugs for use in switch & routes

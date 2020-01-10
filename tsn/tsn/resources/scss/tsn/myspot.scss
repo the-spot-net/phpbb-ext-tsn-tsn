@@ -1,0 +1,28 @@
+.tsn-login-cta {
+  padding: 0;
+
+  .mdc-card__media {
+    position: relative;
+    color: $mdc-theme-on-primary;
+    background-position: center;
+    background-size: cover;
+    background-color: $mdc-theme-primary;
+
+    .mdc-card__media-content {
+      top: unset;
+      padding: $full-vertical $full-side;
+    }
+  }
+}
+
+.tsn-stat-card.tsn-stat-new-user {
+  position: relative;
+
+  .avatar {
+    position: absolute;
+    top: $full-vertical;
+    right: $full-vertical;
+    border-radius: 50%;
+    max-width: rem-calc(40px);
+  }
+}

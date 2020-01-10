@@ -7,31 +7,41 @@
 .mdc-drawer {
   @include mdc-drawer-divider-color($mdc-theme-primary);
   @include mdc-drawer-surface-fill-color($white);
-
-  //.mdc-drawer__title {
-  //  margin-bottom: 0;
-  //}
 }
 
-/*
- * Styles for the Content of the page
- */
+// Styles for the Cards
 .mdc-card,
 .mdc-card--outlined {
   @include mdc-card-fill-color($white);
   padding: $full-vertical $full-side;
+  margin-top: $half-vertical;
+  margin-bottom: $half-vertical;
 
   &--dense {
     padding: $quarter-vertical $quarter-side;
   }
-
-  &.tsn-stat-card {
-    @include mdc-card-shape-radius(0 $full-side 0 0, false);
-  }
 }
 
+// Styles for drawers
 .mdc-drawer-app-content {
   flex: auto;
   overflow: auto;
   position: relative;
+}
+
+.mdc-chip {
+  min-width: 0;
+
+  [role="gridcell"] {
+    @include text-overflow(block);
+  }
+}
+
+// For Desktop+
+@media (min-width: $xlarge-desktop-min) {
+  // Left/Right Margin to create "centralized" grid
+  .mdc-layout-grid {
+    margin-left: rem-calc(112);
+    margin-right: rem-calc(112);
+  }
 }

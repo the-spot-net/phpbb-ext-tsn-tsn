@@ -1,0 +1,39 @@
+.mdc-card,
+.mdc-card--outlined {
+
+  // Give Stat Cards a rounded top-right corner
+  &.tsn-stat-card {
+    @include mdc-card-shape-radius(0 $full-side 0 0, false);
+  }
+}
+
+// Handle Forum/User Images in the navigation drawer
+.mdc-drawer {
+  .mdc-drawer__header {
+
+    .tsn-drawer-logo {
+      width: $triple-side;
+      height: $triple-side;
+      margin-top: #{$double-vertical} + #{$half-vertical};
+    }
+
+    .avatar {
+      width: $triple-side;
+      height: $triple-side;
+      margin: $full-vertical $full-side $full-vertical 0;
+    }
+  }
+
+  .tsn-navigation-image {
+    min-width: $double-side;
+    height: $double-vertical;
+  }
+}
+
+// User Avatar in a Chip leading icon role
+.mdc-chip {
+  .avatar {
+    @extend .mdc-chip__icon;
+    @extend .mdc-chip__icon--leading;
+  }
+}

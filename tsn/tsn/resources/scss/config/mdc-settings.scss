@@ -11,6 +11,23 @@ $mdc-theme-on-surface: #000000;
 // Set the font family global override variable
 $mdc-typography-font-family: unquote("Lato, Helvetica, sans-serif");
 
+/*
+ * Setup the Grid Overrides
+ */
+$xlarge-desktop-min: 1440px; // tsn
+$desktop-min: 1024px; // 840px
+$tablet-min: 480px;
+$phone-min: 0px;
+
+// Use variables instead of hard-coded values
+$mdc-layout-grid-breakpoints: (
+        desktop: $desktop-min,
+        tablet: $tablet-min,
+        phone: $phone-min,
+);
+
+$mdc-layout-grid-default-column-span: 1; // 4;
+
 // Import the Material Design component styles
 @import "~@material/animation/variables";
 @import "~@material/animation/functions";

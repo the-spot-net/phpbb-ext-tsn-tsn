@@ -1,0 +1,6 @@
+@mixin text-overflow($display: inline-block) {
+  text-overflow: ellipsis;
+  display: $display;
+  white-space: nowrap;
+  overflow: hidden;
+}

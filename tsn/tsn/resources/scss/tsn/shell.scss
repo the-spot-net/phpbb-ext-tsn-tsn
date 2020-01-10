@@ -1,28 +1,27 @@
-.mdc-drawer {
-  .mdc-drawer__header {
+body {
+  margin: 0;
+  background: $mdc-theme-surface none;
+  display: flex;
+  height: 100vh;
+  padding: 0 0 $double-vertical;
 
-    .tsn-drawer-logo {
-      width: $triple-side;
-      height: $triple-side;
-      margin-top: #{$double-vertical} + #{$half-vertical};
-    }
-
-    .avatar {
-      width: $triple-side;
-      height: $triple-side;
-      margin: $full-vertical $full-side $full-vertical 0;
-    }
+  // Override existing tsn8 styles
+  header, footer, main, section, nav {
+    max-width: 100vw;
+    width: 100%;
+    margin: 0;
   }
 
-  .tsn-navigation-image {
-    min-width: $double-side;
-    height: $double-vertical;
-  }
-}
-
-.mdc-chip {
-  .avatar {
-    @extend .mdc-chip__icon;
-    @extend .mdc-chip__icon--leading;
+  footer {
+    border-top: $default-border-width solid $mdc-list-divider-color-on-light-bg;
+    padding: $half-vertical-bordered $full-side $half-vertical;
+    vertical-align: middle;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    line-height: $full-vertical;
+    background-color: $mdc-theme-surface;
+    color: $mdc-theme-on-surface;
   }
 }

@@ -2,7 +2,7 @@
 .mdc-card--outlined {
 
   // Give Stat Cards a rounded top-right corner
-  &.tsn-stat-card {
+  &.tsn-card--stat {
     @include mdc-card-shape-radius(0 $full-side 0 0, false);
   }
 }
@@ -11,7 +11,7 @@
 .mdc-drawer {
   .mdc-drawer__header {
 
-    .tsn-drawer-logo {
+    .tsn-image--drawer-header-logo {
       width: $triple-side;
       height: $triple-side;
       margin-top: #{$double-vertical} + #{$half-vertical};
@@ -24,7 +24,7 @@
     }
   }
 
-  .tsn-navigation-image {
+  .tsn-image--navigation {
     min-width: $double-side;
     height: $double-vertical;
   }
@@ -35,5 +35,11 @@
   .avatar {
     @extend .mdc-chip__icon;
     @extend .mdc-chip__icon--leading;
+  }
+}
+
+.tsn-card {
+  &.unread {
+    border-left: rem-calc(3px) solid $mdc-theme-secondary;
   }
 }

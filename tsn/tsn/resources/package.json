@@ -60,7 +60,7 @@
     "@material/touch-target": "^4.0.0",
     "@material/typography": "^4.0.0",
     "babel-loader": "^8.0.6",
-    "css-loader": "^3.4.0",
+    "css-loader": "^3.4.1",
     "eslint": "^6.7.2",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-standard": "^14.1.0",

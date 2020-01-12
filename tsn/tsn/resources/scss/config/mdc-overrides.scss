@@ -33,7 +33,7 @@
   min-width: 0;
 
   [role="gridcell"] {
-    @include text-overflow(block);
+    @include text-overflow();
   }
 }
 

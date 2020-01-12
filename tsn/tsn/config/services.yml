@@ -9,6 +9,7 @@ services:
             - '@auth.provider_collection'
             - '@captcha.factory'
             - '@config'
+            - '@content.visibility'
             - '@dbal.conn'
             - '@controller.helper'
             - '@language'

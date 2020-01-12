@@ -12,10 +12,12 @@ use phpbb\auth\auth;
 use phpbb\auth\provider_collection;
 use phpbb\captcha\factory;
 use phpbb\config\config;
+use phpbb\content_visibility;
 use phpbb\controller\helper;
 use phpbb\language\language;
 use phpbb\path_helper;
 use phpbb\request\request;
+use phpbb\request\request_interface;
 use phpbb\template\template;
 use phpbb\user;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +37,8 @@ class main_controller
     protected $captcha;
     /* @var \phpbb\config\config */
     protected $config;
+    /** @var \phpbb\content_visibility */
+    protected $contentVisibility;
     /** @var \phpbb\db\driver\driver */
     protected $db;
     /* @var \phpbb\controller\helper */
@@ -62,8 +66,10 @@ class main_controller
      *
      * @param \phpbb\auth\auth                $auth
      * @param \phpbb\auth\provider_collection $authProviderCollection
+     * @param \phpbb\cache\service            $cacheService
      * @param \phpbb\captcha\factory          $captcha
      * @param \phpbb\config\config            $config   Config object
+     * @param \phpbb\content_visibility       $contentVisibility
      * @param \phpbb\db\driver\factory        $db
      * @param \phpbb\controller\helper        $helper   Controller helper object
      * @param \phpbb\language\language        $language Language object
@@ -72,12 +78,13 @@ class main_controller
      * @param \phpbb\template\template        $template Template object
      * @param \phpbb\user                     $user
      */
-    public function __construct(auth $auth, provider_collection $authProviderCollection, factory $captcha, config $config, \phpbb\db\driver\factory $db, helper $helper, language $language, path_helper $pathHelper, request $request, template $template, user $user)
+    public function __construct(auth $auth, provider_collection $authProviderCollection, factory $captcha, config $config, content_visibility $contentVisibility, \phpbb\db\driver\factory $db, helper $helper, language $language, path_helper $pathHelper, request $request, template $template, user $user)
     {
         $this->auth = $auth;
         $this->authProviderCollection = $authProviderCollection;
         $this->captcha = $captcha;
         $this->config = $config;
+        $this->contentVisibility = $contentVisibility;
         $this->db = $db;
         $this->helper = $helper;
         $this->language = $language;
@@ -95,7 +102,6 @@ class main_controller
      * @param string $route the Variable URI in /tsn/ajax/{route}
      *
      * @return \Symfony\Component\HttpFoundation\Response A Symfony Response object
-     * @see \tsn\tsn\framework\constants\url::ROUTE_AJAX_SPECIAL_REPORT
      */
     public function ajax($route)
     {
@@ -125,6 +131,7 @@ class main_controller
 
         $this->moduleStatistics();
         $this->moduleSpecialReport();
+        $this->moduleMySpotPosts();
 
         $this->template->assign_vars([
             'S_ALLOW_MINI_PROFILE'   => !empty($this->config['tsn8_activate_mini_profile']),
@@ -149,7 +156,9 @@ class main_controller
 
         $this->initUserAuthentication();
 
-        return $this->moduleLogin($this->request->variable('redirect', $this->helper->route(url::ROUTE_INDEX)));
+        $this->moduleLogin($this->request->variable('redirect', $this->helper->route(url::ROUTE_INDEX)));
+
+        return $this->helper->render('@tsn_tsn/tsn_login.html', $this->language->lang('LOGIN'));
     }
 
     /**
@@ -172,6 +181,14 @@ class main_controller
     public function getDb()
     {
         return $this->db;
+    }
+
+    /**
+     * @return \phpbb\user
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -206,7 +223,7 @@ class main_controller
         // Setup the permissions...
         $this->user->session_begin();
         $this->auth->acl($this->user->data);
-        $this->user->setup(['viewforum', 'memberlist', 'groups']);
+        $this->user->setup(['viewforum', 'memberlist', 'groups', 'search']);
 
         $this->template->assign_vars([
             'SERVER_PROTOCOL' => $this->config['server_protocol'],
@@ -282,7 +299,7 @@ class main_controller
                         $err = sprintf(
                             $this->language->lang($result['error_msg']),
                             // TODO - Update this route to /tsn/user/send-password
-                            ($this->getConfig('email_enable')) ? '<a href="' . append_sid(self::$phpbbRootPath . 'ucp.' . self::$phpEx, 'mode=sendpassword') . '">' : '',
+                            ($this->getConfig('email_enable')) ? '<a href="' . append_sid(self::$phpbbRootPath . '/ucp.' . self::$phpEx, 'mode=sendpassword') . '">' : '',
                             ($this->getConfig('email_enable')) ? '</a>' : '',
                             '<a href="' . phpbb_get_board_contact_link($this->config, self::$phpbbRootPath, self::$phpEx) . '">',
                             '</a>'
@@ -307,7 +324,7 @@ class main_controller
                         // Assign admin contact to some error messages
                         if ($result['error_msg'] == 'LOGIN_ERROR_USERNAME' || $result['error_msg'] == 'LOGIN_ERROR_PASSWORD') {
                             // TODO - Update this route with /tsn/contact/admin
-                            $err = sprintf($this->language->lang($result['error_msg']), '<a href="' . append_sid(self::$phpbbRootPath . 'memberlist.' . self::$phpEx, 'mode=contactadmin') . '">', '</a>');
+                            $err = sprintf($this->language->lang($result['error_msg']), '<a href="' . append_sid(self::$phpbbRootPath . '/memberlist.' . self::$phpEx, 'mode=contactadmin') . '">', '</a>');
                         }
 
                         break;
@@ -348,18 +365,18 @@ class main_controller
 
             'U_SEND_PASSWORD'     => ($this->getConfig('email_enable'))
                 // TODO - Update this route to /tsn/user/send-password
-                ? append_sid(self::$phpbbRootPath . 'ucp.' . self::$phpEx, 'mode=sendpassword')
+                ? append_sid(self::$phpbbRootPath . '/ucp.' . self::$phpEx, 'mode=sendpassword')
                 : '',
             'U_RESEND_ACTIVATION' => ($this->getConfig('require_activation') == USER_ACTIVATION_SELF && $this->getConfig('email_enable'))
                 // TODO - Update this route to /tsn/user/send-activation
-                ? append_sid(self::$phpbbRootPath . 'ucp.' . self::$phpEx, 'mode=resend_act')
+                ? append_sid(self::$phpbbRootPath . '/ucp.' . self::$phpEx, 'mode=resend_act')
                 : '',
             // TODO - Update this route to /tsn/terms
-            'U_TERMS_USE'         => append_sid(self::$phpbbRootPath . 'ucp.' . self::$phpEx, 'mode=terms'),
+            'U_TERMS_USE'         => append_sid(self::$phpbbRootPath . '/ucp.' . self::$phpEx, 'mode=terms'),
             // TODO - Update this route to /tsn/privacy
-            'U_PRIVACY'           => append_sid(self::$phpbbRootPath . 'ucp.' . self::$phpEx, 'mode=privacy'),
+            'U_PRIVACY'           => append_sid(self::$phpbbRootPath . '/ucp.' . self::$phpEx, 'mode=privacy'),
             // TODO - Update this route to /tsn/privacy
-            'UA_PRIVACY'          => addslashes(append_sid(self::$phpbbRootPath . 'ucp.' . self::$phpEx, 'mode=privacy')),
+            'UA_PRIVACY'          => addslashes(append_sid(self::$phpbbRootPath . '/ucp.' . self::$phpEx, 'mode=privacy')),
 
             'S_DISPLAY_FULL_LOGIN' => true,
             'S_HIDDEN_FIELDS'      => $s_hidden_fields,
@@ -370,8 +387,6 @@ class main_controller
             'USERNAME_CREDENTIAL' => 'username',
             'PASSWORD_CREDENTIAL' => 'password', // ($admin) ? 'password_' . $credential : 'password', // Skip admin login for now
         ]);
-
-        return $this->helper->render('@tsn_tsn/tsn_login.html', $this->language->lang('LOGIN'));
     }
 
     /**
@@ -396,18 +411,18 @@ class main_controller
             'FORUM_UNREAD_IMG'        => $this->user->img('forum_unread', 'UNREAD_POSTS'),
             'FORUM_LOCKED_IMG'        => $this->user->img('forum_read_locked', 'NO_UNREAD_POSTS_LOCKED'),
             'FORUM_UNREAD_LOCKED_IMG' => $this->user->img('forum_unread_locked', 'UNREAD_POSTS_LOCKED'),
-            'S_LOGIN_ACTION'          => append_sid(self::$phpbbRootPath . 'ucp.' . self::$phpEx, 'mode=login'),
+            'S_LOGIN_ACTION'          => append_sid(self::$phpbbRootPath . '/ucp.' . self::$phpEx, 'mode=login'),
             'U_SEND_PASSWORD'         => ($this->getConfig('email_enable'))
-                ? append_sid(self::$phpbbRootPath . 'ucp.' . self::$phpEx, 'mode=sendpassword')
+                ? append_sid(self::$phpbbRootPath . '/ucp.' . self::$phpEx, 'mode=sendpassword')
                 : '',
             'S_DISPLAY_BIRTHDAY_LIST' => (bool)$this->getConfig('load_birthdays'),
             'S_INDEX'                 => true, // Not sure what this is for...
             // 'S_MYSPOT_LOGIN_REDIRECT' => '<input type="hidden" name="redirect" value="' . $this->helper->route(url::ROUTE_INDEX) . '">',
             'U_MARK_FORUMS'           => ($this->user->data['is_registered'] || $this->getConfig('load_anon_lastread'))
-                ? append_sid(self::$phpbbRootPath . 'index.' . self::$phpEx, 'hash=' . generate_link_hash('global') . '&amp;mark=forums&amp;mark_time=' . time())
+                ? append_sid(self::$phpbbRootPath . '/index.' . self::$phpEx, 'hash=' . generate_link_hash('global') . '&amp;mark=forums&amp;mark_time=' . time())
                 : '',
             'U_MCP'                   => ($this->auth->acl_get('m_') || $this->auth->acl_getf_global('m_'))
-                ? append_sid(self::$phpbbRootPath . 'mcp.' . self::$phpEx, 'i=main&amp;mode=front', true, $this->user->session_id)
+                ? append_sid(self::$phpbbRootPath . '/mcp.' . self::$phpEx, 'i=main&amp;mode=front', true, $this->user->session_id)
                 : '',
         ]);
     }
@@ -447,7 +462,7 @@ class main_controller
                 'POSTS_PCT_NUM' => number_format($percentage, 2),
 
                 'U_USER_ADMIN' => ($this->auth->acl_get('a_user'))
-                    ? append_sid(self::$phpbbRootPath . 'index.' . self::$phpEx, 'i=users&amp;mode=overview&amp;u=' . $this->user->data['user_id'], true, $this->user->session_id)
+                    ? append_sid(self::$phpbbRootPath . '/index.' . self::$phpEx, 'i=users&amp;mode=overview&amp;u=' . $this->user->data['user_id'], true, $this->user->session_id)
                     : '',
             ]);
 
@@ -480,6 +495,28 @@ class main_controller
                 ]);
             }
         }
+    }
+
+    /**
+     * Generate the post sets for the MySpot page
+     */
+    private function moduleMySpotPosts()
+    {
+
+        $this->template->assign_vars([
+            'S_ALLOW_SEARCH'      => ($this->auth->acl_get('u_search') || $this->auth->acl_getf_global('f_search') || $this->getConfig('load_search')),
+            'S_SEARCH_OVERLOADED' => ($this->user->load && $this->getConfig('limit_search_load') && ($this->user->load > doubleval($this->getConfig('limit_search_load')))),
+        ]);
+
+        // This was a normal search feature, but is new for tsn9 prominence
+        $this->submoduleNewPosts();
+        // This is the original "what's new" module
+        $this->submoduleUnreadPosts();
+        // This is to keep conversations going
+        $this->submoduleUnansweredTopics();
+        // This is to show what's popular, and recently replied to
+        $this->submoduleActiveTopics();
+
     }
 
     /**
@@ -530,23 +567,21 @@ class main_controller
                 $postWords = explode(' ', strip_tags($postBody));
 
                 $this->template->assign_block_vars('specialreport', [
-                    'FORUM_NAME'         => $topicRow['forum_name'],
-                    'TOPIC_ID'           => $topicRow['topic_id'],
+                    'FORUM_NAME' => $topicRow['forum_name'],
+
+                    'TOPIC_ID'   => $topicRow['topic_id'],
+                    'TOPIC_META' => $this->processTopicMeta($topicRow['topic_views'], (int)$topicRow['topic_posts_approved'] - 1),
+
                     'HEADLINE'           => censor_text($topicRow['topic_title']),
                     'I_AVATAR_IMG'       => $this->generateUserAvatar($topicRow['topic_poster']),
                     // TODO Update this to use new route URL
                     'POST_AUTHOR'        => get_username_string('full', $topicRow['topic_poster'], $topicRow['username'], $topicRow['user_colour']),
-                    'POST_EXCERPT'       => (count($postWords) > $this->config['tsn_specialreport_excerpt_words'])
-                        ? implode(' ', array_slice($postWords, 0, $this->config['tsn_specialreport_excerpt_words'])) . '... '
-                        : implode(' ', $postWords),
+                    'POST_EXCERPT'       => implode(' ', array_slice($postWords, 0, 200)),
                     'POST_BODY'          => $postBody,
                     'POST_DATE'          => $this->user->format_date($topicRow['topic_time']),
-                    'POST_META'          => $this->language->lang('SPECIAL_REPORT_VIEWS_COMMENTS_COUNT', $topicRow['topic_views'], (int)$topicRow['topic_posts_approved'] - 1),
                     'S_UNREAD_TOPIC'     => $isUnreadTopic,
                     'U_CONTINUE_READING' => $this->helper->route(url::ROUTE_POST, ['id' => $topicRow['post_id']]),
                     'U_FORUM'            => $this->helper->route(url::ROUTE_FORUM, ['id' => $topicRow['forum_id']]),
-                    //                    'U_HEADLINE'         => append_sid(self::$phpbbRootPath . 'viewtopic.' . self::$phpEx, "p=" . $topicRow['post_id']),
-                    //                    'U_USER_PROFILE'     => append_sid(self::$phpbbRootPath . 'memberlist.' . self::$phpEx, "mode=viewprofile&u=" . $topicRow['topic_poster']),
                 ]);
             }
         }
@@ -560,6 +595,242 @@ class main_controller
         $this->submoduleUserBirthdays();
         $this->submoduleUsersOnline();
         $this->submoduleUserGroupLegend();
+    }
+
+    /**
+     * Process the topic query for the particular submodule results cursor
+     *
+     * @param $blockName
+     * @param $cursor
+     * @param $field
+     * @param $forumIdExclusions
+     * @param $m_approve_topics_fid_sql
+     */
+    private function postprocessMySpotSearchResults($cursor, $field)
+    {
+        $start = 0;
+        $per_page = 10; // $this->getConfig('topics_per_page');
+
+        $id_ary = [];
+        while ($row = $this->db->sql_fetchrow($cursor)) {
+            $id_ary[] = (int)$row[$field];
+        }
+        query::freeCursor($this, $cursor);
+
+        if ($total_match_count = count($id_ary)) {
+            // We have matches, take the first page
+            $id_ary = array_slice($id_ary, $start, $per_page);
+        }
+
+        return $id_ary;
+    }
+
+    private function prepareMySpotSearchResultsOutput($blockName, $id_ary, $forumIdExclusions, $approvedTopicForumIdsSql)
+    {
+        // make sure that some arrays are always in the same order
+        sort($forumIdExclusions);
+
+        $this->language->add_lang('viewtopic');
+
+        if (count($id_ary)) {
+
+            // Do this for later...
+            if ($this->getConfig('load_anon_lastread') || ($this->user->data['is_registered'] && !$this->getConfig('load_db_lastread'))) {
+                $tracking_topics = $this->request->variable($this->getConfig('cookie_name') . '_track', '', true, request_interface::COOKIE);
+                $tracking_topics = ($tracking_topics) ? tracking_unserialize($tracking_topics) : [];
+            }
+
+            $topic_tracking_info = $forums = $rowset = $shadow_topic_list = [];
+
+            $cursor = query::getMySpotNewPostsTopicDetailsCursor($this, $id_ary, $forumIdExclusions, $approvedTopicForumIdsSql);
+
+            while ($row = $this->db->sql_fetchrow($cursor)) {
+
+                $row['forum_id'] = (int)$row['forum_id'];
+                $row['topic_id'] = (int)$row['topic_id'];
+
+                if ($row['topic_status'] == ITEM_MOVED) {
+                    $shadow_topic_list[$row['topic_moved_id']] = $row['topic_id'];
+                }
+
+                $rowset[$row['topic_id']] = $row;
+
+                if (!isset($forums[$row['forum_id']]) && $this->user->data['is_registered'] && $this->getConfig('load_db_lastread')) {
+                    $forums[$row['forum_id']]['mark_time'] = $row['f_mark_time'];
+                }
+                $forums[$row['forum_id']]['topic_list'][] = $row['topic_id'];
+                $forums[$row['forum_id']]['rowset'][$row['topic_id']] = &$rowset[$row['topic_id']];
+            }
+            query::freeCursor($this, $cursor);
+
+            // If we have some shadow topics, update the rowset to reflect their topic information
+            if (count($shadow_topic_list)) {
+
+                $cursor = query::getTopicRowCursor($this, $shadow_topic_list);
+                while ($row = $this->db->sql_fetchrow($cursor)) {
+
+                    $orig_topic_id = $shadow_topic_list[$row['topic_id']];
+
+                    // We want to retain some values
+                    $row = array_merge($row, [
+                            'topic_moved_id' => $rowset[$orig_topic_id]['topic_moved_id'],
+                            'topic_status'   => $rowset[$orig_topic_id]['topic_status'],
+                            'forum_name'     => $rowset[$orig_topic_id]['forum_name'],
+                        ]
+                    );
+
+                    $rowset[$orig_topic_id] = $row;
+                }
+                query::freeCursor($this, $cursor);
+            }
+            unset($shadow_topic_list);
+
+            foreach ($forums as $forum_id => $forum) {
+                if ($this->user->data['is_registered'] && $this->getConfig('load_db_lastread')) {
+                    $topic_tracking_info[$forum_id] = get_topic_tracking($forum_id, $forum['topic_list'], $forum['rowset'], [$forum_id => $forum['mark_time']]);
+                } else if ($this->getConfig('load_anon_lastread') || $this->user->data['is_registered']) {
+                    $topic_tracking_info[$forum_id] = get_complete_topic_tracking($forum_id, $forum['topic_list']);
+
+                    if (!$this->user->data['is_registered']) {
+                        $this->user->data['user_lastmark'] = (isset($tracking_topics['l']))
+                            ? (int)(base_convert($tracking_topics['l'], 36, 10) + $this->getConfig('board_startdate'))
+                            : 0;
+                    }
+                }
+            }
+            unset($forums);
+
+            if (!function_exists('topic_status')) {
+                include_once('includes/functions_display.' . self::$phpEx);
+            }
+
+            foreach ($rowset as $row) {
+                $forum_id = $row['forum_id'];
+                $topicId = $row['topic_id'];
+                $replies = $this->contentVisibility->get_count('topic_posts', $row, $forum_id) - 1;
+
+                $folder_img = $folder_alt = $topic_type = '';
+                topic_status($row, $replies, (isset($topic_tracking_info[$forum_id][$topicId]) && $row['topic_last_post_time'] > $topic_tracking_info[$forum_id][$topicId]) ? true : false, $folder_img, $folder_alt, $topic_type);
+
+                $unread_topic = (isset($topic_tracking_info[$forum_id][$topicId]) && $row['topic_last_post_time'] > $topic_tracking_info[$forum_id][$topicId]) ? true : false;
+
+                $topic_unapproved = (($row['topic_visibility'] == ITEM_UNAPPROVED || $row['topic_visibility'] == ITEM_REAPPROVE) && $this->auth->acl_get('m_approve', $forum_id)) ? true : false;
+                $posts_unapproved = ($row['topic_visibility'] == ITEM_APPROVED && $row['topic_posts_unapproved'] && $this->auth->acl_get('m_approve', $forum_id)) ? true : false;
+                $topic_deleted = ($row['topic_visibility'] == ITEM_DELETED);
+
+                $postBody = generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], 1);
+                $postWords = explode(' ', strip_tags($postBody));
+
+                $this->template->assign_block_vars($blockName, [
+                    'FORUM_TITLE' => $row['forum_name'],
+
+                    'TOPIC_META' => $this->processTopicMeta($row['topic_views'], (int)$row['topic_posts_approved'] - 1),
+
+                    'LAST_POST_SUBJECT'         => $row['topic_last_post_subject'],
+                    'LAST_POST_TIME'            => $this->user->format_date($row['topic_last_post_time']),
+                    'LAST_POST_AUTHOR_FULL'     => get_username_string('full', $row['topic_last_poster_id'], $row['topic_last_poster_name'], $row['topic_last_poster_colour']),
+                    'I_LAST_POST_AUTHOR_AVATAR' => $this->generateUserAvatar($row['topic_last_poster_id']),
+                    'LAST_POST_EXCERPT'         => implode(' ', array_slice($postWords, 0, 100)),
+
+                    'S_UNREAD_TOPIC' => $unread_topic,
+
+                    'S_TOPIC_REPORTED'   => (!empty($row['topic_reported']) && $this->auth->acl_get('m_report', $forum_id)) ? true : false,
+                    'S_TOPIC_UNAPPROVED' => $topic_unapproved,
+                    'S_POSTS_UNAPPROVED' => $posts_unapproved,
+                    'S_TOPIC_DELETED'    => $topic_deleted,
+                    'S_HAS_POLL'         => ($row['poll_start']) ? true : false,
+
+                    'U_NEWEST_POST' => $this->helper->route(url::ROUTE_TOPIC, ['id' => $topicId, 'f' => $forum_id, 'view' => 'unread']) . '#unread',
+                    // TODO Update this to MCP Route, when exists
+                    'U_MCP_REPORT'  => append_sid(self::$phpbbRootPath . '/mcp.' . self::$phpEx, 'i=reports&amp;mode=reports&amp;t=' . $topicId, true, $this->user->session_id),
+                    'U_VIEW_FORUM'  => $this->helper->route(url::ROUTE_FORUM, ['id' => $forum_id]),
+                ]);
+            }
+        }
+        unset($rowset);
+    }
+
+    /**
+     * Setup the forum IDs that can be used when searching for the MySpot post submodules
+     *
+     * @param string $search_id The Search Content Enum
+     * @param array  $forumIdExclusions
+     * @param string $m_approve_topics_fid_sql
+     */
+    private function processMySpotSearchSetup($search_id, array &$forumIdExclusions = [], &$m_approve_topics_fid_sql = '')
+    {
+
+        $forumIdExclusions = array_unique(array_merge(array_keys($this->auth->acl_getf('!f_read', true)), array_keys($this->auth->acl_getf('!f_search', true))));
+        $cursor = query::getMySpotPostSearchResultCursor($this, $this->user->session_id, $forumIdExclusions, $this->user->data['user_id']);
+
+        while ($forumRow = $this->db->sql_fetchrow($cursor)) {
+            if ($forumRow['forum_password'] && $forumRow['user_id'] != $this->user->data['user_id']) {
+                // User doesn't have access to this forum...
+                $forumIdExclusions[] = $forumRow['forum_id'];
+            }
+
+            // Exclude forums from active topics
+            if (!($forumRow['forum_flags'] & FORUM_FLAG_ACTIVE_TOPICS) && ($search_id == 'active_topics')) {
+                $ex_fid_ary[] = (int)$forumRow['forum_id'];
+                continue;
+            }
+        }
+        query::freeCursor($this, $cursor);
+
+        $m_approve_topics_fid_sql = $this->contentVisibility->get_global_visibility_sql('topic', $forumIdExclusions, 't.');
+    }
+
+    /**
+     * Run the views & comments through the language processor consistently
+     *
+     * @param int $views
+     * @param int $comments
+     *
+     * @return string
+     */
+    private function processTopicMeta($views, $comments)
+    {
+        return $this->language->lang('MYSPOT_TOPIC_VIEWS_COMMENTS', number_format((int)$views, 0), number_format((int)$comments, 0));
+    }
+
+    /**
+     * Generate the 'Active Topics (90 days)' submodule
+     */
+    private function submoduleActiveTopics()
+    {
+        $forumIdExclusions = [];
+        $approvedTopicForumIdsSql = '';
+
+        $this->processMySpotSearchSetup('active_topics', $forumIdExclusions, $approvedTopicForumIdsSql);
+
+        $sort_days = 90; // days; default: 7
+        $cursor = query::getMySpotActiveTopicIdsCursor($this, $sort_days, $approvedTopicForumIdsSql, $forumIdExclusions);
+
+        $field = 'topic_id';
+        $id_ary = $this->postprocessMySpotSearchResults($cursor, $field);
+
+        $this->prepareMySpotSearchResultsOutput('activetopics', $id_ary, $forumIdExclusions, $approvedTopicForumIdsSql);
+    }
+
+    /**
+     * Generate the "What's New" submodule
+     */
+    private function submoduleNewPosts()
+    {
+        $forumIdExclusions = [];
+        $approvedTopicForumIdsSql = '';
+
+        $this->processMySpotSearchSetup('newposts', $forumIdExclusions, $approvedTopicForumIdsSql);
+
+        // Set limit for the $total_match_count to reduce server load
+        $total_matches_limit = 1000;
+        // Only return up to $total_matches_limit+1 ids (the last one will be removed later)
+        $cursor = query::getMySpotNewPostTopicIdsCursor($this, $this->user->data['user_lastvisit'], $approvedTopicForumIdsSql, $forumIdExclusions, $total_matches_limit + 1);
+
+        $field = 'topic_id';
+        $id_ary = $this->postprocessMySpotSearchResults($cursor, $field);
+
+        $this->prepareMySpotSearchResultsOutput('newposts', $id_ary, $forumIdExclusions, $approvedTopicForumIdsSql);
     }
 
     /**
@@ -578,6 +849,47 @@ class main_controller
             $this->user->data['session_time'] = (isset($sessionRow['session_time'])) ? $sessionRow['session_time'] : 0;
             $this->user->data['session_viewonline'] = (isset($sessionRow['session_viewonline'])) ? $sessionRow['session_viewonline'] : 0;
         }
+    }
+
+    /**
+     * Generate the Unanswered Topics submodule
+     */
+    private function submoduleUnansweredTopics()
+    {
+        $forumIdExclusions = [];
+        $approvedTopicForumIdsSql = '';
+
+        $this->processMySpotSearchSetup('unanswered', $forumIdExclusions, $approvedTopicForumIdsSql);
+
+        $cursor = query::getMySpotUnansweredTopicIdsCursor($this, $approvedTopicForumIdsSql, $forumIdExclusions);
+
+        $field = 'topic_id';
+        $id_ary = $this->postprocessMySpotSearchResults($cursor, $field);
+
+        $this->prepareMySpotSearchResultsOutput('unanswered', $id_ary, $forumIdExclusions, $approvedTopicForumIdsSql);
+    }
+
+    /**
+     * Generate the 'Unread Posts' submodule
+     */
+    private function submoduleUnreadPosts()
+    {
+        $forumIdExclusions = [];
+        $approvedTopicForumIdsSql = '';
+        $total_matches_limit = 1000; // Set limit for the $total_match_count to reduce server load
+
+        $this->processMySpotSearchSetup('unreadposts', $forumIdExclusions, $approvedTopicForumIdsSql);
+
+        // This is not moved to own query because it's done in another method... might rebuild method locally.
+        $sql_sort = 'ORDER BY t.topic_last_post_time DESC';
+        $sql_where = 'AND t.topic_moved_id = 0
+					AND ' . $approvedTopicForumIdsSql . '
+					' . ((count($forumIdExclusions)) ? 'AND ' . $this->db->sql_in_set('t.forum_id', $forumIdExclusions, true) : '');
+
+        // Only return up to $total_matches_limit+1 ids (the last one will be removed later)
+        $id_ary = array_keys(get_unread_topics($this->user->data['user_id'], $sql_where, $sql_sort, $total_matches_limit + 1));
+
+        $this->prepareMySpotSearchResultsOutput('unreadposts', $id_ary, $forumIdExclusions, $approvedTopicForumIdsSql);
     }
 
     /**
@@ -600,7 +912,7 @@ class main_controller
                     'I_AVATAR_IMG' => $this->generateUserAvatar($userRow['user_id']),
                     'NAME'         => $userRow['username'],
                     'COLOR'        => ($userRow['user_colour']) ? '#' . $userRow['user_colour'] : '',
-                    'URL'          => $this->helper->route(url::make(url::ROUTE_MEMBER, [$userRow['user_id']])),
+                    'URL'          => $this->helper->route(url::ROUTE_MEMBER, ['id' => $userRow['user_id']]),
                 ]);
             }
 

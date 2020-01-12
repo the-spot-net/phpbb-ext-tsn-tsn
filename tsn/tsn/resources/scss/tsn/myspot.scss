@@ -31,11 +31,13 @@
   position: relstive;
 
   .tsn-card--specialreport__content {
-    margin-right: rem-calc(112px);
+    margin-right: rem-calc(96px);
   }
 
   .tsn-card--specialreport__excerpt {
     margin-top: $half-vertical;
+    max-height: 3em;
+    @include text-overflow(2);
   }
 
   .avatar {
@@ -43,5 +45,33 @@
     top: $full-vertical;
     right: $full-side;
     width: rem-calc(80px);
+  }
+}
+
+.tsn-card-collection {
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.tsn-card--postsearch {
+  position: relative;
+
+  .tsn-card--postsearch__content {
+    margin-right: rem-calc(52px);
+
+    .tsn-card--postsearch__title {
+      @include text-overflow();
+    }
+
+    .tsn-card--postsearch__excerpt {
+      @include text-overflow();
+    }
+  }
+
+  .avatar {
+    position: absolute;
+    //top: $full-vertical;
+    right: $full-vertical;
+    width: rem-calc(40);
   }
 }

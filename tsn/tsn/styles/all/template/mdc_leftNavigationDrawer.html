@@ -1,21 +1,18 @@
 <aside class="mdc-drawer mdc-drawer--modal mdc-top-app-bar--fixed-adjust mdc-theme--surface mdc-theme--on-surface">
     <div class="mdc-drawer__header">
         {% if S_USER_LOGGED_IN %}
-        <div class="grid-x">
-            <div class="cell shrink">
+            <div class="tsn-drawer--header">
                 {{ CURRENT_USER_AVATAR }}
+                <div class="tsn-drawer--header__content">
+                    <h6 class="mdc-drawer__title mdc-typography--headline6 ">{{ CURRENT_USERNAME_FULL }}</h6>
+                    <span class="mdc-drawer__subtitle mdc-typography--body2">{% if RANK_TITLE %}{{ RANK_TITLE }}{% endif %}</span>
+                </div>
             </div>
-            <div class="cell auto">
-                <span class="mdc-drawer__title mdc-typography--headline6 ">{{ CURRENT_USERNAME_FULL }}</span>
-                <span class="mdc-drawer__subtitle mdc-typography--body2">{% if RANK_TITLE %}{{ RANK_TITLE }}{% endif %}</span>
-            </div>
-        </div>
         {% else %}
-        <img alt="site logo" class="tsn-image--drawer-header-logo" src="{{ T_EXT_PATH }}/images/tsn-13.png">
-        <span class="mdc-drawer__title mdc-typography--headline6">{{ lang('WELCOME_VISITOR') }}</span>
-        <span class="mdc-drawer__subtitle mdc-typography--body2">{{ lang('JOIN_THE_DISCUSSION') }}</span>
-        <div class="grid-x grid-padding-y text-center">
-            <div class="cell auto">
+            <img alt="site logo" class="tsn-image--drawer-header-logo" src="{{ T_EXT_PATH }}/images/tsn-13.png">
+            <h6 class="mdc-drawer__title mdc-typography--headline6">{{ lang('WELCOME_VISITOR') }}</h6>
+            <p class="mdc-drawer__subtitle mdc-typography--body2">{{ lang('JOIN_THE_DISCUSSION') }}</p>
+            <div>
                 <div class="mdc-touch-target-wrapper">
                     <button class="mdc-button mdc-button--touch mdc-button--raised">
                         <div class="mdc-button__ripple"></div>
@@ -23,8 +20,6 @@
                         <div class="mdc-button__touch"></div>
                     </button>
                 </div>
-            </div>
-            <div class="cell auto ">
                 <div class="mdc-touch-target-wrapper">
                     <a class="mdc-button mdc-button--touch mdc-button--outlined" href="{{ U_TSN_LOGIN }}">
                         <div class="mdc-button__ripple"></div>
@@ -33,51 +28,17 @@
                     </a>
                 </div>
             </div>
-        </div>
         {% endif %}
     </div>
     <hr class="mdc-list-divider">
     <nav class="mdc-drawer__content">
         <div class="mdc-list">
-            {% EVENT navbar_header_quick_links_before %}
-
-            <!-- TODO All this needs to become navrow, similar to forumrow -->
             <a aria-current="page" class="mdc-list-item mdc-list-item--activated" href="{{ U_TSN_INDEX }}">
                 <i aria-hidden="true" class="material-icons mdc-list-item__graphic">home</i>
                 <span class="mdc-list-item__text">My Spot</span>
             </a>
-
-            {% if S_DISPLAY_SEARCH %}
-            {% if S_USER_LOGGED_IN %}
-            <a class="mdc-list-item" href="{{ U_SEARCH_NEW }}">
-                <i aria-hidden="true" class="material-icons mdc-list-item__graphic">new_releases</i>
-                <span class="mdc-list-item__text">{{ lang('SEARCH_NEW') }}</span>
-            </a>
-            {% endif %}
-            {% if S_LOAD_UNREADS %}
-            <a class="mdc-list-item" href="{{ U_SEARCH_UNREAD }}">
-                <i aria-hidden="true" class="material-icons mdc-list-item__graphic">bookmark</i>
-                <span class="mdc-list-item__text">{{ lang('SEARCH_UNREAD') }}</span>
-            </a>
-            {% endif %}
-            <a class="mdc-list-item" href="{{ U_SEARCH_UNANSWERED }}">
-                <i aria-hidden="true" class="material-icons mdc-list-item__graphic">speaker_notes_off</i>
-                <span class="mdc-list-item__text">{{ lang('SEARCH_UNANSWERED') }}</span>
-            </a>
-            <a class="mdc-list-item" href="{{ U_SEARCH_ACTIVE_TOPICS }}">
-                <i aria-hidden="true" class="material-icons mdc-list-item__graphic">whatshot</i>
-                <span class="mdc-list-item__text">{{ lang('SEARCH_ACTIVE_TOPICS') }}</span>
-            </a>
-            <a class="mdc-list-item" href="{{ U_SEARCH }}">
-                <i aria-hidden="true" class="material-icons mdc-list-item__graphic">search</i>
-                <span class="mdc-list-item__text">{{ lang('SEARCH') }}</span>
-            </a>
-            {% endif %}
-
-            {% EVENT navbar_header_quick_links_after %}
         </div>
         <div class="mdc-list">
-            <!-- @formatter:off -->
             {% for row in forumrow %}
                 {% if row.S_IS_CAT %}
                     <hr class="mdc-list-divider">
@@ -98,7 +59,6 @@
             {% else %}
                 {{ lang('NO_FORUMS') }}
             {% endfor %}
-            <!-- @formatter:on -->
         </div>
     </nav>
 </aside>

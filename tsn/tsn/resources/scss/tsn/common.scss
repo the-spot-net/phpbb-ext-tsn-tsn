@@ -17,10 +17,20 @@
       margin-top: #{$double-vertical} + #{$half-vertical};
     }
 
-    .avatar {
-      width: $triple-side;
-      height: $triple-side;
-      margin: $full-vertical $full-side $full-vertical 0;
+    .tsn-drawer--header {
+      position: relative;
+      min-height: rem-calc(80);
+
+      .avatar {
+        position: absolute;
+        top: $full-vertical;
+        width: $triple-side;
+        height: $triple-vertical;
+      }
+
+      .tsn-drawer--header__content {
+        margin-left: rem-calc(48+16);
+      }
     }
   }
 

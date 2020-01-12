@@ -1,8 +1,9 @@
-@mixin text-overflow($display: inline-block) {
-  text-overflow: ellipsis;
-  display: $display;
-  white-space: nowrap;
+@mixin text-overflow($lines: 1) {
   overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
 }
 
 // =============================================================================

@@ -38,7 +38,7 @@
     <!-- @formatter:on -->
 
     {% if U_CANONICAL %}
-    <link href="{{ U_CANONICAL }}" rel="canonical">
+        <link href="{{ U_CANONICAL }}" rel="canonical">
     {% endif %}
 
     <!--
@@ -53,15 +53,15 @@
     <link href="{{ T_STYLESHEET_LANG_LINK }}" rel="stylesheet">
 
     {% if S_CONTENT_DIRECTION == 'rtl' %}
-    <link href="{{ T_THEME_PATH }}/bidi.css?assets_version={{ T_ASSETS_VERSION }}" rel="stylesheet">
+        <link href="{{ T_THEME_PATH }}/bidi.css?assets_version={{ T_ASSETS_VERSION }}" rel="stylesheet">
     {% endif %}
 
     {% if S_PLUPLOAD %}
-    <link href="{{ T_THEME_PATH }}/plupload.css?assets_version={{ T_ASSETS_VERSION }}" rel="stylesheet">
+        <link href="{{ T_THEME_PATH }}/plupload.css?assets_version={{ T_ASSETS_VERSION }}" rel="stylesheet">
     {% endif %}
 
     {% if S_COOKIE_NOTICE %}
-    <link href="{{ T_ASSETS_PATH }}/cookieconsent/cookieconsent.min.css?assets_version={{ T_ASSETS_VERSION }}" rel="stylesheet">
+        <link href="{{ T_ASSETS_PATH }}/cookieconsent/cookieconsent.min.css?assets_version={{ T_ASSETS_VERSION }}" rel="stylesheet">
     {% endif %}
 
     <!--[if lte IE 9]>
@@ -78,21 +78,17 @@
 
     {$STYLESHEETS}
 
+    {% INCLUDECSS '@tsn_tsn/css/tsn_theme.css' %}
+    {% INCLUDEJS '@tsn_tsn/js/tsn_scripts.js' %}
+
     {% EVENT overall_header_stylesheets_after %}
 
 </head>
 <!--<body id="phpbb" class="nojs notouch section-{{ SCRIPT_NAME }} {{ S_CONTENT_DIRECTION }} {{ BODY_CLASS }}">-->
 <body class="nojs notouch {{ S_CONTENT_DIRECTION }}">
-{% INCLUDECSS '@tsn_tsn/css/tsn_theme.css' %}
-{% INCLUDEJS '@tsn_tsn/js/tsn_scripts.js' %}
-
 {% include '@tsn_tsn/mdc_topAppBar.html' %}
 {% include '@tsn_tsn/mdc_leftNavigationDrawer.html' %}
-
 <main class="mdc-drawer-app-content mdc-top-app-bar--fixed-adjust">
-
-    {% if S_USER_INACTIVE %}
-    <!--        <span class="tsn8_error_message"><b>{{ lang('USER_IS_INACTIVE') }}</b><br/>{{ lang('INACTIVE_REASON') }}: {{ USER_INACTIVE_REASON }}</span>-->
-    {% endif %}
-
-
+{#    {% if S_USER_INACTIVE %}#}
+{#        <span class="tsn8_error_message"><b>{{ lang('USER_IS_INACTIVE') }}</b><br/>{{ lang('INACTIVE_REASON') }}: {{ USER_INACTIVE_REASON }}</span>#}
+{#    {% endif %}#}

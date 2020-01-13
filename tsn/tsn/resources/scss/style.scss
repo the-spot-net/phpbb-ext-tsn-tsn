@@ -1,10 +1,10 @@
+// Import the foundation sites stuff;
+@import "config/foundation-settings";
+
 // Import the tsn variable assignments
 @import "config/vars";
 @import "tsn/util/_transitions";
 @import "tsn/util/_mixins";
-
-// Import the foundation sites stuff;
-@import "config/foundation-settings";
 
 // Import the mdc variable assignments, then the overridden style property assignments
 @import "config/mdc-settings";

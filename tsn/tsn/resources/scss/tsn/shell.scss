@@ -3,14 +3,13 @@ body {
   padding: 0;
   background: $mdc-theme-surface none;
   display: flex;
-  height: 100vh;
-
+  max-height: 100vh;
+  overflow-y: hidden;
   max-width: initial !important;
   position: relative;
   font-weight: 300;
   line-height: 1.5em;
   @include transition-default();
-
 
   // Override existing tsn8 styles
   header, footer, main, section, nav {
@@ -19,7 +18,7 @@ body {
     margin: 0;
   }
 
-  main{
+  main {
     position: relative;
     padding-bottom: $double-vertical;
     @include transition-default();

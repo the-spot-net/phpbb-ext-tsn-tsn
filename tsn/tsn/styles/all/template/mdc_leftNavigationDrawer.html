@@ -4,7 +4,7 @@
             <div class="tsn-drawer--header">
                 {{ CURRENT_USER_AVATAR }}
                 <div class="tsn-drawer--header__content">
-                    <h6 class="mdc-drawer__title mdc-typography--headline6 ">{{ CURRENT_USERNAME_FULL }}</h6>
+                    <h6 class="mdc-drawer__title mdc-typography--headline6">{{ CURRENT_USERNAME_FULL }}</h6>
                     <span class="mdc-drawer__subtitle mdc-typography--body2">{% if RANK_TITLE %}{{ RANK_TITLE }}{% endif %}</span>
                 </div>
             </div>
@@ -39,26 +39,28 @@
             </a>
         </div>
         <div class="mdc-list">
-            {% for row in forumrow %}
-                {% if row.S_IS_CAT %}
-                    <hr class="mdc-list-divider">
-                    <h6 class="mdc-list-group__subheader">{{ row.FORUM_NAME }}</h6>
-                {% elseif row.S_IS_LINK %}
-                    <a class="mdc-list-item" href="{{ row.U_VIEWFORUM }}" target="_blank">
-                        {% if row.FORUM_IMAGE_SRC %}<img alt="{{ row.FORUM_FOLDER_IMG_ALT }}" class="mdc-list-item__graphic tsn-image--navigation" src="{{ row.FORUM_IMAGE_SRC }}"/>{% endif %}
-                        <span class="mdc-list-item__text">{{ row.FORUM_NAME }}</span>
-                        <i aria-hidden="true" class="material-icons mdc-list-item__meta">open_in_new</i>
-                    </a>
+            <div class="mdc-list-group">
+                {% for row in forumrow %}
+                    {% if row.S_IS_CAT %}
+                        <hr class="mdc-list-divider">
+                        <h6 class="mdc-list-group__subheader">{{ row.FORUM_NAME }}</h6>
+                    {% elseif row.S_IS_LINK %}
+                        <a class="mdc-list-item" href="{{ row.U_VIEWFORUM }}" target="_blank">
+                            {% if row.FORUM_IMAGE_SRC %}<img alt="{{ row.FORUM_FOLDER_IMG_ALT }}" class="mdc-list-item__graphic tsn-image--navigation" src="{{ row.FORUM_IMAGE_SRC }}"/>{% endif %}
+                            <span class="mdc-list-item__text">{{ row.FORUM_NAME }}</span>
+                            <i aria-hidden="true" class="material-icons mdc-list-item__meta">open_in_new</i>
+                        </a>
+                    {% else %}
+                        {% if row.S_NO_CAT %}{{ lang('FORUMS') }}{% endif %}
+                        <a class="mdc-list-item" href="{{ row.U_VIEWFORUM }}">
+                            <i aria-hidden="true" class="material-icons mdc-list-item__graphic">{% if row.S_UNREAD_FORUM %}fiber_new{% endif %}</i>
+                            <span class="mdc-list-item__text">{{ row.FORUM_NAME }}</span>
+                        </a>
+                    {% endif %}
                 {% else %}
-                    {% if row.S_NO_CAT %}{{ lang('FORUMS') }}{% endif %}
-                    <a class="mdc-list-item" href="{{ row.U_VIEWFORUM }}">
-                        <i aria-hidden="true" class="material-icons mdc-list-item__graphic">{% if row.S_UNREAD_FORUM %}fiber_new{% endif %}</i>
-                        <span class="mdc-list-item__text">{{ row.FORUM_NAME }}</span>
-                    </a>
-                {% endif %}
-            {% else %}
-                {{ lang('NO_FORUMS') }}
-            {% endfor %}
+                    {{ lang('NO_FORUMS') }}
+                {% endfor %}
+            </div>
         </div>
     </nav>
 </aside>

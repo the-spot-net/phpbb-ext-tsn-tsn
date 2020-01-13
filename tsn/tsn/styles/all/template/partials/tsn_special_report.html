@@ -15,18 +15,11 @@ e.g. {% for topic in specialreport %}
         </div>
         <div class="mdc-card__actions">
             <div class="mdc-card__action-buttons">
-                <a class="mdc-button mdc-card__action mdc-button--outlined mdc-card__action--button" href="{{ topic.U_CONTINUE_READING }}">
+                <a class="mdc-button mdc-card__action mdc-card__action--button" href="{{ topic.U_CONTINUE_READING }}">
                     <div class="mdc-button__ripple"></div>
                     <span class="mdc-button__label">Read More</span>
                     <div class="mdc-button__touch"></div>
                 </a>
-                {% if topic.S_UNREAD_TOPIC %}
-                    <button class="mdc-button mdc-card__action mdc-card__action--button" data-js="tsn--mark-post-read" data-topic-id="{{ topic.TOPIC_ID }}">
-                        <div class="mdc-button__ripple"></div>
-                        <span class="mdc-button__label">Mark Read</span>
-                        <div class="mdc-button__touch"></div>
-                    </button>
-                {% endif %}
             </div>
             <div class="mdc-card__action-icons">
                 {# TODO Hook up the Share & Context Menu #}

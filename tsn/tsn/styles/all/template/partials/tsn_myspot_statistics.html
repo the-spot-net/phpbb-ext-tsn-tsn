@@ -11,9 +11,9 @@
                 <a class="mdc-chip" role="row" href="{{ user.URL }}" title="{{ user.NAME }} ({{ user.AGE }})">
                     <div class="mdc-chip__ripple"></div>
                     {{ user.I_AVATAR_IMG }}
-                    <span role="gridcell">
-                                    <span role="button" {% if user.COLOR %} style="color:{{ user.COLOR }}" {% endif %} class="mdc-chip__text">{{ user.NAME }} ({{ user.AGE }})</span>
-                                </span>
+                    <div role="gridcell">
+                        <span role="button" {% if user.COLOR %} style="color:{{ user.COLOR }}" {% endif %} class="mdc-chip__text">{{ user.NAME }} ({{ user.AGE }})</span>
+                    </div>
                 </a>
             {% endfor %}
         </div>

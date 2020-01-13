@@ -11,14 +11,6 @@ $mdc-theme-on-surface: #000000;
 // Set the font family global override variable
 $mdc-typography-font-family: unquote("Lato, Helvetica, sans-serif");
 
-/*
- * Setup the Grid Overrides
- */
-$xlarge-desktop-min: 1440px; // tsn
-$desktop-min: 1024px; // 840px
-$tablet-min: 480px;
-$phone-min: 0px;
-
 // Use variables instead of hard-coded values
 $mdc-layout-grid-breakpoints: (
         desktop: $desktop-min,

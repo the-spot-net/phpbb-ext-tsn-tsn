@@ -37,10 +37,23 @@
   }
 }
 
+.tsn-fab--absolute {
+  position: fixed;
+  bottom: rem-calc($triple-vertical + 1rem);
+  right: 1rem;
+}
+
+@media #{$mq-tablet-min} {
+  .tsn-fab--absolute {
+    bottom: rem-calc($double-vertical + 1.5rem);
+    right: 1.5rem;
+  }
+}
+
 // For Desktop+
-@media (min-width: $xlarge-desktop-min) {
+@media #{$mq-x-desktop-min} {
   // Left/Right Margin to create "centralized" grid
-  .mdc-layout-grid {
+  .mdc-layout-grid:first-of-type {
     margin-left: rem-calc(112);
     margin-right: rem-calc(112);
   }

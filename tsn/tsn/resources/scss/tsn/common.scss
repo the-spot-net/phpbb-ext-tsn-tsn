@@ -29,7 +29,7 @@
       }
 
       .tsn-drawer--header__content {
-        margin-left: rem-calc(48+16);
+        margin-left: rem-calc($double-side + $double-side);
       }
     }
   }
@@ -50,6 +50,6 @@
 
 .tsn-card {
   &.unread {
-    border-left: rem-calc(3px) solid $mdc-theme-secondary;
+    border-left: rem-calc(3) solid $mdc-theme-secondary;
   }
 }

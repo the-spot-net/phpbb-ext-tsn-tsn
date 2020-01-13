@@ -23,7 +23,7 @@
     top: $full-vertical;
     right: $full-vertical;
     border-radius: 50%;
-    max-width: rem-calc(40px);
+    max-width: rem-calc(40);
   }
 }
 
@@ -31,7 +31,7 @@
   position: relstive;
 
   .tsn-card--specialreport__content {
-    margin-right: rem-calc(96px);
+    margin-right: rem-calc(96);
   }
 
   .tsn-card--specialreport__excerpt {
@@ -49,15 +49,15 @@
 }
 
 .tsn-card-collection {
-  max-height: 75vh;
-  overflow-y: auto;
+  //max-height: 75vh;
+  //overflow-y: auto;
 }
 
 .tsn-card--postsearch {
   position: relative;
 
   .tsn-card--postsearch__content {
-    margin-right: rem-calc(52px);
+    margin-right: rem-calc(52);
 
     .tsn-card--postsearch__title {
       @include text-overflow();
@@ -72,6 +72,6 @@
     position: absolute;
     //top: $full-vertical;
     right: $full-vertical;
-    width: rem-calc(40);
+    width: rem-calc($double-side + $half-side);
   }
 }

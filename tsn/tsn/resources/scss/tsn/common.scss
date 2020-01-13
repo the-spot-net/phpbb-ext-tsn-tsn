@@ -1,5 +1,10 @@
 .mdc-card,
 .mdc-card--outlined {
+  &.tsn-card {
+    &.unread {
+      border-left: rem-calc(3) solid $mdc-theme-secondary;
+    }
+  }
 
   // Give Stat Cards a rounded top-right corner
   &.tsn-card--stat {
@@ -48,8 +53,29 @@
   }
 }
 
-.tsn-card {
-  &.unread {
-    border-left: rem-calc(3) solid $mdc-theme-secondary;
+.mdc-fab {
+  .second-icon,
+  .first-icon {
+    left: 0;
+    margin-left: 16px;
+    margin-top: 16px;
+    position: absolute;
+    top: 0;
+    -webkit-transition: all .2s cubic-bezier(.4, 0, .2, 1);
+    transition: all .2s cubic-bezier(.4, 0, .2, 1);
+  }
+
+  .second-icon,
+  &:hover .first-icon {
+    opacity: 0;
+    -webkit-transform: rotate(225deg);
+    transform: rotate(225deg);
+  }
+
+  &:hover .second-icon {
+    opacity: 1;
+    visibility: visible;
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }

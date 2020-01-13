@@ -9,6 +9,7 @@
 // Import the mdc variable assignments, then the overridden style property assignments
 @import "config/mdc-settings";
 @import "config/mdc-overrides";
+@import "config/mdc-replacements";
 
 // Then include the tsn extension scss files,
 // wrapped in an ID tag so they override anything from external templates

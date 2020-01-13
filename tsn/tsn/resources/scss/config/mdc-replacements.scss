@@ -1,0 +1,73 @@
+/*
+ * Material Tooltips (NYI in Web repo)
+ */
+[data-md-tooltip] {
+  &:hover:before {
+    transform: translateX(-50%) scale(1);
+  }
+
+  &:before {
+    @extend .mdc-typography--caption;
+
+    content: attr(data-md-tooltip);
+    text-transform: initial;
+    position: absolute;
+    bottom: rem-calc(-$double-vertical);
+    left: 50%;
+    padding: 0 $full-side;
+    transform: translateX(-50%) scale(0);
+    transition: transform 0.3s $easeInOutQuad;
+    transform-origin: top;
+    background: $mdc-theme-on-surface;
+    color: $mdc-theme-surface;
+    border-radius: $quarter-vertical;
+    line-height: 1.5rem;
+    white-space: nowrap;
+    display: inline-block;
+  }
+
+  &.md-tooltip--right {
+    &:before {
+      left: auto;
+      right: auto;
+      bottom: auto;
+      top: 50%;
+      transform: translate(100%, -50%) scale(0);
+      transform-origin: left center;
+    }
+
+    &:hover:before {
+      transform: translate(100%, -50%) scale(1);
+    }
+  }
+
+  &.md-tooltip--left {
+    &:before {
+      left: auto;
+      right: auto;
+      bottom: auto;
+      top: 50%;
+      transform: translate(-100%, -50%) scale(0);
+      transform-origin: right center;
+    }
+
+    &:hover:before {
+      transform: translate(-100%, -50%) scale(1);
+    }
+  }
+}
+
+.md-tooltip--top:before {
+  top: rem-calc(-$double-vertical);
+  bottom: auto;
+  transform: translateX(-50%) scale(0);
+  transform-origin: bottom center;
+}
+
+@media #{$mq-tablet-min} {
+  [data-md-tooltip] {
+    &:before {
+      padding: 0 $half-side;
+    }
+  }
+}

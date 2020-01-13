@@ -3,6 +3,7 @@ import { MDCCheckbox } from '@material/checkbox/component';
 import { MDCFormField } from '@material/form-field/component';
 import { MDCRipple } from '@material/ripple';
 import { MDCChipSet } from '@material/chips';
+import { MDCList } from '@material/list/component';
 import tsnHeader from './tsn/tsnHeader';
 
 $(document).ready(function () {
@@ -31,7 +32,7 @@ $(document).ready(function () {
     }
   });
 
-  $('.mdc-button').each(function (i, obj) {
+  $('.mdc-button, .mdc-fab').each(function (i, obj) {
     // eslint-disable-next-line no-new
     new MDCRipple(obj);
   });
@@ -39,5 +40,10 @@ $(document).ready(function () {
   $('.mdc-chip-set').each(function (i, obj) {
     // eslint-disable-next-line no-new
     new MDCChipSet(obj);
+  });
+
+  $('.mdc-list').each(function (i, obj) {
+    // eslint-disable-next-line no-new
+    new MDCList(obj).listElements.map((listItemEl) => new MDCRipple(listItemEl));
   });
 });

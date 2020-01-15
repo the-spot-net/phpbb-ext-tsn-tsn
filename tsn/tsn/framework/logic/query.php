@@ -9,7 +9,7 @@
 namespace tsn\tsn\framework\logic;
 
 use DateTime;
-use tsn\tsn\controller\main_controller;
+use phpbb\db\driver\factory;
 
 /**
  * Class query
@@ -53,105 +53,108 @@ class query
     /**
      * Return the minimal data set for the latest topic from the Special Report Forum
      *
-     * @param \tsn\tsn\controller\main_controller $controller
+     * @param \phpbb\db\driver\factory $db
+     * @param int                      $forumId
      *
      * @return mixed
      */
-    public static function checkForSpecialReportLatestTopic(main_controller $controller)
+    public static function checkForSpecialReportLatestTopic(factory $db, int $forumId)
     {
-        $query = str_replace(self::TOKEN_FORUM_ID, $controller->getConfig('tsn_specialreport_forumid'), self::SQL_SPECIAL_REPORT_NEWEST_TOPIC_ID);
+        $query = str_replace(self::TOKEN_FORUM_ID, $forumId, self::SQL_SPECIAL_REPORT_NEWEST_TOPIC_ID);
 
-        return self::executeQuery($controller, $query);
+        return self::executeQuery($db, $query);
     }
 
     /**
      * Release the DB Cursor
      *
-     * @param \tsn\tsn\controller\main_controller $controller
+     * @param \phpbb\db\driver\factory            $db
      * @param                                     $cursor
      */
-    public static function freeCursor(main_controller $controller, $cursor)
+    public static function freeCursor(factory $db, $cursor)
     {
-        $controller->getDb()->sql_freeresult($cursor);
+        $db->sql_freeresult($cursor);
     }
 
     /**
      * Return the cursor for the Active Topics Module of MySpot
      *
-     * @param \tsn\tsn\controller\main_controller $controller
+     * @param \phpbb\db\driver\factory            $db
      * @param int                                 $sort_days
      * @param                                     $approvedTopicForumIdsSql
      * @param array                               $forumIdExclusions
      *
      * @return mixed
      */
-    public static function getMySpotActiveTopicIdsCursor(main_controller $controller, int $sort_days, $approvedTopicForumIdsSql, array $forumIdExclusions)
+    public static function getMySpotActiveTopicIdsCursor(factory $db, int $sort_days, $approvedTopicForumIdsSql, array $forumIdExclusions)
     {
         $last_post_time_sql = ($sort_days) ? ' AND t.topic_last_post_time > ' . (time() - ($sort_days * 24 * 3600)) : '';
-        $forumIdExclusionSql = (count($forumIdExclusions)) ? ' AND ' . $controller->getDb()->sql_in_set('t.forum_id', $forumIdExclusions, true) : '';
+        $forumIdExclusionSql = (count($forumIdExclusions)) ? ' AND ' . $db->sql_in_set('t.forum_id', $forumIdExclusions, true) : '';
 
         $query = str_replace(self::TOKEN_DATE, $last_post_time_sql, self::SQL_MYSPOT_ACTIVE_TOPICS_INFOS);
         $query = str_replace(self::TOKEN_FORUM_ID_WHITELIST, $approvedTopicForumIdsSql, $query);
         $query = str_replace(self::TOKEN_FORUM_ID_EXCLUSIONS, $forumIdExclusionSql, $query);
 
-        return $controller->getDb()->sql_query($query);
+        return $db->sql_query($query);
     }
 
     /**
      * Pull the Topic IDs for which there are new posts for this user since their last visit
      *
-     * @param \tsn\tsn\controller\main_controller $controller
-     * @param int                                 $userLastVisit
-     * @param string                              $approvedTopicsVisibilitySql
-     * @param int[]                               $forumIdExclusions
+     * @param \phpbb\db\driver\factory $db
+     * @param int                      $userLastVisit
+     * @param string                   $approvedTopicsVisibilitySql
+     * @param int[]                    $forumIdExclusions
+     * @param int                      $total_matches_limit
      *
      * @return bool|mixed
      */
-    public static function getMySpotNewPostTopicIdsCursor(main_controller $controller, int $userLastVisit, $approvedTopicsVisibilitySql, array $forumIdExclusions, $total_matches_limit = 1000)
+    public static function getMySpotNewPostTopicIdsCursor(factory $db, int $userLastVisit, $approvedTopicsVisibilitySql, array $forumIdExclusions, $total_matches_limit = 1000)
     {
         $forumExclusionSql = (count($forumIdExclusions))
-            ? 'AND ' . $controller->getDb()->sql_in_set('t.forum_id', $forumIdExclusions, true)
+            ? 'AND ' . $db->sql_in_set('t.forum_id', $forumIdExclusions, true)
             : '';
 
         $query = str_replace(self::TOKEN_DATE, $userLastVisit, self::SQL_MYSPOT_NEW_POSTS_TOPIC_IDS);
         $query = str_replace(self::TOKEN_FORUM_ID_WHITELIST, $approvedTopicsVisibilitySql, $query);
         $query = str_replace(self::TOKEN_FORUM_ID_EXCLUSIONS, $forumExclusionSql, $query);
 
-        return $controller->getDb()->sql_query_limit($query, $total_matches_limit);
+        return $db->sql_query_limit($query, $total_matches_limit);
     }
 
     /**
-     * @param \tsn\tsn\controller\main_controller $controller
+     * @param \phpbb\db\driver\factory            $db
+     * @param int                                 $userId
      * @param array                               $topicIds
      * @param array                               $forumIdExclusions
      * @param                                     $approvedTopicsVisibilitySql
      *
      * @return mixed
      */
-    public static function getMySpotNewPostsTopicDetailsCursor(main_controller $controller, array $topicIds, array $forumIdExclusions, $approvedTopicsVisibilitySql)
+    public static function getMySpotNewPostsTopicDetailsCursor(factory $db, int $userId, array $topicIds, array $forumIdExclusions, $approvedTopicsVisibilitySql)
     {
-        $forumIdExclusionSql = (count($forumIdExclusions)) ? ' AND (' . $controller->getDb()->sql_in_set('f.forum_id', $forumIdExclusions, true) . ' OR f.forum_id IS NULL)' : '';
+        $forumIdExclusionSql = (count($forumIdExclusions)) ? ' AND (' . $db->sql_in_set('f.forum_id', $forumIdExclusions, true) . ' OR f.forum_id IS NULL)' : '';
 
-        $query = str_replace(self::TOKEN_USER_ID, $controller->getUser()->data['user_id'], self::SQL_MYSPOT_NEW_POSTS_TOPIC_INFOS);
-        $query = str_replace(self::TOKEN_TOPIC_IDS, $controller->getDb()->sql_in_set('t.topic_id', $topicIds), $query);
+        $query = str_replace(self::TOKEN_USER_ID, $userId, self::SQL_MYSPOT_NEW_POSTS_TOPIC_INFOS);
+        $query = str_replace(self::TOKEN_TOPIC_IDS, $db->sql_in_set('t.topic_id', $topicIds), $query);
         $query = str_replace(self::TOKEN_FORUM_ID_EXCLUSIONS, $forumIdExclusionSql, $query);
         $query = str_replace(self::TOKEN_FORUM_ID_WHITELIST, $approvedTopicsVisibilitySql, $query);
 
-        return $controller->getDb()->sql_query($query);
+        return $db->sql_query($query);
     }
 
     /**
-     * @param \tsn\tsn\controller\main_controller $controller
+     * @param \phpbb\db\driver\factory            $db
      * @param                                     $sessionId
      * @param                                     $forumIdExclusions
      * @param                                     $userId
      *
      * @return mixed
      */
-    public static function getMySpotPostSearchResultCursor(main_controller $controller, $sessionId, $forumIdExclusions, $userId)
+    public static function getMySpotPostSearchResultCursor(factory $db, $sessionId, $forumIdExclusions, $userId)
     {
         $forumIdExclusionSql = (count($forumIdExclusions))
-            ? $controller->getDb()->sql_in_set('f.forum_id', $forumIdExclusions, true)
+            ? $db->sql_in_set('f.forum_id', $forumIdExclusions, true)
             : "";
 
         if ($forumIdExclusionSql) {
@@ -161,166 +164,167 @@ class query
             $queryInjection = '';
         }
 
-        $query = str_replace(self::TOKEN_SESSION_ID, $controller->getDb()->sql_escape($sessionId), self::SQL_MYSPOT_NEW_POSTS_FORUM_INFO);
+        $query = str_replace(self::TOKEN_SESSION_ID, $db->sql_escape($sessionId), self::SQL_MYSPOT_NEW_POSTS_FORUM_INFO);
         $query = str_replace(self::TOKEN_FORUM_ID_EXCLUSIONS, $queryInjection, $query);
 
-        return $controller->getDb()->sql_query($query);
+        return $db->sql_query($query);
     }
 
     /**
      * Run the query for Unanswered Topic \s
      *
-     * @param \tsn\tsn\controller\main_controller $controller
+     * @param \phpbb\db\driver\factory            $db
      * @param                                     $approvedTopicForumIdsSql
      * @param                                     $forumIdExclusions
      *
      * @return mixed
      */
-    public static function getMySpotUnansweredTopicIdsCursor(main_controller $controller, $approvedTopicForumIdsSql, $forumIdExclusions)
+    public static function getMySpotUnansweredTopicIdsCursor(factory $db, $approvedTopicForumIdsSql, $forumIdExclusions)
     {
         $forumIdExclusionSql = ((count($forumIdExclusions))
-            ? ' AND ' . $controller->getDb()->sql_in_set('p.forum_id', $forumIdExclusions, true)
+            ? ' AND ' . $db->sql_in_set('p.forum_id', $forumIdExclusions, true)
             : '');
 
         $query = str_replace(self::TOKEN_FORUM_ID_WHITELIST, $approvedTopicForumIdsSql, self::SQL_MYSPOT_UNANSWERED_TOPIC_INFOS);
         $query = str_replace(self::TOKEN_FORUM_ID_EXCLUSIONS, $forumIdExclusionSql, $query);
 
-        return $controller->getDb()->sql_query($query);
+        return $db->sql_query($query);
     }
 
     /**
      * Get the core data set for the Latest Topic in Special Report Forum; return it as an array
      *
-     * @param \tsn\tsn\controller\main_controller $controller
-     * @param int                                 $topicId
+     * @param \phpbb\db\driver\factory $db
+     * @param int                      $forumId
+     * @param int                      $topicId
      *
      * @return mixed
      */
-    public static function getSpecialReportLatestTopicInfo(main_controller $controller, int $topicId)
+    public static function getSpecialReportLatestTopicInfo(factory $db, int $forumId, int $topicId)
     {
         $query = str_replace(self::TOKEN_TOPIC_ID, $topicId, self::SQL_SPECIAL_REPORT_NEWEST_TOPIC_DETAILS);
-        $query = str_replace(self::TOKEN_FORUM_ID, $controller->getConfig('tsn_specialreport_forumid'), $query);
+        $query = str_replace(self::TOKEN_FORUM_ID, $forumId, $query);
 
-        return self::executeQuery($controller, $query);
+        return self::executeQuery($db, $query);
     }
 
     /**
      * For the User, Topic, and Forum, get the read/unread status details
      *
-     * @param \tsn\tsn\controller\main_controller $controller
-     * @param int                                 $userId
-     * @param int                                 $topicId
-     * @param int                                 $forumId
+     * @param \phpbb\db\driver\factory $db
+     * @param int                      $userId
+     * @param int                      $topicId
+     * @param int                      $forumId
      *
      * @return mixed
      */
-    public static function getTopicReadStatus(main_controller $controller, int $userId, int $topicId, int $forumId)
+    public static function getTopicReadStatus(factory $db, int $userId, int $topicId, int $forumId)
     {
         // Get the current user's unread state for this topic...
         $query = str_replace(self::TOKEN_USER_ID, $userId, self::SQL_TOPIC_UNREAD_STATUS);
         $query = str_replace(self::TOKEN_TOPIC_ID, $topicId, $query);
         $query = str_replace(self::TOKEN_FORUM_ID, $forumId, $query);
 
-        return self::executeQuery($controller, $query);
+        return self::executeQuery($db, $query);
     }
 
     /**
      * Get all info about the topicIds
      *
-     * @param \tsn\tsn\controller\main_controller $controller
+     * @param \phpbb\db\driver\factory            $db
      * @param                                     $topicIds
      *
      * @return mixed
      */
-    public static function getTopicRowCursor(main_controller $controller, $topicIds)
+    public static function getTopicRowCursor(factory $db, $topicIds)
     {
 
-        $query = str_replace(self::TOKEN_TOPIC_IDS, $controller->getDb()->sql_in_set('topic_id', array_keys($topicIds)), self::SQL_MYSPOT_SEARCH_TOPIC_INFOS);
+        $query = str_replace(self::TOKEN_TOPIC_IDS, $db->sql_in_set('topic_id', array_keys($topicIds)), self::SQL_MYSPOT_SEARCH_TOPIC_INFOS);
 
-        return $controller->getDb()->sql_query($query);
+        return $db->sql_query($query);
     }
 
     /**
      * Return the avatar row for a user id
      *
-     * @param \tsn\tsn\controller\main_controller $controller
-     * @param int                                 $userId
+     * @param \phpbb\db\driver\factory $db
+     * @param int                      $userId
      *
      * @return mixed
      */
-    public static function getUserAvatar(main_controller $controller, int $userId)
+    public static function getUserAvatar(factory $db, int $userId)
     {
         $query = str_replace(self::TOKEN_USER_ID, $userId, self::SQL_USER_AVATAR);
 
-        return self::executeQuery($controller, $query);
+        return self::executeQuery($db, $query);
     }
 
     /**
-     * @param \tsn\tsn\controller\main_controller $controller
-     * @param \DateTime                           $time
+     * @param \phpbb\db\driver\factory $db
+     * @param \DateTime                $time
      *
      * @return mixed
      */
-    public static function getUserBirthdaysCursor(main_controller $controller, DateTime $time)
+    public static function getUserBirthdaysCursor(factory $db, DateTime $time)
     {
         $now = phpbb_gmgetdate($time->getTimestamp() + $time->getOffset());
 
         $includeLeapYear = ($now['mday'] == 28 && $now['mon'] == 2 && !$time->format('L'));
 
-        $query = str_replace(self::TOKEN_DATE, $controller->getDb()->sql_escape(sprintf('%2d-%2d-', $now['mday'], $now['mon'])), self::SQL_USER_BIRTHDAYS);
+        $query = str_replace(self::TOKEN_DATE, $db->sql_escape(sprintf('%2d-%2d-', $now['mday'], $now['mon'])), self::SQL_USER_BIRTHDAYS);
         // Conditionally inject the leap year date onto the query if needed.
         $query = str_replace(self::TOKEN_LEAP_DATE, ($includeLeapYear)
-            ? str_replace(self::TOKEN_DATE, $controller->getDb()->sql_escape(sprintf('%2d-%2d-', 29, 2)), self::SQL_INJECT_USER_LEAP_BIRTHDAYS)
+            ? str_replace(self::TOKEN_DATE, $db->sql_escape(sprintf('%2d-%2d-', 29, 2)), self::SQL_INJECT_USER_LEAP_BIRTHDAYS)
             : '', $query);
 
-        return $controller->getDb()->sql_query($query);
+        return $db->sql_query($query);
 
     }
 
     /**
-     * @param \tsn\tsn\controller\main_controller $controller
-     * @param int                                 $userId
-     * @param bool                                $isRestricted
+     * @param \phpbb\db\driver\factory $db
+     * @param int                      $userId
+     * @param bool                     $isRestricted
      *
      * @return mixed
      */
-    public static function getUserGroupLegendCursor(main_controller $controller, int $userId, bool $isRestricted = true)
+    public static function getUserGroupLegendCursor(factory $db, int $userId, bool $isRestricted = true)
     {
         $query = str_replace(self::TOKEN_USER_ID, $userId, ($isRestricted)
             ? self::SQL_USER_GROUPS_LEGEND_RESTRICTED
             : self::SQL_USER_GROUPS_LEGEND_ALL);
 
-        return $controller->getDb()->sql_query($query);
+        return $db->sql_query($query);
     }
 
     /**
      * Get some basic Session details for the user for updating online time
      *
-     * @param \tsn\tsn\controller\main_controller $controller
-     * @param int                                 $userId
+     * @param \phpbb\db\driver\factory $db
+     * @param int                      $userId
      *
      * @return mixed
      */
-    public static function getUserSessionTime(main_controller $controller, int $userId)
+    public static function getUserSessionTime(factory $db, int $userId)
     {
         $query = str_replace(self::TOKEN_USER_ID, $userId, self::SQL_USER_SESSION_TIME);
 
-        return self::executeQuery($controller, $query);
+        return self::executeQuery($db, $query);
     }
 
     /**
      * Executes a query with a sql_fetchrow() call (single row return)
      *
-     * @param \tsn\tsn\controller\main_controller $controller
-     * @param string                              $query
+     * @param \phpbb\db\driver\factory $db
+     * @param string                   $query
      *
      * @return mixed
      */
-    private static function executeQuery(main_controller $controller, string $query)
+    private static function executeQuery(factory $db, string $query)
     {
-        $cursor = $controller->getDb()->sql_query($query);
-        $result = $controller->getDb()->sql_fetchrow($cursor);
-        self::freeCursor($controller, $cursor);
+        $cursor = $db->sql_query($query);
+        $result = $db->sql_fetchrow($cursor);
+        self::freeCursor($db, $cursor);
 
         return $result;
     }

@@ -31,12 +31,6 @@
     </div>
 {% endif %}
 
-<div class="mdc-card mdc-card--outlined tsn-card tsn-card--stat">
-    <span class="mdc-typography--overline">{{ lang('MYSPOT_RECORD') }}</span>
-    <h4 class="mdc-typography--headline4">{{ ONLINE_RECORD_COUNT }}</h4>
-    <p class="mdc-typography--body2">{{ lang('ON') }} {{ ONLINE_RECORD_DATE }}</p>
-</div>
-
 <div class="mdc-card mdc-card--outlined tsn-card tsn-card--stat tsn-card--new-user">
     {{ NEWEST_USER_AVATAR }}
     <div class="mdc-layout-grid__inner">
@@ -45,6 +39,12 @@
             <h5 class="mdc-typography--headline5">{{ NEWEST_USER_NAME }}</h5>
         </div>
     </div>
+</div>
+
+<div class="mdc-card mdc-card--outlined tsn-card tsn-card--stat">
+    <span class="mdc-typography--overline">{{ lang('MYSPOT_RECORD') }}</span>
+    <h4 class="mdc-typography--headline4">{{ ONLINE_RECORD_COUNT }}</h4>
+    <p class="mdc-typography--body2">{{ ONLINE_RECORD_DATE }}</p>
 </div>
 
 <div class="mdc-card mdc-card--outlined tsn-card tsn-card--stat">

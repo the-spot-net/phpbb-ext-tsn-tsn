@@ -8,11 +8,14 @@
   <footer class="mdc-typography--caption text-center">
       <a href="{{ lang('TSN_VERSION_LINK') }}">{{ lang('TSN_VERSION') }}</a> | {{ lang('COPYRIGHT_CREDITS') }}
   </footer>
-  <button class="mdc-fab tsn-fab--absolute md-tooltip--left" aria-label="{% if S_VIEWTOPIC %}Add Reply{% else %}New Topic{% endif %}" data-md-tooltip="{% if S_VIEWTOPIC %}Add Reply{% else %}New Topic{% endif %}">
-    <div class="mdc-fab__ripple"></div>
-    <span class="mdc-fab__icon material-icons second-icon">{% if S_VIEWTOPIC %}reply{% else %}edit{% endif %}</span>
-    <span class="mdc-fab__icon material-icons first-icon">add</span>
-  </button>
+
+  {% if S_USER_LOGGED_IN %}
+    <button class="mdc-fab tsn-fab--absolute md-tooltip--left" aria-label="{% if S_VIEWTOPIC %}Add Reply{% else %}New Topic{% endif %}" data-md-tooltip="{% if S_VIEWTOPIC %}Add Reply{% else %}New Topic{% endif %}">
+      <div class="mdc-fab__ripple"></div>
+      <span class="mdc-fab__icon material-icons second-icon">{% if S_VIEWTOPIC %}reply{% else %}edit{% endif %}</span>
+      <span class="mdc-fab__icon material-icons first-icon">add</span>
+    </button>
+  {% endif %}
 <!-- @formatter:on -->
 
 {% EVENT overall_footer_page_body_after %}

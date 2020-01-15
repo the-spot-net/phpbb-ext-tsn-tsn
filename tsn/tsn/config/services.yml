@@ -17,7 +17,21 @@ services:
             - '@request'
             - '@template'
             - '@user'
-
+    tsn.tsn.controller.ajax:
+        class: tsn\tsn\controller\ajax_controller
+        arguments:
+            - '@auth'
+            - '@auth.provider_collection'
+            - '@captcha.factory'
+            - '@config'
+            - '@content.visibility'
+            - '@dbal.conn'
+            - '@controller.helper'
+            - '@language'
+            - '@path_helper'
+            - '@request'
+            - '@template'
+            - '@user'
     tsn.tsn.controller.acp:
         class: tsn\tsn\controller\acp_controller
         arguments:

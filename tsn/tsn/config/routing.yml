@@ -6,10 +6,10 @@ tsn_tsn_login:
     pattern: /tsn/login
     defaults: { _controller: tsn.tsn.controller.main:doLogin }
 
-#tsn_tsn_ajax:
-#    pattern: /tsn/ajax/{route}
-#    defaults: { _controller: tsn.tsn.controller.ajax:doIndex, route: "index" }
-#
+tsn_tsn_ajax:
+    pattern: /tsn/ajax/{route}
+    defaults: { _controller: tsn.tsn.controller.ajax:doIndex, route: "index" }
+
 tsn_tsn_forum:
     pattern: /tsn/forum/{id}
     defaults: { _controller: tsn.tsn.controller.forum:doIndex }

@@ -1,3 +1,9 @@
+.avatar {
+  // All avatars are now rounded
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .mdc-card,
 .mdc-card--outlined {
   &.tsn-card {

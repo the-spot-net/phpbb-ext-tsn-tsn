@@ -1,13 +1,9 @@
 <aside class="mdc-drawer mdc-drawer--modal mdc-top-app-bar--fixed-adjust mdc-theme--surface mdc-theme--on-surface">
     <div class="mdc-drawer__header">
         {% if S_USER_LOGGED_IN %}
-            <div class="tsn-drawer--header">
-                {{ CURRENT_USER_AVATAR }}
-                <div class="tsn-drawer--header__content">
-                    <h6 class="mdc-drawer__title mdc-typography--headline6">{{ CURRENT_USERNAME_FULL }}</h6>
-                    <span class="mdc-drawer__subtitle mdc-typography--body2">{% if RANK_TITLE %}{{ RANK_TITLE }}{% endif %}</span>
-                </div>
-            </div>
+            {{ CURRENT_USER_AVATAR }}
+            <h6 class="mdc-drawer__title mdc-typography--headline6">{{ CURRENT_USERNAME_FULL }}</h6>
+            <span class="mdc-drawer__subtitle mdc-typography--body2">{% if RANK_TITLE %}{{ RANK_TITLE }}{% endif %}</span>
         {% else %}
             <img alt="site logo" class="tsn-image--drawer-header-logo" src="{{ T_EXT_PATH }}/images/tsn-13.png">
             <h6 class="mdc-drawer__title mdc-typography--headline6">{{ lang('WELCOME_VISITOR') }}</h6>

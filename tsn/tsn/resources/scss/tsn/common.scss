@@ -21,27 +21,12 @@
 // Handle Forum/User Images in the navigation drawer
 .mdc-drawer {
   .mdc-drawer__header {
+    padding-top: $full-vertical;
 
-    .tsn-image--drawer-header-logo {
+    .tsn-image--drawer-header-logo,
+    .avatar {
       width: $triple-side;
-      height: $triple-side;
-      margin-top: #{$double-vertical} + #{$half-vertical};
-    }
-
-    .tsn-drawer--header {
-      position: relative;
-      min-height: rem-calc(80);
-
-      .avatar {
-        position: absolute;
-        top: $full-vertical;
-        width: $triple-side;
-        height: $triple-vertical;
-      }
-
-      .tsn-drawer--header__content {
-        margin-left: rem-calc($double-side + $double-side);
-      }
+      height: $triple-vertical;
     }
   }
 

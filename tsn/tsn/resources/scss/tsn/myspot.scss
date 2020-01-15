@@ -22,8 +22,8 @@
     position: absolute;
     top: $full-vertical;
     right: $full-vertical;
-    border-radius: 50%;
-    max-width: rem-calc(40);
+    width: rem-calc(40);
+    heiht: rem-calc(40);
   }
 }
 
@@ -44,7 +44,8 @@
     position: absolute;
     top: $full-vertical;
     right: $full-side;
-    width: rem-calc(80px);
+    width: rem-calc(80);
+    height: rem-calc(80);
   }
 }
 
@@ -70,8 +71,8 @@
 
   .avatar {
     position: absolute;
-    //top: $full-vertical;
     right: $full-vertical;
     width: rem-calc($double-side + $half-side);
+    height: rem-calc($double-side + $half-side);
   }
 }

@@ -24,4 +24,7 @@ class url
     const ROUTE_POST = 'tsn_tsn_post';
     const ROUTE_TOPIC = 'tsn_tsn_topic';
     const ROUTE_USER = 'tsn_tsn_user';
+
+    // AJAX Slugs
+    const AJAX_MYSPOT_FEED_PAGE = 'myspot-feed';
 }

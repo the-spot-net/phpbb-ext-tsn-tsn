@@ -1,6 +1,6 @@
 {% include '@tsn_tsn/shellHeader.html' %}
 
-<div class="mdc-layout-grid">
+<div class="mdc-layout-grid" data-js="js--tsn-myspot">
     <div class="mdc-layout-grid__inner">
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9-desktop mdc-layout-grid__cell--span-5-tablet mdc-layout-grid__cell--span-12-phone">
             <div class="mdc-layout-grid__inner">
@@ -14,13 +14,11 @@
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
                     <div class="mdc-layout-grid__inner">
                         <div class="mdc-layout-grid__cell--span-12">
-                            <div class="tsn-card-collection">
+                            <div class="tsn-card-collection" data-js="js--tsn-myspot-card-list">
                                 {% if myspotfeed %}
                                     {% for post in myspotfeed %}
                                         {% include '@tsn_tsn/partials/tsn_myspot_postcard.html' %}
                                     {% endfor %}
-                                {% else %}
-                                    {{ lang('MYSPOT_NOTHING_ACTIVE') }}
                                 {% endif %}
                             </div>
                         </div>
@@ -34,5 +32,9 @@
         </div>
     </div>
 </div>
+
+<script>
+  window.tsnSettings = { myspot: { t: {{ TIME_NOW }}, p: 1 } };
+</script>
 
 {% include '@tsn_tsn/shellFooter.html' %}

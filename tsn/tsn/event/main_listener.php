@@ -17,6 +17,7 @@ use phpbb\language\language;
 use phpbb\template\template;
 use phpbb\user;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use tsn\tsn\framework\constants\url;
 
 /**
  * the-spot.net Event listener.
@@ -67,6 +68,7 @@ class main_listener implements EventSubscriberInterface
             'core.get_avatar_after'                         => 'processUserAvatar',
             'core.obtain_users_online_string_sql'           => 'injectOnlineAvatarQuery',
             'core.obtain_users_online_string_before_modify' => 'processOnlineAvatarQuery',
+            'core.modify_username_string'                   => 'convertProfileUrlToRoute',
             //            'core.page_header'                         => 'add_page_header_link',
             //            'core.viewonline_overwrite_location'       => 'viewonline_page',
             //            'core.display_forums_modify_template_vars' => 'display_forums_modify_template_vars',
@@ -96,6 +98,52 @@ class main_listener implements EventSubscriberInterface
 //        $permissions['u_new_tsn_tsn'] = ['lang' => 'ACL_U_NEW_TSN_TSN', 'cat' => 'post'];
 
         $event['permissions'] = $permissions;
+    }
+
+    /**
+     * @note Available fields: 'mode', 'user_id', 'username', 'username_colour', 'guest_username', 'custom_profile_url', 'username_string', '_profile_cache',
+     */
+    public function convertProfileUrlToRoute($event)
+    {
+
+        $mode = $event['mode'];
+        $userId = $event['user_id'];
+        $userName = $event['username'];
+        $userColor = $event['username_colour'];
+        $profileCache = $event['_profile_cache'];
+
+        // Cleanup User Color: maybe empty, maybe ##, maybe 3|6 hex chars
+        $userColor = (strlen($userColor) > 2) ? '#' . ltrim($userColor, '#') : '';
+
+        // Build the correct profile url, if not anonymous & viewer has permissions to view profiles
+        // For anonymous, redirect to login page
+        $profileUrl = '';
+
+        if ($userId && $userId != ANONYMOUS && ($this->user->data['user_id'] == ANONYMOUS || $this->auth->acl_get('u_viewprofile'))) {
+            $profileUrl = $this->helper->route(url::ROUTE_MEMBER, ['id' => (int)$userId]);
+        }
+
+        // Return profile
+        if ($mode == 'profile') {
+            $result = $profileUrl;
+        } else if (!isset($result)) {
+            if (($mode == 'full' && empty($profileUrl)) || $mode == 'no_profile') {
+                $templateString = (!$userColor)
+                    ? $profileCache['tpl_noprofile']
+                    : $profileCache['tpl_noprofile_colour'];
+
+                $result = str_replace(['{USERNAME_COLOUR}', '{USERNAME}'], [$userColor, $userName], $templateString);
+            } else {
+                $templateString = (!$userColor)
+                    ? $profileCache['tpl_profile']
+                    : $profileCache['tpl_profile_colour'];
+
+                $result = str_replace(['{PROFILE_URL}', '{USERNAME_COLOUR}', '{USERNAME}'], [$profileUrl, $userColor, $userName], $templateString);
+            }
+        }
+
+        $event['username_colour'] = $userColor;
+        $event['username_string'] = $result;
     }
 
     /**

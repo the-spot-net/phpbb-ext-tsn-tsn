@@ -30,6 +30,10 @@ export default class tsnPlugin {
     tsnPlugin.$window = tsnPlugin.$window || $(window);
     tsnPlugin.$document = tsnPlugin.$document || $(window.document);
     tsnPlugin.$body = tsnPlugin.$body || $('body');
+    tsnPlugin.$header = tsnPlugin.$header || $('header');
+    tsnPlugin.$main = tsnPlugin.$main || $('main');
+    tsnPlugin.$nav = tsnPlugin.$nav || $('aside');
+    tsnPlugin.$footer = tsnPlugin.$footer || $('footer');
   }
 
   /**

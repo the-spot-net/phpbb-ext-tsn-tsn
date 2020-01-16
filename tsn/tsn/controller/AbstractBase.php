@@ -35,6 +35,8 @@ abstract class AbstractBase
     protected static $phpEx = 'php';
     /** @var string */
     protected static $boardUrl;
+    /** @var int */
+    protected static $now = null;
 
     /** @var \phpbb\auth\auth */
     protected $auth;
@@ -95,6 +97,7 @@ abstract class AbstractBase
         self::$phpbbRootPath = $this->getConfig('script_path');
         self::$phpEx = substr(strrchr(__FILE__, '.'), 1);
         self::$boardUrl = generate_board_url() . '/';
+        self::$now = time();
     }
 
     /**
@@ -165,6 +168,8 @@ abstract class AbstractBase
             'SERVER_PROTOCOL' => $this->config['server_protocol'],
             'SERVER_DOMAIN'   => $this->config['server_name'],
             'SERVER_PORT'     => (!in_array((int)$this->config['server_port'], [0, 80, 443])) ? ':' . $this->config['server_port'] : '',
+
+            'TIME_NOW' => time(),
 
             'T_EXT_PATH' => $this->getConfig('script_path') . '/ext/tsn/tsn/styles/all/theme',
 

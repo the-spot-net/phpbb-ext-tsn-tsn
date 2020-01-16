@@ -16,7 +16,6 @@ use tsn\tsn\framework\logic\query;
  */
 class main_controller extends AbstractBase
 {
-
     use myspot;
 
     /**
@@ -204,8 +203,6 @@ class main_controller extends AbstractBase
             'PASSWORD_CREDENTIAL' => 'password', // ($admin) ? 'password_' . $credential : 'password', // Skip admin login for now
         ]);
     }
-
-
 
     /**
      * Call the submodules for Statistics sidebar

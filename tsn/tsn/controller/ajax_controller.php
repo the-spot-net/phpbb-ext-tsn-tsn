@@ -70,20 +70,21 @@ class ajax_controller extends AbstractBase
     public function doIndex($route)
     {
         $this->initUserAuthentication();
-        $statusCode = 200;
+        $statusCode = Response::HTTP_OK;
 
         switch ($route) {
             case url::AJAX_MYSPOT_FEED_PAGE:
-//                $this->response->status = 1;
-//                $this->response->data['content'] = '<em>hello world';
-//                $this->response->data['page'] = $this->request->variable('page', 0);
+                $this->response->status = 1;
+                $this->response->data['content'] = '<em>hello world</em>';
+//                $this->response->data['page'] = $this->request->variable('p', null);
+//                $this->response->data['time'] = $this->request->variable('t', null);
                 break;
             default:
-                $statusCode = 404;
+                $statusCode = Response::HTTP_NOT_FOUND;
                 break;
         }
 
-        $headers = ['Content-Type' => 'application/json'];
+        $headers = ['Content-Type' => 'application/json; charset=UTF-8'];
 
         if (!empty($this->user->data['is_bot'])) {
             $headers['X-PHPBB-IS-BOT'] = 'yes';

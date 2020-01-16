@@ -20,7 +20,6 @@ use tsn\tsn\framework\logic\query;
  * Trait myspot
  * Handle the My Spot functionality for the controllers that need it
  * @package tsn\tsn\controller\traits
- * @method string generateUserAvatar($userId)
  * @method mixed|config getConfig($field = null)
  * @method factory getDb()
  * @method user getUser()
@@ -49,23 +48,19 @@ trait myspot
         ]);
 
         $forumIdExclusions = [];
-        $approvedTopicForumIdsSql = '';
 
-        $this->processMySpotSearchSetup('', $forumIdExclusions, $approvedTopicForumIdsSql);
+        $this->processMySpotSearchSetup('', $forumIdExclusions);
 
-        $id_ary = array_merge(
-            [],
-            // This was a normal search feature, but is new for tsn9 prominence
-            $this->submoduleNewPosts($forumIdExclusions, $approvedTopicForumIdsSql),
-            // This is the original "what's new" module
-            $this->submoduleUnreadPosts($forumIdExclusions, $approvedTopicForumIdsSql),
-            // This is to keep conversations going
-            $this->submoduleUnansweredTopics($forumIdExclusions, $approvedTopicForumIdsSql),
-            // This is to show what's popular, and recently replied to
-            $this->submoduleActiveTopics($forumIdExclusions, $approvedTopicForumIdsSql)
-        );
+        $forumIdWhitelistSql = $this->contentVisibility->get_global_visibility_sql('topic', $forumIdExclusions, 't.');
 
-        $this->prepareMySpotSearchResultsOutput('myspotfeed', $id_ary, $forumIdExclusions, $approvedTopicForumIdsSql);
+        $cursor = query::getMySpotFeedPage($this->getDb(), $forumIdWhitelistSql, $forumIdExclusions, (int)$this->user->data['user_id'], (int)$this->user->data['user_lastmark'], $this->request->variable('t', AbstractBase::$now), $this->request->variable('p', 1));
+        $field = 'topic_id';
+
+        $topicIds = $this->postprocessMySpotSearchResults($cursor, $field);
+
+        $blockVars = $this->prepareMySpotSearchResultsOutput($topicIds, $forumIdExclusions, $forumIdWhitelistSql);
+
+        $this->template->assign_block_vars_array('myspotfeed', $blockVars);
     }
 
     /**
@@ -146,37 +141,31 @@ trait myspot
      */
     private function postprocessMySpotSearchResults($cursor, $field)
     {
-        $start = 0;
-        $per_page = 10; // $this->getConfig('topics_per_page');
-
-        $id_ary = [];
+        $topicIds = [];
         while ($row = $this->getDb()->sql_fetchrow($cursor)) {
-            $id_ary[] = (int)$row[$field];
+            $topicIds[] = (int)$row[$field];
         }
         query::freeCursor($this->getDb(), $cursor);
 
-        if ($total_match_count = count($id_ary)) {
-            // We have matches, take the first page
-            $id_ary = array_slice($id_ary, $start, $per_page);
-        }
-
-        return $id_ary;
+        return $topicIds;
     }
 
     /**
-     * @param $blockName
-     * @param $id_ary
+     * @param $topicIds
      * @param $forumIdExclusions
      * @param $approvedTopicForumIdsSql
+     *
+     * @return array
      */
-    private function prepareMySpotSearchResultsOutput($blockName, $id_ary, $forumIdExclusions, $approvedTopicForumIdsSql)
+    private function prepareMySpotSearchResultsOutput($topicIds, $forumIdExclusions, $approvedTopicForumIdsSql)
     {
+        $blockVars = [];
         // make sure that some arrays are always in the same order
         sort($forumIdExclusions);
 
         $this->language->add_lang('viewtopic');
 
-        if (count($id_ary)) {
+        if (count($topicIds)) {
 
             // Do this for later...
             if ($this->getConfig('load_anon_lastread') || ($this->user->data['is_registered'] && !$this->getConfig('load_db_lastread'))) {
@@ -186,7 +175,7 @@ trait myspot
 
             $topic_tracking_info = $forums = $rowset = $shadow_topic_list = [];
 
-            $cursor = query::getMySpotNewPostsTopicDetailsCursor($this->getDb(), $this->getUser()->data['user_id'], $id_ary, $forumIdExclusions, $approvedTopicForumIdsSql);
+            $cursor = query::getMySpotFeedTopicsCursor($this->getDb(), $this->getUser()->data['user_id'], $topicIds, $forumIdExclusions, $approvedTopicForumIdsSql);
 
             while ($row = $this->getDb()->sql_fetchrow($cursor)) {
 
@@ -266,7 +255,7 @@ trait myspot
                 $postBody = generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], 1);
                 $postWords = explode(' ', strip_tags($postBody));
 
-                $this->template->assign_block_vars($blockName, [
+                $blockVars[] = [
                     'FORUM_TITLE' => $row['forum_name'],
 
                     'TOPIC_META' => $this->processTopicMeta($row['topic_views'], (int)$row['topic_posts_approved'] - 1),
@@ -289,24 +278,26 @@ trait myspot
                     // TODO Update this to MCP Route, when exists
                     'U_MCP_REPORT'  => append_sid(AbstractBase::$phpbbRootPath . '/mcp.' . AbstractBase::$phpEx, 'i=reports&amp;mode=reports&amp;t=' . $topicId, true, $this->user->session_id),
                     'U_VIEW_FORUM'  => $this->helper->route(url::ROUTE_FORUM, ['id' => $forum_id]),
-                ]);
+                ];
+
             }
         }
         unset($rowset);
+
+        return $blockVars;
     }
 
     /**
      * Setup the forum IDs that can be used when searching for the MySpot post submodules
      *
-     * @param array  $forumIdExclusions
-     * @param string $m_approve_topics_fid_sql
      * @param string $search_id The Search Content Enum
+     * @param array  $forumIdExclusions
      */
-    private function processMySpotSearchSetup($search_id, array &$forumIdExclusions = [], &$m_approve_topics_fid_sql = '')
+    private function processMySpotSearchSetup($search_id, array &$forumIdExclusions = [])
     {
 
         $forumIdExclusions = array_unique(array_merge(array_keys($this->auth->acl_getf('!f_read', true)), array_keys($this->auth->acl_getf('!f_search', true))));
-        $cursor = query::getMySpotPostSearchResultCursor($this->getDb(), $this->user->session_id, $forumIdExclusions, $this->user->data['user_id']);
+        $cursor = query::getMySpotFeedForumsCursor($this->getDb(), $this->user->session_id, $forumIdExclusions, $this->user->data['user_id']);
 
         while ($forumRow = $this->getDb()->sql_fetchrow($cursor)) {
             if ($forumRow['forum_password'] && $forumRow['user_id'] != $this->user->data['user_id']) {
@@ -316,89 +307,10 @@ trait myspot
 
             // Exclude forums from active topics
             if (!($forumRow['forum_flags'] & FORUM_FLAG_ACTIVE_TOPICS) && ($search_id == 'active_topics')) {
-                $ex_fid_ary[] = (int)$forumRow['forum_id'];
+                $forumIdExclusions[] = (int)$forumRow['forum_id'];
                 continue;
             }
         }
         query::freeCursor($this->getDb(), $cursor);
-
-        $m_approve_topics_fid_sql = $this->contentVisibility->get_global_visibility_sql('topic', $forumIdExclusions, 't.');
-    }
-
-    /**
-     * Generate the 'Active Topics (90 days)' submodule
-     *
-     * @param $forumIdExclusions
-     * @param $approvedTopicForumIdsSql
-     *
-     * @return array
-     */
-    private function submoduleActiveTopics($forumIdExclusions, $approvedTopicForumIdsSql)
-    {
-        $sort_days = 90; // days; default: 7
-        $cursor = query::getMySpotActiveTopicIdsCursor($this->getDb(), $sort_days, $approvedTopicForumIdsSql, $forumIdExclusions);
-
-        $field = 'topic_id';
-
-        return $this->postprocessMySpotSearchResults($cursor, $field);
-    }
-
-    /**
-     * Generate the "What's New" submodule
-     *
-     * @param $forumIdExclusions
-     * @param $approvedTopicForumIdsSql
-     *
-     * @return array
-     */
-    private function submoduleNewPosts($forumIdExclusions, $approvedTopicForumIdsSql)
-    {
-        // Set limit for the $total_match_count to reduce server load
-        $total_matches_limit = 1000;
-        // Only return up to $total_matches_limit+1 ids (the last one will be removed later)
-        $cursor = query::getMySpotNewPostTopicIdsCursor($this->getDb(), $this->user->data['user_lastvisit'], $approvedTopicForumIdsSql, $forumIdExclusions, $total_matches_limit + 1);
-
-        $field = 'topic_id';
-
-        return $this->postprocessMySpotSearchResults($cursor, $field);
-    }
-
-    /**
-     * Generate the Unanswered Topics submodule
-     *
-     * @param $forumIdExclusions
-     * @param $approvedTopicForumIdsSql
-     *
-     * @return array
-     */
-    private function submoduleUnansweredTopics($forumIdExclusions, $approvedTopicForumIdsSql)
-    {
-        $cursor = query::getMySpotUnansweredTopicIdsCursor($this->getDb(), $approvedTopicForumIdsSql, $forumIdExclusions);
-
-        $field = 'topic_id';
-
-        return $this->postprocessMySpotSearchResults($cursor, $field);
-    }
-
-    /**
-     * Generate the 'Unread Posts' submodule
-     *
-     * @param $forumIdExclusions
-     * @param $approvedTopicForumIdsSql
-     *
-     * @return array
-     */
-    private function submoduleUnreadPosts($forumIdExclusions, $approvedTopicForumIdsSql)
-    {
-        $total_matches_limit = 1000; // Set limit for the $total_match_count to reduce server load
-
-        // This is not moved to own query because it's done in another method... might rebuild method locally.
-        $sql_sort = 'ORDER BY t.topic_last_post_time DESC';
-        $sql_where = 'AND t.topic_moved_id = 0
-					AND ' . $approvedTopicForumIdsSql . '
-					' . ((count($forumIdExclusions)) ? 'AND ' . $this->getDb()->sql_in_set('t.forum_id', $forumIdExclusions, true) : '');
-
-        // Only return up to $total_matches_limit+1 ids (the last one will be removed later)
-        return array_keys(get_unread_topics($this->user->data['user_id'], $sql_where, $sql_sort, $total_matches_limit + 1));
     }
 }

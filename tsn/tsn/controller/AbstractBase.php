@@ -20,6 +20,7 @@ use phpbb\path_helper;
 use phpbb\request\request;
 use phpbb\template\template;
 use phpbb\user;
+use tsn\tsn\controller\traits\users;
 use tsn\tsn\framework\constants\url;
 use tsn\tsn\framework\logic\query;
 
@@ -29,6 +30,8 @@ use tsn\tsn\framework\logic\query;
  */
 abstract class AbstractBase
 {
+    use users;
+
     /** @var string|null */
     protected static $phpbbRootPath = null;
     /** @var false|string */
@@ -128,30 +131,6 @@ abstract class AbstractBase
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * Run the submodule work for a User Avatar
-     *
-     * @param int $userId
-     *
-     * @return string
-     */
-    protected function generateUserAvatar(int $userId)
-    {
-        $avatarImage = '';
-        if ($avatarRow = query::getUserAvatar($this->getDb(), $userId)) {
-
-            // Prepare the avatar image...
-            $avatarImage = preg_replace('/(\.\.\/)+?/', './', phpbb_get_user_avatar([
-                'avatar'        => $avatarRow['user_avatar'],
-                'avatar_type'   => $avatarRow['user_avatar_type'],
-                'avatar_width'  => $avatarRow['user_avatar_width'],
-                'avatar_height' => $avatarRow['user_avatar_height'],
-            ]));
-        }
-
-        return $avatarImage;
     }
 
     /**

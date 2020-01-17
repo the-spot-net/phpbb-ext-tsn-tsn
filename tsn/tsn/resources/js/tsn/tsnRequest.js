@@ -32,8 +32,6 @@ export default class tsnRequest {
           // and remove contentType assumptions
           contentType = false;
           processData = false;
-        } else {
-          contentType = 'application/json';
         }
       }
 

@@ -21,6 +21,7 @@ class url
     const ROUTE_GROUP = 'tsn_tsn_group';
     const ROUTE_LOGIN = 'tsn_tsn_login';
     const ROUTE_MEMBER = 'tsn_tsn_member';
+    const ROUTE_MODERATOR = 'tsn_tsn_moderator';
     const ROUTE_POST = 'tsn_tsn_post';
     const ROUTE_TOPIC = 'tsn_tsn_topic';
     const ROUTE_USER = 'tsn_tsn_user';

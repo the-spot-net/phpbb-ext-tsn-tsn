@@ -74,10 +74,13 @@ class ajax_controller extends AbstractBase
 
         switch ($route) {
             case url::AJAX_MYSPOT_FEED_PAGE:
+
+                // Request Variables are called in side the function where necessary
+//                $this->moduleMySpotPosts();
+
                 $this->response->status = 1;
                 $this->response->data['content'] = '<em>hello world</em>';
-//                $this->response->data['page'] = $this->request->variable('p', null);
-//                $this->response->data['time'] = $this->request->variable('t', null);
+//                $this->response->data['json'] = $this->blockVars;
                 break;
             default:
                 $statusCode = Response::HTTP_NOT_FOUND;

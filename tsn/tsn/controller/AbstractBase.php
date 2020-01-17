@@ -66,6 +66,11 @@ abstract class AbstractBase
     /* @var \phpbb\user */
     protected $user;
 
+    /** @var array Store key-value pair vars from modules to compile before output */
+    protected $rootVars = [];
+    /** @var array Store key-array pair vars from modules to compile before output */
+    protected $blockVars = [];
+
     /**
      * AbstractBase constructor.
      *
@@ -159,6 +164,20 @@ abstract class AbstractBase
         // Setup constant shell data...
         $this->moduleMiniForums();
         $this->moduleMiniProfile();
+    }
+
+    /**
+     * Handle the assignment of block vars and root vars before calling the template
+     */
+    protected function processTemplateVars()
+    {
+        $this->template->assign_vars($this->rootVars);
+
+        foreach ($this->blockVars as $blockName => $varsArray) {
+            $this->template->assign_block_vars_array($blockName, $varsArray);
+        }
+
+        $this->rootVars = $this->blockVars = [];
     }
 
     /**

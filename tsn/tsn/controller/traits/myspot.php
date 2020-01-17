@@ -10,7 +10,6 @@ namespace tsn\tsn\controller\traits;
 
 use phpbb\config\config;
 use phpbb\db\driver\factory;
-use phpbb\request\request_interface;
 use phpbb\user;
 use tsn\tsn\controller\AbstractBase;
 use tsn\tsn\framework\constants\url;
@@ -40,12 +39,10 @@ trait myspot
      */
     private function moduleMySpotPosts()
     {
-        $this->template->assign_vars([
-            'S_ALLOW_SEARCH'      => ($this->auth->acl_get('u_search') || $this->auth->acl_getf_global('f_search') || $this->getConfig('load_search')),
-            'S_SEARCH_OVERLOADED' => ($this->user->load
-                && $this->getConfig('limit_search_load')
-                && ($this->user->load > doubleval($this->getConfig('limit_search_load')))),
-        ]);
+        $this->rootVars['S_ALLOW_SEARCH'] = ($this->auth->acl_get('u_search') || $this->auth->acl_getf_global('f_search') || $this->getConfig('load_search'));
+        $this->rootVars['S_SEARCH_OVERLOADED'] = ($this->user->load
+            && $this->getConfig('limit_search_load')
+            && ($this->user->load > doubleval($this->getConfig('limit_search_load'))));
 
         $forumIdExclusions = [];
 
@@ -54,13 +51,16 @@ trait myspot
         $forumIdWhitelistSql = $this->contentVisibility->get_global_visibility_sql('topic', $forumIdExclusions, 't.');
 
         $cursor = query::getMySpotFeedPage($this->getDb(), $forumIdWhitelistSql, $forumIdExclusions, (int)$this->user->data['user_id'], (int)$this->user->data['user_lastmark'], $this->request->variable('t', AbstractBase::$now), $this->request->variable('p', 1));
+
         $field = 'topic_id';
 
-        $topicIds = $this->postprocessMySpotSearchResults($cursor, $field);
+        $topicIds = [];
+        while ($row = $this->getDb()->sql_fetchrow($cursor)) {
+            $topicIds[] = (int)$row[$field];
+        }
+        query::freeCursor($this->getDb(), $cursor);
 
-        $blockVars = $this->prepareMySpotSearchResultsOutput($topicIds, $forumIdExclusions, $forumIdWhitelistSql);
-
-        $this->template->assign_block_vars_array('myspotfeed', $blockVars);
+        $this->prepareMySpotSearchResultsOutput($topicIds, $forumIdExclusions, $forumIdWhitelistSql);
     }
 
     /**
@@ -68,6 +68,8 @@ trait myspot
      */
     private function moduleSpecialReport()
     {
+        $this->blockVars['specialreport'] = [];
+
         // Get the minimal Latest Topic Info, if any
         if ($topicRow = query::checkForSpecialReportLatestTopic($this->getDb(), $this->getConfig('tsn_specialreport_forumid'))) {
 
@@ -110,7 +112,7 @@ trait myspot
                 $postBody = generate_text_for_display($topicRow['post_text'], $topicRow['bbcode_uid'], $topicRow['bbcode_bitfield'], 1);
                 $postWords = explode(' ', strip_tags($postBody));
 
-                $this->template->assign_block_vars('specialreport', [
+                $this->blockVars['specialreport'][] = [
                     'FORUM_NAME' => $topicRow['forum_name'],
 
                     'TOPIC_ID'   => $topicRow['topic_id'],
@@ -118,7 +120,6 @@ trait myspot
 
                     'HEADLINE'           => censor_text($topicRow['topic_title']),
                     'I_AVATAR_IMG'       => $this->generateUserAvatar($topicRow['topic_poster']),
-                    // TODO Update this to use new route URL
                     'POST_AUTHOR'        => get_username_string('full', $topicRow['topic_poster'], $topicRow['username'], $topicRow['user_colour']),
                     'POST_EXCERPT'       => implode(' ', array_slice($postWords, 0, 200)),
                     'POST_BODY'          => $postBody,
@@ -126,52 +127,25 @@ trait myspot
                     'S_UNREAD_TOPIC'     => $isUnreadTopic,
                     'U_CONTINUE_READING' => $this->helper->route(url::ROUTE_POST, ['id' => $topicRow['post_id']]),
                     'U_FORUM'            => $this->helper->route(url::ROUTE_FORUM, ['id' => $topicRow['forum_id']]),
-                ]);
+                ];
             }
         }
-    }
-
-    /**
-     * Process the topic query for the particular submodule results cursor
-     *
-     * @param $cursor
-     * @param $field
-     *
-     * @return array
-     */
-    private function postprocessMySpotSearchResults($cursor, $field)
-    {
-        $topicIds = [];
-        while ($row = $this->getDb()->sql_fetchrow($cursor)) {
-            $topicIds[] = (int)$row[$field];
-        }
-        query::freeCursor($this->getDb(), $cursor);
-
-        return $topicIds;
     }
 
     /**
      * @param $topicIds
      * @param $forumIdExclusions
      * @param $approvedTopicForumIdsSql
-     *
-     * @return array
      */
     private function prepareMySpotSearchResultsOutput($topicIds, $forumIdExclusions, $approvedTopicForumIdsSql)
     {
-        $blockVars = [];
+        $this->blockVars['myspotfeed'] = [];
         // make sure that some arrays are always in the same order
         sort($forumIdExclusions);
 
         $this->language->add_lang('viewtopic');
 
         if (count($topicIds)) {
-
-            // Do this for later...
-            if ($this->getConfig('load_anon_lastread') || ($this->user->data['is_registered'] && !$this->getConfig('load_db_lastread'))) {
-                $tracking_topics = $this->request->variable($this->getConfig('cookie_name') . '_track', '', true, request_interface::COOKIE);
-                $tracking_topics = ($tracking_topics) ? tracking_unserialize($tracking_topics) : [];
-            }
 
             $topic_tracking_info = $forums = $rowset = $shadow_topic_list = [];
 
@@ -216,75 +190,71 @@ trait myspot
                 }
                 query::freeCursor($this->getDb(), $cursor);
             }
-            unset($shadow_topic_list);
+            $shadow_topic_list = null;
 
-            foreach ($forums as $forum_id => $forum) {
+            foreach ($forums as $forumId => $forum) {
                 if ($this->user->data['is_registered'] && $this->getConfig('load_db_lastread')) {
-                    $topic_tracking_info[$forum_id] = get_topic_tracking($forum_id, $forum['topic_list'], $forum['rowset'], [$forum_id => $forum['mark_time']]);
-                } else if ($this->getConfig('load_anon_lastread') || $this->user->data['is_registered']) {
-                    $topic_tracking_info[$forum_id] = get_complete_topic_tracking($forum_id, $forum['topic_list']);
-
-                    if (!$this->user->data['is_registered']) {
-                        /** @noinspection PhpUndefinedVariableInspection */
-                        $this->user->data['user_lastmark'] = (isset($tracking_topics['l']))
-                            ? (int)(base_convert($tracking_topics['l'], 36, 10) + $this->getConfig('board_startdate'))
-                            : 0;
-                    }
+                    $topic_tracking_info[$forumId] = get_topic_tracking($forumId, $forum['topic_list'], $forum['rowset'], [$forumId => $forum['mark_time']]);
                 }
             }
-            unset($forums);
+            $forums = null;
 
             if (!function_exists('topic_status')) {
                 include_once('includes/functions_display.' . AbstractBase::$phpEx);
             }
 
             foreach ($rowset as $row) {
-                $forum_id = $row['forum_id'];
+                $forumId = $row['forum_id'];
                 $topicId = $row['topic_id'];
-                $replies = $this->contentVisibility->get_count('topic_posts', $row, $forum_id) - 1;
+                $replies = $this->contentVisibility->get_count('topic_posts', $row, $forumId) - 1;
 
                 $folder_img = $folder_alt = $topic_type = '';
-                topic_status($row, $replies, (isset($topic_tracking_info[$forum_id][$topicId]) && $row['topic_last_post_time'] > $topic_tracking_info[$forum_id][$topicId]) ? true : false, $folder_img, $folder_alt, $topic_type);
 
-                $unread_topic = (isset($topic_tracking_info[$forum_id][$topicId]) && $row['topic_last_post_time'] > $topic_tracking_info[$forum_id][$topicId]) ? true : false;
+                $unread_topic = (isset($topic_tracking_info[$forumId][$topicId]) && $row['topic_last_post_time'] > $topic_tracking_info[$forumId][$topicId]);
+                topic_status($row, $replies, $unread_topic, $folder_img, $folder_alt, $topic_type);
 
-                $topic_unapproved = (($row['topic_visibility'] == ITEM_UNAPPROVED || $row['topic_visibility'] == ITEM_REAPPROVE) && $this->auth->acl_get('m_approve', $forum_id)) ? true : false;
-                $posts_unapproved = ($row['topic_visibility'] == ITEM_APPROVED && $row['topic_posts_unapproved'] && $this->auth->acl_get('m_approve', $forum_id)) ? true : false;
-                $topic_deleted = ($row['topic_visibility'] == ITEM_DELETED);
+                $firstPostBody = generate_text_for_display($row['first_post_text'], $row['first_post_bbcode_uid'], $row['first_post_bbcode_bitfield'], 1);
+                $lastPostBody = generate_text_for_display($row['last_post_text'], $row['last_post_bbcode_uid'], $row['last_post_bbcode_bitfield'], 1);
 
-                $postBody = generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], 1);
-                $postWords = explode(' ', strip_tags($postBody));
+                $this->blockVars['myspotfeed'][] = [
+                    // Forum
+                    'FORUM_NAME'                 => $row['forum_name'],
 
-                $blockVars[] = [
-                    'FORUM_TITLE' => $row['forum_name'],
+                    // Topic
+                    'TOPIC_ID'                   => $topicId,
+                    'S_UNREAD_TOPIC'             => $unread_topic,
+                    'S_HAS_POLL'                 => (bool)$row['poll_start'],
 
-                    'TOPIC_META' => $this->processTopicMeta($row['topic_views'], (int)$row['topic_posts_approved'] - 1),
+                    // First Post
+                    'FIRST_POST_ID'              => $row['topic_first_post_id'],
+                    'FIRST_POST_AUTHOR_COLOR'    => get_username_string('no_profile', $row['topic_poster'], $row['topic_first_poster_name'], $row['topic_first_poster_colour']), // TODO
+                    'FIRST_POST_SUBJECT'         => $row['topic_title'],
+                    'FIRST_POST_TIME'            => $this->user->format_date($row['topic_time']),
+                    // 'FIRST_POST_BODY'            => $firstPostBody,
+                    'FIRST_POST_EXCERPT'         => implode(' ', array_slice(explode(' ', strip_tags($firstPostBody)), 0, 100)),
+                    'I_FIRST_POST_AUTHOR_AVATAR' => $this->generateUserAvatar($row['topic_poster']),
 
-                    'LAST_POST_SUBJECT'         => $row['topic_last_post_subject'],
-                    'LAST_POST_TIME'            => $this->user->format_date($row['topic_last_post_time']),
-                    'LAST_POST_AUTHOR_FULL'     => get_username_string('full', $row['topic_last_poster_id'], $row['topic_last_poster_name'], $row['topic_last_poster_colour']),
-                    'I_LAST_POST_AUTHOR_AVATAR' => $this->generateUserAvatar($row['topic_last_poster_id']),
-                    'LAST_POST_EXCERPT'         => implode(' ', array_slice($postWords, 0, 100)),
+                    // Meta
+                    'VIEWS'                      => number_format((int)$row['topic_views'], 0),
+                    'COMMENT_COUNT'              => number_format((int)$row['topic_posts_approved'] - 1, 0),
+                    'NEW_COUNT'                  => '',
 
-                    'S_UNREAD_TOPIC' => $unread_topic,
+                    // Last Post
+                    'LAST_POST_ID'               => $row['topic_last_post_id'],
+                    'LAST_POST_AUTHOR_COLOR'     => get_username_string('no_profile', $row['topic_last_poster_id'], $row['topic_last_poster_name'], $row['topic_last_poster_colour']),
+                    'LAST_POST_SUBJECT'          => $row['topic_last_post_subject'],
+                    'LAST_POST_TIME'             => $this->user->format_date($row['topic_last_post_time']),
+                    // 'LAST_POST_BODY'             => $lastPostBody,
+                    'LAST_POST_EXCERPT'          => implode(' ', array_slice(explode(' ', strip_tags($lastPostBody)), 0, 100)),
+                    'I_LAST_POST_AUTHOR_AVATAR'  => $this->generateUserAvatar($row['topic_last_poster_id']),
 
-                    'S_TOPIC_REPORTED'   => (!empty($row['topic_reported']) && $this->auth->acl_get('m_report', $forum_id)) ? true : false,
-                    'S_TOPIC_UNAPPROVED' => $topic_unapproved,
-                    'S_POSTS_UNAPPROVED' => $posts_unapproved,
-                    'S_TOPIC_DELETED'    => $topic_deleted,
-                    'S_HAS_POLL'         => ($row['poll_start']) ? true : false,
-
-                    'U_NEWEST_POST' => $this->helper->route(url::ROUTE_TOPIC, ['id' => $topicId, 'f' => $forum_id, 'view' => 'unread']) . '#unread',
-                    // TODO Update this to MCP Route, when exists
-                    'U_MCP_REPORT'  => append_sid(AbstractBase::$phpbbRootPath . '/mcp.' . AbstractBase::$phpEx, 'i=reports&amp;mode=reports&amp;t=' . $topicId, true, $this->user->session_id),
-                    'U_VIEW_FORUM'  => $this->helper->route(url::ROUTE_FORUM, ['id' => $forum_id]),
+                    // 'U_MCP_REPORT' => $this->helper->route(url::ROUTE_MODERATOR, ['i' => 'reports', 'mode' => 'reports', 't' => $topicId], true, $this->user->session_id),
+                    // 'U_VIEW_FORUM' => $this->helper->route(url::ROUTE_FORUM, ['id' => $forumId]),
                 ];
-
             }
+            $topic_tracking_info = null;
+            $rowset = null;
         }
-        unset($rowset);
-
-        return $blockVars;
     }
 
     /**

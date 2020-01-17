@@ -16,8 +16,8 @@
                         <div class="mdc-layout-grid__cell--span-12">
                             <div class="tsn-card-collection" data-js="js--tsn-myspot-card-list">
                                 {% if myspotfeed %}
-                                    {% for post in myspotfeed %}
-                                        {% include '@tsn_tsn/partials/tsn_myspot_postcard.html' %}
+                                    {% for topic in myspotfeed %}
+                                        {% include '@tsn_tsn/partials/tsn_topic_card.html' %}
                                     {% endfor %}
                                 {% endif %}
                             </div>

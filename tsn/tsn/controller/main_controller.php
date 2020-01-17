@@ -39,6 +39,8 @@ class main_controller extends AbstractBase
             'S_USER_ID'              => $this->user->data['user_id'],
         ]);
 
+        $this->processTemplateVars();
+
         return $this->helper->render('@tsn_tsn/tsn_myspot.html', $this->language->lang('MYSPOT'), 200, true);
     }
 

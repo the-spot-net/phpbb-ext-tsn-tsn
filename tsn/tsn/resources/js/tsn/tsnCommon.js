@@ -46,7 +46,7 @@ export default class tsnCommon {
       }
     });
 
-    $('.mdc-button, .mdc-fab').each(function (i, obj) {
+    $('.mdc-button, .mdc-fab, .mdc-card__primary-action').each(function (i, obj) {
       // eslint-disable-next-line no-new
       new MDCRipple(obj);
     });

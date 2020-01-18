@@ -10,12 +10,15 @@
   .tsn-card--topic__content {
     padding-left: rem-calc(76);
 
-    .avatar {
+    .tsn-card--topic__avatar {
       position: absolute;
       left: 0;
       margin-left: rem-calc(10);
-      width: rem-calc(40);
-      height: rem-calc(40);
+
+      .avatar {
+        width: rem-calc(40);
+        height: rem-calc(40);
+      }
     }
 
     .tsn-card--topic__excerpt {
@@ -34,10 +37,13 @@
         @include text-overflow(3);
       }
 
-      .avatar {
+      .tsn-card--topic__avatar {
         margin-left: 0;
-        width: rem-calc(60);
-        height: rem-calc(60);
+
+        .avatar {
+          width: rem-calc(60);
+          height: rem-calc(60);
+        }
       }
     }
   }

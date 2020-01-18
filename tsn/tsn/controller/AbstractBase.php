@@ -32,12 +32,14 @@ abstract class AbstractBase
 {
     use users;
 
-    /** @var string|null */
+    /** @var string|null Forum URI webroot directory */
     protected static $phpbbRootPath = null;
     /** @var false|string */
     protected static $phpEx = 'php';
-    /** @var string */
+    /** @var string Full URL of the board from domain down */
     protected static $boardUrl;
+    /** @var string Root directory of the extension */
+    protected static $extensionRoot;
     /** @var int */
     protected static $now = null;
 
@@ -102,10 +104,11 @@ abstract class AbstractBase
         $this->template = $template;
         $this->user = $user;
 
+        self::$boardUrl = generate_board_url() . '/';
+        self::$extensionRoot = dirname(dirname(__FILE__));
+        self::$now = time();
         self::$phpbbRootPath = $this->getConfig('script_path');
         self::$phpEx = substr(strrchr(__FILE__, '.'), 1);
-        self::$boardUrl = generate_board_url() . '/';
-        self::$now = time();
     }
 
     /**

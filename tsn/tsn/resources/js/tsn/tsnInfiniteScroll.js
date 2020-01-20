@@ -67,7 +67,7 @@ export default class tsnInfiniteScroll extends tsnPlugin {
           if (response.status === tsnRequest.constants.SUCCESS) {
             // TODO Check if topic exists, if so, update first/last post & reply status;
             // TODO If not, Pull the Template, populate the data points, append to the list
-            // this.$container.append($(response.data.content));
+            this.$container.append($(response.data.html));
             this.mightHaveMore = response.data.hasMore || false;
 
             // response.data.templateHtml

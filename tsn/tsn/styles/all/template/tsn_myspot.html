@@ -14,12 +14,11 @@
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
                     <div class="mdc-layout-grid__inner">
                         <div class="mdc-layout-grid__cell--span-12">
-                            <div class="tsn-card-collection" data-js="js--tsn-myspot-card-list">
-                                {% if myspotfeed %}
-                                    {% for topic in myspotfeed %}
-                                        {% include '@tsn_tsn/partials/tsn_topic_card.html' %}
-                                    {% endfor %}
-                                {% endif %}
+                            <div class="tsn-card-collection">
+                                <div data-js="js--tsn-myspot-card-list">
+                                    {% include '@tsn_tsn/partials/tsn_myspot_feed.html' %}
+                                </div>
+                                {# TODO Add a placeholder card here. Push it down when the feed is apended, hide it when the feed is exhausted, and reveal it if the feed is refreshed #}
                             </div>
                         </div>
                     </div>

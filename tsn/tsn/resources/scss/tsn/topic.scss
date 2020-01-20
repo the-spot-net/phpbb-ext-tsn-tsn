@@ -31,11 +31,11 @@
       @include transition-default();
     }
 
-    &.tsn-card--topic__content--first {
+    .tsn-card--topic__replies {
+      @include transition-default();
+    }
 
-      .tsn-card--topic__excerpt {
-        @include text-overflow(3);
-      }
+    &.tsn-card--topic__content--first {
 
       .tsn-card--topic__avatar {
         margin-left: 0;
@@ -44,6 +44,10 @@
           width: rem-calc(60);
           height: rem-calc(60);
         }
+      }
+
+      .tsn-card--topic__excerpt {
+        @include text-overflow(3);
       }
     }
   }

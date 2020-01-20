@@ -23,21 +23,22 @@ use tsn\tsn\framework\logic\query;
  * @method factory getDb()
  * @method user getUser()
  * @method string processTopicMeta($viewCount, $replyCount)
- * @property \phpbb\auth\auth          $auth
- * @property \phpbb\content_visibility $contentVisibility
- * @property \phpbb\controller\helper  $helper
- * @property \phpbb\language\language  $language
- * @property \phpbb\request\request    $request
- * @property \phpbb\template\template  $template
- * @property \phpbb\user               $user
+ * @property \phpbb\auth\auth                  $auth
+ * @property \phpbb\content_visibility         $contentVisibility
+ * @property \phpbb\controller\helper          $helper
+ * @property \phpbb\language\language          $language
+ * @property \phpbb\request\request            $request
+ * @property \tsn\tsn\framework\logic\template $template
+ * @property \phpbb\user                       $user
  */
 trait myspot
 {
+    private static $feedLimit = 25;
 
     /**
      * Generate the post sets for the MySpot page
      */
-    private function moduleMySpotPosts()
+    private function moduleMySpotFeed()
     {
         $this->rootVars['S_ALLOW_SEARCH'] = ($this->auth->acl_get('u_search') || $this->auth->acl_getf_global('f_search') || $this->getConfig('load_search'));
         $this->rootVars['S_SEARCH_OVERLOADED'] = ($this->user->load
@@ -46,11 +47,12 @@ trait myspot
 
         $forumIdExclusions = [];
 
-        $this->processMySpotSearchSetup('', $forumIdExclusions);
+        $this->processMySpotFeedSetup('', $forumIdExclusions);
 
         $forumIdWhitelistSql = $this->contentVisibility->get_global_visibility_sql('topic', $forumIdExclusions, 't.');
 
-        $cursor = query::getMySpotFeedPage($this->getDb(), $forumIdWhitelistSql, $forumIdExclusions, (int)$this->user->data['user_id'], (int)$this->user->data['user_lastmark'], $this->request->variable('t', AbstractBase::$now), $this->request->variable('p', 1));
+        // Add 1 to the limit to see if there is another page
+        $cursor = query::getMySpotFeedPage($this->getDb(), $forumIdWhitelistSql, $forumIdExclusions, (int)$this->user->data['user_id'], (int)$this->user->data['user_lastmark'], $this->request->variable('t', AbstractBase::$now), $this->request->variable('p', 1), self::$feedLimit + 1);
 
         $field = 'topic_id';
 
@@ -60,7 +62,15 @@ trait myspot
         }
         query::freeCursor($this->getDb(), $cursor);
 
-        $this->prepareMySpotSearchResultsOutput($topicIds, $forumIdExclusions, $forumIdWhitelistSql);
+        $hasMore = false;
+        if ($topicIds > self::$feedLimit) {
+            $hasMore = true;
+            $topicIds = array_slice($topicIds, 0, self::$feedLimit);
+        }
+
+        $this->prepareMySpotFeedOutput($topicIds, $forumIdExclusions, $forumIdWhitelistSql);
+
+        return $hasMore;
     }
 
     /**
@@ -137,9 +147,9 @@ trait myspot
      * @param $forumIdExclusions
      * @param $approvedTopicForumIdsSql
      */
-    private function prepareMySpotSearchResultsOutput($topicIds, $forumIdExclusions, $approvedTopicForumIdsSql)
+    private function prepareMySpotFeedOutput($topicIds, $forumIdExclusions, $approvedTopicForumIdsSql)
     {
-        $this->blockVars['myspotfeed'] = [];
+        $this->blockVars['topics'] = [];
         // make sure that some arrays are always in the same order
         sort($forumIdExclusions);
 
@@ -216,7 +226,7 @@ trait myspot
                 $firstPostBody = generate_text_for_display($row['first_post_text'], $row['first_post_bbcode_uid'], $row['first_post_bbcode_bitfield'], 1);
                 $lastPostBody = generate_text_for_display($row['last_post_text'], $row['last_post_bbcode_uid'], $row['last_post_bbcode_bitfield'], 1);
 
-                $this->blockVars['myspotfeed'][] = [
+                $this->blockVars['topics'][] = [
                     // Forum
                     'FORUM_NAME'                 => $row['forum_name'],
 
@@ -263,7 +273,7 @@ trait myspot
      * @param string $search_id The Search Content Enum
      * @param array  $forumIdExclusions
      */
-    private function processMySpotSearchSetup($search_id, array &$forumIdExclusions = [])
+    private function processMySpotFeedSetup($search_id, array &$forumIdExclusions = [])
     {
 
         $forumIdExclusions = array_unique(array_merge(array_keys($this->auth->acl_getf('!f_read', true)), array_keys($this->auth->acl_getf('!f_search', true))));

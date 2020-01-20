@@ -17,12 +17,12 @@ use phpbb\controller\helper;
 use phpbb\language\language;
 use phpbb\path_helper;
 use phpbb\request\request;
-use phpbb\template\template;
 use phpbb\user;
 use stdClass;
 use Symfony\Component\HttpFoundation\Response;
 use tsn\tsn\controller\traits\myspot;
 use tsn\tsn\framework\constants\url;
+use tsn\tsn\framework\logic\template;
 
 /**
  * Class ajax_controller
@@ -38,18 +38,18 @@ class ajax_controller extends AbstractBase
     /**
      * ajax_controller constructor.
      *
-     * @param \phpbb\auth\auth                $auth
-     * @param \phpbb\auth\provider_collection $authProviderCollection
-     * @param \phpbb\captcha\factory          $captcha
-     * @param \phpbb\config\config            $config
-     * @param \phpbb\content_visibility       $contentVisibility
-     * @param \phpbb\db\driver\factory        $db
-     * @param \phpbb\controller\helper        $helper
-     * @param \phpbb\language\language        $language
-     * @param \phpbb\path_helper              $pathHelper
-     * @param \phpbb\request\request          $request
-     * @param \phpbb\template\template        $template
-     * @param \phpbb\user                     $user
+     * @param \phpbb\auth\auth                  $auth
+     * @param \phpbb\auth\provider_collection   $authProviderCollection
+     * @param \phpbb\captcha\factory            $captcha
+     * @param \phpbb\config\config              $config
+     * @param \phpbb\content_visibility         $contentVisibility
+     * @param \phpbb\db\driver\factory          $db
+     * @param \phpbb\controller\helper          $helper
+     * @param \phpbb\language\language          $language
+     * @param \phpbb\path_helper                $pathHelper
+     * @param \phpbb\request\request            $request
+     * @param \tsn\tsn\framework\logic\template $template
+     * @param \phpbb\user                       $user
      */
     public function __construct(auth $auth, provider_collection $authProviderCollection, factory $captcha, config $config, content_visibility $contentVisibility, \phpbb\db\driver\factory $db, helper $helper, language $language, path_helper $pathHelper, request $request, template $template, user $user)
     {
@@ -75,12 +75,13 @@ class ajax_controller extends AbstractBase
         switch ($route) {
             case url::AJAX_MYSPOT_FEED_PAGE:
 
-                // Request Variables are called in side the function where necessary
-//                $this->moduleMySpotPosts();
+                $hasMore = $this->moduleMySpotFeed();
+                $this->processTemplateVars();
 
                 $this->response->status = 1;
-                $this->response->data['content'] = '<em>hello world</em>';
-//                $this->response->data['json'] = $this->blockVars;
+                // Request Variables are called in side the function where necessary
+                $this->response->data['hasMore'] = $hasMore;
+                $this->response->data['html'] = $this->template->renderPartial(template::P_MYSPOT_FEED);
                 break;
             default:
                 $statusCode = Response::HTTP_NOT_FOUND;

@@ -28,7 +28,7 @@ class main_controller extends AbstractBase
 
         $this->moduleStatistics();
         $this->moduleSpecialReport();
-        $this->moduleMySpotPosts();
+        $this->moduleMySpotFeed();
 
         $this->template->assign_vars([
             'S_ALLOW_MINI_PROFILE'   => !empty($this->config['tsn8_activate_mini_profile']),

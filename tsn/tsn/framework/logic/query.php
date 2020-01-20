@@ -125,7 +125,7 @@ class query
      *
      * @return mixed
      */
-    public static function getMySpotFeedPage(factory $db, string $forumIdWhitelistSql, array $forumIdExclusions, int $userId, int $lastMarkTime, int $initialLoadTime, int $page = 1, int $limit = 25)
+    public static function getMySpotFeedPage(factory $db, string $forumIdWhitelistSql, array $forumIdExclusions, int $userId, int $lastMarkTime, int $initialLoadTime, int $page = 1, int $limit = 26)
     {
         $forumIdExclusionSql = (count($forumIdExclusions)) ? ' AND ' . $db->sql_in_set('t.forum_id', $forumIdExclusions, true) : '';
 

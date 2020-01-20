@@ -32,6 +32,18 @@ services:
             - '@request'
             - '@template'
             - '@user'
+    tsn.tsn.framework.logic.template:
+        class: tsn\tsn\framework\logic\template
+        decorates: 'template'
+        arguments:
+            - '@path_helper'
+            - '@config'
+            - '@template_context'
+            - '@template.twig.environment'
+            - '%core.template.cache_path%'
+            - '@user'
+            - '@template.twig.extensions.collection'
+            - '@ext.manager'
     tsn.tsn.controller.acp:
         class: tsn\tsn\controller\acp_controller
         arguments:

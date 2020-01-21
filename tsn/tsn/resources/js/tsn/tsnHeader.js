@@ -53,9 +53,9 @@ export default class tsnHeader extends tsnPlugin {
 }
 
 if (!$.fn.tsnHeader) {
-  $.fn.tsnHeader = function () {
+  $.fn.tsnHeader = function (options = {}) {
     return this.each(function () {
-      return tsnPlugin.getPluginObject({ pluginName: tsnHeader.pluginName, $elem: $(this) }) || new tsnHeader({ container: this });
+      return tsnPlugin.getPluginObject({ pluginName: tsnHeader.pluginName, $elem: $(this) }) || new tsnHeader({ container: this, options });
     });
   };
 }

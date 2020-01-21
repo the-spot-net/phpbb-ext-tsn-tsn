@@ -37,20 +37,6 @@
   }
 }
 
-.tsn-fab--absolute {
-  position: fixed;
-  bottom: rem-calc($triple-vertical + 1rem);
-  right: 1rem;
-}
-
-@media #{$mq-tablet-min} {
-  .tsn-fab--absolute {
-    bottom: rem-calc($double-vertical + 1.5rem);
-    right: 1.5rem;
-  }
-}
-
-
 // Left/Right Margin to create "centralized" grid
 .mdc-layout-grid:first-of-type {
   margin-left: auto;

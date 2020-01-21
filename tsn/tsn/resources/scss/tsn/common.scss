@@ -45,6 +45,20 @@
 }
 
 .mdc-fab {
+
+  &.tsn-fab--absolute {
+    position: fixed;
+    bottom: rem-calc($triple-vertical + 1rem);
+    right: 1rem;
+  }
+
+  @media #{$mq-tablet-min} {
+    &.tsn-fab--absolute {
+      bottom: rem-calc($double-vertical + 1.5rem);
+      right: 1.5rem;
+    }
+  }
+
   .second-icon,
   .first-icon {
     left: 0;

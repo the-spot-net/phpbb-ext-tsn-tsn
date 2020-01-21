@@ -7,7 +7,9 @@
 
                 {% if specialreport %}
                     {% for topic in specialreport %}
-                        {% include '@tsn_tsn/partials/tsn_special_report.html' %}
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                            {% include '@tsn_tsn/partials/tsn_special_report.html' %}
+                        </div>
                     {% endfor %}
                 {% endif %}
 

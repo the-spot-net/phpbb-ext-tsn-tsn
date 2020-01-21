@@ -3,23 +3,21 @@
     This templates requires a `topic` blockvar to be sent
     e.g. {% for topic in specialreport %}
 #}
-<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-    <div class="mdc-card tsn-card tsn-card--specialreport {% if topic.S_UNREAD_TOPIC and not S_IS_BOT %}unread{% endif %}">
-        {{ topic.I_AVATAR_IMG }}
-        <div class="tsn-card--specialreport__content">
-            <a class="mdc-typography--overline" href="{{ topic.U_FORUM }}">{{ topic.FORUM_NAME }}</a>
-            <a href="{{ topic.U_CONTINUE_READING }}" class="mdc-typography--headline5 mdc-card__primary-action">
-                {{ topic.HEADLINE }}
-            </a>
-            <span class="mdc-typography--body2">{{ topic.POST_AUTHOR }}&nbsp;&mdash;&nbsp;{{ topic.POST_DATE }} :: {{ topic.TOPIC_META }}</span>
-            <p class="mdc-typography--body1 tsn-card--specialreport__excerpt">{{ topic.POST_EXCERPT }}</p>
-        </div>
-        <div class="mdc-card__actions mdc-card__actions--full-bleed">
-            <a class="mdc-button mdc-card__action mdc-card__action--button" href="{{ topic.U_CONTINUE_READING }}">
-                <div class="mdc-button__ripple"></div>
-                <span class="mdc-button__label">Read More</span>
-                <div class="mdc-button__touch"></div>
-            </a>
-        </div>
+<div class="mdc-card tsn-card tsn-card--specialreport {% if topic.S_UNREAD_TOPIC and not S_IS_BOT %}unread{% endif %}">
+    {{ topic.I_AVATAR_IMG }}
+    <div class="tsn-card--specialreport__content">
+        <a class="mdc-typography--overline" href="{{ topic.U_FORUM }}">{{ topic.FORUM_NAME }}</a>
+        <a href="{{ topic.U_CONTINUE_READING }}" class="mdc-typography--headline5 mdc-card__primary-action">
+            {{ topic.HEADLINE }}
+        </a>
+        <span class="mdc-typography--body2">{{ topic.POST_AUTHOR }}&nbsp;&mdash;&nbsp;{{ topic.POST_DATE }} :: {{ topic.TOPIC_META }}</span>
+        <p class="mdc-typography--body1 tsn-card--specialreport__excerpt">{{ topic.POST_EXCERPT }}</p>
+    </div>
+    <div class="mdc-card__actions mdc-card__actions--full-bleed">
+        <a class="mdc-button mdc-card__action mdc-card__action--button" href="{{ topic.U_CONTINUE_READING }}">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label">Read More</span>
+            <div class="mdc-button__touch"></div>
+        </a>
     </div>
 </div>

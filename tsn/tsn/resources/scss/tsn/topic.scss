@@ -1,5 +1,6 @@
 .tsn-card--topic {
   position: relative;
+  cursor: pointer;
   @include transition-default();
 
   &:hover {

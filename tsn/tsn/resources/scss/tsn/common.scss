@@ -93,37 +93,53 @@
 
 .tsn-mimic-container {
   position: absolute;
+  overflow: hidden;
+  @include transition-default();
 
   &.tsn-mimic-container__is-active {
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+    @include transition-default();
 
-    main & {
+    & ~ main {
       opacity: 0;
+      overflow: hidden;
       @include transition-default();
     }
   }
 
-  .tsn-mimic-card {
-    position: relative;
+  &.tsn-mimic-container__is-ready {
+    overflow-y: auto;
 
-    &.tsn-mimic-card__is-active {
-      max-width: $xlarge-desktop-min;
-      margin: calc(#{$mdc-top-app-bar-row-height} + #{$full-vertical}) auto $footer-height;
+    & ~ main {
+      display: none;
     }
   }
-}
 
-.tsn-mimic {
-  position: absolute;
-  @include transition-default();
-
-  &.expanding,
-  &.expanded {
-    @extend .tsn-content-area;
-    @extend .mdc-elevation--z8;
+  .tsn-mimic-card {
+    position: absolute;
     @include transition-default();
+
+    // Using Important to override all the on-element styles while active
+    &.tsn-mimic-card__is-active {
+      // Put it below the header
+      top: calc(#{$mdc-top-app-bar-row-height} + #{$full-vertical}) !important;
+
+      // Horizontally center, without swinging left/right with 0px values
+      left: 50% !important;
+      transform: translateX(-50%);
+      margin-left: auto;
+      margin-right: auto;
+
+      // As much height is required, but keep the width in the normal space or as a card when smaller
+      height: auto !important;
+      width: 100vw !important;
+      max-width: $xlarge-desktop-min;
+
+      @include mdc-elevation(8);
+      @include transition(.5s);
+    }
   }
 }

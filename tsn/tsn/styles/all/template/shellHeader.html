@@ -88,6 +88,9 @@
 <body class="nojs notouch {{ S_CONTENT_DIRECTION }}">
 {% include '@tsn_tsn/mdc_topAppBar.html' %}
 {% include '@tsn_tsn/mdc_leftNavigationDrawer.html' %}
+<div class="tsn-mimic-container" data-js="js--tsn-mimic-container">
+    <div class="tsn-mimic-card" data-js="js--tsn-mimic-card"></div>
+</div>
 <main class="mdc-drawer-app-content mdc-top-app-bar--fixed-adjust">
     {#    {% if S_USER_INACTIVE %}#}
     {#        <span class="tsn8_error_message"><b>{{ lang('USER_IS_INACTIVE') }}</b><br/>{{ lang('INACTIVE_REASON') }}: {{ USER_INACTIVE_REASON }}</span>#}

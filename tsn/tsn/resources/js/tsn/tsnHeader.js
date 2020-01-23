@@ -9,7 +9,7 @@ export default class tsnHeader extends tsnPlugin {
   constructor({
     container,
     options = {},
-    name = ''
+    name = tsnHeader.pluginName
   } = {}) {
     super({ container, options, name });
     this.constructListeners();
@@ -24,11 +24,9 @@ export default class tsnHeader extends tsnPlugin {
   constructDynamicProperties() {
     super.constructDynamicProperties();
 
-    this.MDCDrawer = this.MDCDrawer || new MDCDrawer(document.querySelector(tsnHeader.selectors.mdcDrawer));
-    this.MDCTopAppBar = this.MDCTopAppBar || new MDCTopAppBar(document.querySelector(tsnHeader.selectors.mdcTopAppBar));
-
-    this.navigationList = this.navigationList || document.querySelector(tsnHeader.selectors.mdcDrawerList);
-    this.mainContent = this.mainContent || document.querySelector('main');
+    this.MDCDrawer = this.MDCDrawer || new MDCDrawer(this.$elem(tsnHeader.selectors.mdcDrawer)[0]);
+    this.MDCTopAppBar = this.MDCTopAppBar || new MDCTopAppBar(this.$elem(tsnHeader.selectors.mdcTopAppBar)[0]);
+    this.$navigationList = this.$elem(tsnHeader.selectors.mdcDrawerList);
   }
 
   constructListeners() {
@@ -38,17 +36,19 @@ export default class tsnHeader extends tsnPlugin {
     });
 
     // Close the drawer when clicking a list item in it
-    this.navigationList.addEventListener('click', () => {
-      this.MDCDrawer.open = false;
-    });
+    this.$navigationList
+      .on('click', () => {
+        this.MDCDrawer.open = false;
+      });
 
     // Force-focus the first focusable element in the main content after the drawer is closed
-    document.body.addEventListener(tsnHeader.events.mdcDrawer.closed, () => {
-      const firstElement = this.mainContent.querySelector('input, button');
-      if (firstElement) {
-        firstElement.focus();
-      }
-    });
+    tsnHeader.$body
+      .on(tsnHeader.events.mdcDrawer.closed, () => {
+        const firstElement = tsnHeader.$main[0].querySelector('input, button');
+        if (firstElement) {
+          firstElement.focus();
+        }
+      });
   }
 }
 

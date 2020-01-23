@@ -16,9 +16,7 @@ export default class tsnPlugin {
     this.name = name;
 
     tsnPlugin.constructStaticProperties();
-
     this.constructDynamicProperties();
-
     this.constructPlugin();
   }
 
@@ -27,21 +25,13 @@ export default class tsnPlugin {
    * We wait for the first plugin to be instantiated to ensure that the DOM is ready
    */
   static constructStaticProperties() {
-    tsnPlugin.window = tsnPlugin.window || (window);
-    tsnPlugin.document = tsnPlugin.document || (window.document);
-    tsnPlugin.body = tsnPlugin.body || window.document.body;
-    tsnPlugin.header = tsnPlugin.header || window.document.getElementsByTagName('header');
-    tsnPlugin.main = tsnPlugin.main || window.document.getElementsByTagName('main');
-    tsnPlugin.nav = tsnPlugin.nav || window.document.getElementsByTagName('aside');
-    tsnPlugin.footer = tsnPlugin.footer || window.document.getElementsByTagName('footer');
-
-    tsnPlugin.$window = tsnPlugin.$window || $(tsnPlugin.window);
-    tsnPlugin.$document = tsnPlugin.$document || $(tsnPlugin.document);
-    tsnPlugin.$body = tsnPlugin.$body || $(tsnPlugin.body);
-    tsnPlugin.$header = tsnPlugin.$header || $(tsnPlugin.header);
-    tsnPlugin.$main = tsnPlugin.$main || $(tsnPlugin.main);
-    tsnPlugin.$nav = tsnPlugin.$nav || $(tsnPlugin.aside);
-    tsnPlugin.$footer = tsnPlugin.$footer || $(tsnPlugin.footer);
+    tsnPlugin.$window = tsnPlugin.$window || $(window);
+    tsnPlugin.$document = tsnPlugin.$document || $(window.document);
+    tsnPlugin.$body = tsnPlugin.$body || $('body');
+    tsnPlugin.$header = tsnPlugin.$header || $('header');
+    tsnPlugin.$main = tsnPlugin.$main || $('main');
+    tsnPlugin.$nav = tsnPlugin.$nav || $('aside');
+    tsnPlugin.$footer = tsnPlugin.$footer || $('footer');
   }
 
   /**

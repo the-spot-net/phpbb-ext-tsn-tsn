@@ -11,9 +11,10 @@ export default class tsnInfiniteScroll extends tsnPlugin {
       endpoint: '',
       initialLoad: (new Date()).getTime(),
       templateSelector: null,
-      page: 1
+      page: 1,
+      resolveCallback: null
     },
-    name = ''
+    name = tsnInfiniteScroll.pluginName
   } = {}) {
     super({ container, options, name });
     this.constructListeners();
@@ -78,6 +79,9 @@ export default class tsnInfiniteScroll extends tsnPlugin {
         },
         resolveCallback: () => {
           this.isRequestActive = false;
+          if (typeof this.options.resolveCallback === 'function') {
+            this.options.resolveCallback();
+          }
         }
       });
     }

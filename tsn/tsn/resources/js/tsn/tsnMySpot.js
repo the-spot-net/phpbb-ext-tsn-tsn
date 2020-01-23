@@ -1,5 +1,6 @@
 import tsnPlugin from './tsnPlugin';
 import tsnCommon from './tsnCommon';
+import tsnTopicCard from './tsnTopicCard';
 
 /**
  * Handles the interactions for the MySpot page
@@ -11,7 +12,7 @@ export default class tsnMySpot extends tsnPlugin {
       initialLoad: (new Date()).getTime(),
       page: 1
     },
-    name = ''
+    name = tsnMySpot.pluginName
   } = {}) {
     super({ container, options, name });
     this.constructSubmodules();
@@ -30,6 +31,11 @@ export default class tsnMySpot extends tsnPlugin {
     }
   }
 
+  static processResponse() {
+    // Reinit the topic cards that came through...
+    tsnTopicCard.init();
+  }
+
   /**
    * Setup the submodules of the page
    */
@@ -38,7 +44,8 @@ export default class tsnMySpot extends tsnPlugin {
       .tsnInfiniteScroll({
         endpoint: tsnMySpot.endpoints.feed,
         initialLoad: this.options.initialLoad,
-        page: this.options.page
+        page: this.options.page,
+        resolveCallback: tsnMySpot.processResponse
       });
   }
 }

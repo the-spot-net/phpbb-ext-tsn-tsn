@@ -1,13 +1,17 @@
 {% EVENT overall_footer_content_after %}
 <!-- @formatter:off -->
-      <div>
-          <a accesskey="z" class="anchor" id="bottom"></a>
-          {% if not S_IS_BOT %}{{ RUN_CRON_TASK }}{% endif %}
-      </div>
-  </main>
-  <footer class="mdc-typography--caption text-center">
-      <a href="{{ lang('TSN_VERSION_LINK') }}">{{ lang('TSN_VERSION') }}</a> | {{ lang('COPYRIGHT_CREDITS') }}
-  </footer>
+        </div>
+        <div>
+            <a accesskey="z" class="anchor" id="bottom"></a>
+            {% if not S_IS_BOT %}{{ RUN_CRON_TASK }}{% endif %}
+        </div>
+    </main>
+    <div class="tsn-mimic-container">
+      <div class="tsn-mimic-card"></div>
+    </div>
+    <footer class="mdc-typography--caption text-center">
+        <a href="{{ lang('TSN_VERSION_LINK') }}">{{ lang('TSN_VERSION') }}</a> | {{ lang('COPYRIGHT_CREDITS') }}
+    </footer>
 
   {% if S_USER_LOGGED_IN %}
     <button class="mdc-fab tsn-fab--absolute md-tooltip--left" aria-label="{% if S_VIEWTOPIC %}Add Reply{% else %}New Topic{% endif %}" data-md-tooltip="{% if S_VIEWTOPIC %}Add Reply{% else %}New Topic{% endif %}">

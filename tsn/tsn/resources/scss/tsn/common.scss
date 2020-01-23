@@ -1,3 +1,9 @@
+.tsn-content-area {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: $xlarge-desktop-min;
+}
+
 .avatar {
   // All avatars are now rounded
   border-radius: 50%;
@@ -82,5 +88,42 @@
     visibility: visible;
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
+  }
+}
+
+.tsn-mimic-container {
+  position: absolute;
+
+  &.tsn-mimic-container__is-active {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    main & {
+      opacity: 0;
+      @include transition-default();
+    }
+  }
+
+  .tsn-mimic-card {
+    position: relative;
+
+    &.tsn-mimic-card__is-active {
+      max-width: $xlarge-desktop-min;
+      margin: calc(#{$mdc-top-app-bar-row-height} + #{$full-vertical}) auto $footer-height;
+    }
+  }
+}
+
+.tsn-mimic {
+  position: absolute;
+  @include transition-default();
+
+  &.expanding,
+  &.expanded {
+    @extend .tsn-content-area;
+    @extend .mdc-elevation--z8;
+    @include transition-default();
   }
 }

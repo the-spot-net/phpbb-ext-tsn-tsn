@@ -22,24 +22,10 @@
   }
 }
 
-// Styles for drawers
-.mdc-drawer-app-content {
-  flex: auto;
-  overflow: auto;
-  position: relative;
-}
-
 .mdc-chip {
   min-width: 0;
 
   [role="gridcell"] {
     @include text-overflow();
   }
-}
-
-// Left/Right Margin to create "centralized" grid
-.mdc-layout-grid:first-of-type {
-  margin-left: auto;
-  margin-right: auto;
-  max-width: $xlarge-desktop-min;
 }

@@ -19,12 +19,15 @@ body {
   }
 
   main {
+    flex: auto;
+    overflow: auto;
     position: relative;
     padding-bottom: $double-vertical;
     @include transition-default();
   }
 
   footer {
+    height: $footer-height;
     border-top: $default-border-width solid $mdc-list-divider-color-on-light-bg;
     padding: $half-vertical-bordered $full-side $half-vertical;
     vertical-align: middle;

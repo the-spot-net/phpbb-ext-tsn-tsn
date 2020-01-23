@@ -21,7 +21,7 @@
         {% if S_VIEWTOPIC or S_VIEWFORUM %} - {{ SITENAME }}{% endif %}
     </title>
 
-    <!-- @formatter:off -->
+
     {% if S_ENABLE_FEEDS %}
 
         {% if S_ENABLE_FEEDS_OVERALL %}<link href="{{ path('phpbb_feed_index') }}" rel="alternate" title="{{ lang('FEED') }} - {{ SITENAME }}" type="application/atom+xml">{% endif %}
@@ -35,18 +35,18 @@
         {% EVENT overall_header_feeds %}
 
     {% endif %}
-    <!-- @formatter:on -->
+
 
     {% if U_CANONICAL %}
         <link href="{{ U_CANONICAL }}" rel="canonical">
     {% endif %}
 
-    <!--
+    {#
         phpBB style name: tsn
         Based on style:   prosilver (this is the default phpBB3 style)
         Original author:  Tom Beddard ( http://www.subBlue.com/ )
         Modified by: @neotsn ( http://about.me/neotsn)
-    -->
+    #}
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="{{ T_STYLESHEET_LINK }}" rel="stylesheet">
@@ -84,7 +84,7 @@
     {% EVENT overall_header_stylesheets_after %}
 
 </head>
-<!--<body id="phpbb" class="nojs notouch section-{{ SCRIPT_NAME }} {{ S_CONTENT_DIRECTION }} {{ BODY_CLASS }}">-->
+{#<body id="phpbb" class="nojs notouch section-{{ SCRIPT_NAME }} {{ S_CONTENT_DIRECTION }} {{ BODY_CLASS }}">#}
 <body class="nojs notouch {{ S_CONTENT_DIRECTION }}">
 {% include '@tsn_tsn/mdc_topAppBar.html' %}
 {% include '@tsn_tsn/mdc_leftNavigationDrawer.html' %}

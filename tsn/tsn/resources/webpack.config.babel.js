@@ -37,7 +37,7 @@ module.exports = function (env = {}) {
   return {
     // Strip out the empty ones
     entry: [Object.keys(files).forEach((key) => (files[key].length === 0) && delete files[key]), files][1],
-    mode: 'production',
+    mode: (isDev) ? 'development' : 'production',
     module: {
       rules: [
         {

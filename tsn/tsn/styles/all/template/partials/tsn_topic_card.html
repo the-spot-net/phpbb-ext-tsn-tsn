@@ -3,8 +3,8 @@
     This template also requires a `topic` blockvar to be sent
     e.g. {% for topic in topics %}
 #}
-<div class="mdc-card tsn-card tsn-card--topic {% if topic.S_UNREAD_TOPIC and not S_IS_BOT %}unread{% endif %}" data-js="js--tsn-topic-card" data-topic-id="{{ topic.TOPIC_ID }}">
-    <div class="mdc-card__primary-action tsn-card--topic__content tsn-card--topic__content--first" data-js="js--tsn-topic-card-post" data-post-id="{{ topic.FIRST_POST_ID }}" tabindex="0">
+<div class="mdc-card tsn-card tsn-card--topic {% if topic.S_UNREAD_TOPIC and not S_IS_BOT %}unread{% endif %}" data-js="js--tsn-card js--tsn-topic-card" data-topic-id="{{ topic.TOPIC_ID }}">
+    <div class="tsn-card--topic__content tsn-card--topic__content--first" data-js="js--tsn-topic-card-post" data-post-id="{{ topic.FIRST_POST_ID }}" tabindex="0">
         <span class="tsn-card--topic__avatar" data-js="js--tsn-topic-card-avatar">{{ topic.I_FIRST_POST_AUTHOR_AVATAR }}</span>
         <div class="mdc-typography--overline">{{ topic.FORUM_NAME }}</div>
         <h5 class="mdc-typography--headline5 tsn-card--topic__title">{{ topic.FIRST_POST_SUBJECT }}</h5>
@@ -20,7 +20,7 @@
                 <span data-js="js--tsn-topic-card-meta-new">{% if topic.NEW_COUNT %}, {{ topic.NEW_COUNT }} {{ lang('NEW') }}{% endif %}</span>
             </button>
         </div>
-        <div class="mdc-card__primary-action tsn-card--topic__content" data-js="js--tsn-topic-card-post" data-post-id="{{ topic.LAST_POST_ID }}" tabindex="0">
+        <div class="tsn-card--topic__content" data-js="js--tsn-topic-card-post" data-post-id="{{ topic.LAST_POST_ID }}" tabindex="0">
             <span class="tsn-card--topic__avatar" data-js="js--tsn-topic-card-avatar">{{ topic.I_LAST_POST_AUTHOR_AVATAR }}</span>
             <h6 class="mdc-typography--headline6 tsn-card--topic__title">{{ topic.LAST_POST_SUBJECT }}</h6>
             <div class="mdc-typography--caption">{{ topic.LAST_POST_AUTHOR_COLOR }}&nbsp;&mdash;&nbsp;{{ topic.LAST_POST_TIME }}</div>

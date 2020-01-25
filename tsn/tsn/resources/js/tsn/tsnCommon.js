@@ -89,3 +89,9 @@ tsnCommon.events = {
   ajaxBefore: 'common:ajax:before',
   ajaxComplete: 'common:ajax:complete'
 };
+
+tsnCommon.selectors = {
+  components: {
+    mdcButton: '.mdc-button'
+  }
+};

@@ -16,6 +16,7 @@ namespace tsn\tsn\framework\constants;
 class url
 {
     // URI Base Routes
+    const ROUTE_AJAX = 'tsn_tsn_ajax';
     const ROUTE_INDEX = 'tsn_tsn_index';
     const ROUTE_FORUM = 'tsn_tsn_forum';
     const ROUTE_GROUP = 'tsn_tsn_group';
@@ -28,4 +29,5 @@ class url
 
     // AJAX Slugs
     const AJAX_MYSPOT_FEED_PAGE = 'myspot-feed';
+    const AJAX_LOGIN = 'login';
 }

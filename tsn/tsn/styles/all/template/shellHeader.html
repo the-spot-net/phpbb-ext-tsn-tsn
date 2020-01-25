@@ -24,13 +24,20 @@
 
     {% if S_ENABLE_FEEDS %}
 
-        {% if S_ENABLE_FEEDS_OVERALL %}<link href="{{ path('phpbb_feed_index') }}" rel="alternate" title="{{ lang('FEED') }} - {{ SITENAME }}" type="application/atom+xml">{% endif %}
-        {% if S_ENABLE_FEEDS_NEWS %}<link href="{{ path('phpbb_feed_news') }}" rel="alternate" title="{{ lang('FEED') }} - {{ lang('FEED_NEWS') }}" type="application/atom+xml">{% endif %}
-        {% if S_ENABLE_FEEDS_FORUMS %}<link href="{{ path('phpbb_feed_forums') }}" rel="alternate" title="{{ lang('FEED') }} - {{ lang('ALL_FORUMS') }}" type="application/atom+xml">{% endif %}
-        {% if S_ENABLE_FEEDS_TOPICS %}<link href="{{ path('phpbb_feed_topics') }}" rel="alternate" title="{{ lang('FEED') }} - {{ lang('FEED_TOPICS_NEW') }}" type="application/atom+xml">{% endif %}
-        {% if S_ENABLE_FEEDS_TOPICS_ACTIVE %}<link href="{{ path('phpbb_feed_topics_active') }}" rel="alternate" title="{{ lang('FEED') }} - {{ lang('FEED_TOPICS_ACTIVE') }}" type="application/atom+xml">{% endif %}
-        {% if S_ENABLE_FEEDS_FORUM and S_FORUM_ID %}<link href="{{ path('phpbb_feed_forum', { forum_id : S_FORUM_ID } ) }}" rel="alternate" title="{{ lang('FEED') }} - {{ lang('FORUM') }} - {{ FORUM_NAME }}" type="application/atom+xml">{% endif %}
-        {% if S_ENABLE_FEEDS_TOPIC and S_TOPIC_ID %}<link href="{{ path('phpbb_feed_topic', { topic_id : S_TOPIC_ID } ) }}" rel="alternate" title="{{ lang('FEED') }} - {{ lang('TOPIC') }} - {{ TOPIC_TITLE }}" type="application/atom+xml">{% endif %}
+        {% if S_ENABLE_FEEDS_OVERALL %}
+            <link href="{{ path('phpbb_feed_index') }}" rel="alternate" title="{{ lang('FEED') }} - {{ SITENAME }}" type="application/atom+xml">{% endif %}
+        {% if S_ENABLE_FEEDS_NEWS %}
+            <link href="{{ path('phpbb_feed_news') }}" rel="alternate" title="{{ lang('FEED') }} - {{ lang('FEED_NEWS') }}" type="application/atom+xml">{% endif %}
+        {% if S_ENABLE_FEEDS_FORUMS %}
+            <link href="{{ path('phpbb_feed_forums') }}" rel="alternate" title="{{ lang('FEED') }} - {{ lang('ALL_FORUMS') }}" type="application/atom+xml">{% endif %}
+        {% if S_ENABLE_FEEDS_TOPICS %}
+            <link href="{{ path('phpbb_feed_topics') }}" rel="alternate" title="{{ lang('FEED') }} - {{ lang('FEED_TOPICS_NEW') }}" type="application/atom+xml">{% endif %}
+        {% if S_ENABLE_FEEDS_TOPICS_ACTIVE %}
+            <link href="{{ path('phpbb_feed_topics_active') }}" rel="alternate" title="{{ lang('FEED') }} - {{ lang('FEED_TOPICS_ACTIVE') }}" type="application/atom+xml">{% endif %}
+        {% if S_ENABLE_FEEDS_FORUM and S_FORUM_ID %}
+            <link href="{{ path('phpbb_feed_forum', { forum_id : S_FORUM_ID } ) }}" rel="alternate" title="{{ lang('FEED') }} - {{ lang('FORUM') }} - {{ FORUM_NAME }}" type="application/atom+xml">{% endif %}
+        {% if S_ENABLE_FEEDS_TOPIC and S_TOPIC_ID %}
+            <link href="{{ path('phpbb_feed_topic', { topic_id : S_TOPIC_ID } ) }}" rel="alternate" title="{{ lang('FEED') }} - {{ lang('TOPIC') }} - {{ TOPIC_TITLE }}" type="application/atom+xml">{% endif %}
 
         {% EVENT overall_header_feeds %}
 
@@ -86,6 +93,7 @@
 </head>
 {#<body id="phpbb" class="nojs notouch section-{{ SCRIPT_NAME }} {{ S_CONTENT_DIRECTION }} {{ BODY_CLASS }}">#}
 <body class="nojs notouch {{ S_CONTENT_DIRECTION }}">
+{% include '@tsn_tsn/../theme/images/sprite.svg' %}
 {% include '@tsn_tsn/mdc_topAppBar.html' %}
 {% include '@tsn_tsn/mdc_leftNavigationDrawer.html' %}
 <div class="tsn-mimic-container" data-js="js--tsn-mimic-container">

@@ -24,10 +24,27 @@ class template extends twig
     // Directories
     const TEMPLATE_DIR = '@tsn_tsn/';
     const PARTIALS_DIR = self::TEMPLATE_DIR . 'partials/';
+    const COMPONENTS_DIR = self::PARTIALS_DIR . 'components/';
 
     // Partials
     const P_MYSPOT_FEED = self::PARTIALS_DIR . 'tsn_myspot_feed.html';
     const P_TOPIC_CARD = self::PARTIALS_DIR . 'tsn_topic_card.html';
+
+    /**
+     * Take the default selector, and an array of custom selectors, and merge & glue them together
+     *
+     * @param string|string[] $customSelectors
+     * @param string|string[] $defaultSelectors
+     *
+     * @return string
+     */
+    public static function mergeSelectors($customSelectors = [], $defaultSelectors = '')
+    {
+        $defaultSelectors = array_filter((array)$defaultSelectors);
+        $customSelectors = array_filter((array)$customSelectors);
+
+        return implode(' ', array_merge($defaultSelectors, $customSelectors));
+    }
 
     /**
      * @param string $templateConstant A template path name or constant

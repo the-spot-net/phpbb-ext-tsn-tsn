@@ -1,8 +1,8 @@
+import tsnCommon from './tsnCommon';
+
 /**
  * AJAX Request handling for tsn, with code available for a Promise to resolve after the response handling
  */
-import tsnCommon from './tsnCommon';
-
 export default class tsnRequest {
   /**
    * Generic AJAX Request that executes actions when the promise is resolved
@@ -46,11 +46,11 @@ export default class tsnRequest {
         },
         success: (response) => {
           if (typeof successCallback === 'function') {
-            successCallback(response);
+            successCallback({ response });
           }
 
           if (typeof resolve === 'function') {
-            resolve(response);
+            resolve({ response });
           }
         },
         error: errorCallback,
@@ -65,6 +65,22 @@ export default class tsnRequest {
         resolveCallback({ response });
       }
     });
+  }
+
+  /**
+   * Redirect the browser accordingly, or open a new tab with the url
+   * @param url
+   * @param target
+   */
+  static redirect({
+    url,
+    target = null
+  } = {}) {
+    if (target.length) {
+      window.open(url, target);
+    } else {
+      window.location.href = url;
+    }
   }
 }
 

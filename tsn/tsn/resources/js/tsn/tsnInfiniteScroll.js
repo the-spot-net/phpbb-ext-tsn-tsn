@@ -64,7 +64,7 @@ export default class tsnInfiniteScroll extends tsnPlugin {
           p: this.options.page,
           t: this.options.initialLoad
         },
-        successCallback: (response) => {
+        successCallback: ({ response } = {}) => {
           if (response.status === tsnRequest.constants.SUCCESS) {
             // TODO Check if topic exists, if so, update first/last post & reply status;
             // TODO If not, Pull the Template, populate the data points, append to the list
@@ -77,10 +77,10 @@ export default class tsnInfiniteScroll extends tsnPlugin {
             window.console.log(response.message);
           }
         },
-        resolveCallback: () => {
+        resolveCallback: ({ response } = {}) => {
           this.isRequestActive = false;
           if (typeof this.options.resolveCallback === 'function') {
-            this.options.resolveCallback();
+            this.options.resolveCallback({ response });
           }
         }
       });

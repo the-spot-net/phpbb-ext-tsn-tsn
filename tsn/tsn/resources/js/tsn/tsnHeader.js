@@ -15,9 +15,7 @@ export default class tsnHeader extends tsnPlugin {
     this.constructListeners();
   }
 
-  static init({
-    $context = tsnHeader.$document || $(document)
-  } = {}) {
+  static init({ $context = tsnHeader.$document || $(document) } = {}) {
     $context.find(tsnHeader.selectors.mdcTopAppBar).tsnHeader();
   }
 

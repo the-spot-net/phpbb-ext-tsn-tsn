@@ -32,7 +32,7 @@ export default class tsnMySpot extends tsnPlugin {
   }
 
   static processResponse() {
-    // Reinit the topic cards that came through...
+    // Re-init the topic cards that came through...
     tsnTopicCard.init();
   }
 
@@ -59,7 +59,7 @@ if (!$.fn.tsnMySpot) {
 }
 
 tsnMySpot.endpoints = {
-  feed: tsnCommon.route('ajax/myspot-feed')
+  feed: tsnCommon.route('ajax/myspot-feed') // url::AJAX_MYSPOT_FEED_PAGE
 };
 tsnMySpot.events = {};
 tsnMySpot.pluginName = 'tsnMySpot';

@@ -1,49 +1,49 @@
 {% include '@tsn_tsn/shellHeader.html' %}
 
-{% if LOGIN_ERROR %}{LOGIN_ERROR}{% endif %}
-<form class="grid-x grid-padding-y grid-padding-x tsn-login-form" method="post">
-    <div class="cell text-center">
-        <hgroup>
-            <h2 class="mdc-typography--headline2">{{ lang('WELCOME_VISITOR') }}</h2>
-            <h4 class="mdc-typography--headline4">We're glad you made it</h4>
-        </hgroup>
-    </div>
-    <div class="cell shrink float-center text-center">
-        <div class="tsn-login-fieldset mdc-elevation--z1">
-            <div class="grid-x grid-padding-y grid-padding-x">
-                <div class="cell text-center">
-                    <div class="mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
-                        <input type="text" tabindex="1" name="{{ USERNAME_CREDENTIAL }}" id="{{ USERNAME_CREDENTIAL }}" class="mdc-text-field__input">
-                        <div class="mdc-notched-outline">
-                            <div class="mdc-notched-outline__leading"></div>
-                            <div class="mdc-notched-outline__notch">
-                                <label for="{{ USERNAME_CREDENTIAL }}" class="mdc-floating-label">{{ lang('USERNAME') }}</label>
+{% if LOGIN_ERROR %}{{ LOGIN_ERROR }}{% endif %}
+<form action="{{ U_FORM_ACTION }}" class="tsn-login-form" method="post" data-js="js--tsn-form">
+    <div>
+        <div class="grid-x grid-padding-y grid-padding-x">
+            <div class="cell shrink float-center text-center">
+                <div class="tsn-login-fieldset mdc-elevation--z1">
+                    <div class="grid-x grid-padding-y grid-padding-x">
+                        <div class="cell text-center">
+                            {{ I_LOGO }}
+                            <h4 class="mdc-typography--headline4">{{ SITENAME }}</h4>
+                            <hr>
+                            <h6 class="mdc-typography--headline6">{{ lang('WELCOME_VISITOR') }}</h6>
+                            <div class="mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+                                <input type="text" tabindex="1" name="{{ USERNAME_CREDENTIAL }}" id="{{ USERNAME_CREDENTIAL }}" class="mdc-text-field__input">
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="{{ USERNAME_CREDENTIAL }}" class="mdc-floating-label">{{ lang('USERNAME') }}</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
                             </div>
-                            <div class="mdc-notched-outline__trailing"></div>
                         </div>
-                    </div>
-                </div>
-                <div class="cell text-center">
-                    <div class="mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
-                        <input type="password" tabindex="2" id="{{ PASSWORD_CREDENTIAL }}" name="{{ PASSWORD_CREDENTIAL }}" class="mdc-text-field__input">
-                        <div class="mdc-notched-outline">
-                            <div class="mdc-notched-outline__leading"></div>
-                            <div class="mdc-notched-outline__notch">
-                                <label for="{{ PASSWORD_CREDENTIAL }}" class="mdc-floating-label">{{ lang('PASSWORD') }}</label>
+                        <div class="cell text-center">
+                            <div class="mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+                                <input type="password" tabindex="2" id="{{ PASSWORD_CREDENTIAL }}" name="{{ PASSWORD_CREDENTIAL }}" class="mdc-text-field__input">
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="{{ PASSWORD_CREDENTIAL }}" class="mdc-floating-label">{{ lang('PASSWORD') }}</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
                             </div>
-                            <div class="mdc-notched-outline__trailing"></div>
                         </div>
-                    </div>
-                </div>
 
-                {% if CAPTCHA_TEMPLATE and S_CONFIRM_CODE %}
-                <div class="cell text-center">
-                    {% DEFINE CAPTCHA_TAB_INDEX = 3 %}
-                    {% include '{{ CAPTCHA_TEMPLATE }}' %}
-                </div>
-                {% endif %}
+                        {% if CAPTCHA_TEMPLATE and S_CONFIRM_CODE %}
+                            <div class="cell text-center">
+                                {% DEFINE CAPTCHA_TAB_INDEX = 3 %}
+                                {% include '{{ CAPTCHA_TEMPLATE }}' %}
+                            </div>
+                        {% endif %}
 
-                <!-- @formatter:off -->
+                        <!-- @formatter:off -->
                 {% if S_DISPLAY_FULL_LOGIN %}
                     <div class="cell text-left">
                         {% if S_AUTOLOGIN_ENABLED %}
@@ -78,28 +78,30 @@
                 {% endif %}
                 <!-- @formatter:on -->
 
-                <div class="cell text-center">
-                    <div class="mdc-touch-target-wrapper">
-                        <button class="mdc-button mdc-button--touch mdc-button--raised" type="submit"  name="login" tabindex="6" value="{L_LOGIN}">
-                            <div class="mdc-button__ripple"></div>
-                            <span class="mdc-button__label">{{ lang('SIGN_IN') }}</span>
-                        </button>
+                        <div class="cell text-center">
+                            <div class="mdc-touch-target-wrapper">
+                                <button class="mdc-button mdc-button--touch mdc-button--raised" type="submit" name="login" tabindex="6" value="{L_LOGIN}">
+                                    <div class="mdc-button__ripple"></div>
+                                    <span class="mdc-button__label">{{ lang('SIGN_IN') }}</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                {% if S_DISPLAY_FULL_LOGIN and U_SEND_PASSWORD %}<a class="mdc-typography--body2" href="{{ U_SEND_PASSWORD }}">{{ lang('FORGOT_PASS') }}</a><br>{% endif %}
+                {% if S_DISPLAY_FULL_LOGIN and U_RESEND_ACTIVATION %}<a class="mdc-typography--body2" href="{{ U_RESEND_ACTIVATION }}">{{ lang('RESEND_ACTIVATION') }}</a>{% endif %}
+
+                {{ S_LOGIN_REDIRECT }}
+                {{ S_FORM_TOKEN_LOGIN }}
+                {{ S_HIDDEN_FIELDS }}
+
+                {% if not S_ADMIN_AUTH and PROVIDER_TEMPLATE_FILE %}
+                    {% include '{{ PROVIDER_TEMPLATE_FILE }}' %}
+                {% endif %}
             </div>
         </div>
-
-        {% if S_DISPLAY_FULL_LOGIN and U_SEND_PASSWORD %}<a class="mdc-typography--body2" href="{{ U_SEND_PASSWORD }}">{{ lang('FORGOT_PASS') }}</a><br>{% endif %}
-        {% if S_DISPLAY_FULL_LOGIN and U_RESEND_ACTIVATION %}<a class="mdc-typography--body2" href="{{ U_RESEND_ACTIVATION }}">{{ lang('RESEND_ACTIVATION') }}</a>{% endif %}
     </div>
-
-    {{ S_LOGIN_REDIRECT }}
-    {{ S_FORM_TOKEN_LOGIN }}
-    {{ S_HIDDEN_FIELDS }}
-
-    {% if not S_ADMIN_AUTH and PROVIDER_TEMPLATE_FILE %}
-    {% include '{{ PROVIDER_TEMPLATE_FILE }}' %}
-    {% endif %}
 </form>
 
 {% include '@tsn_tsn/shellFooter.html' %}

@@ -53,17 +53,10 @@ $lang = array_merge($lang, [
     'GOTO_FIRST_UNREAD_POST'      => 'Go to the first unread post',
     'MYSPOT'                      => 'My Spot',
     'MYSPOT_LEGEND'               => 'User Role Legend',
-//    'MYSPOT_NEW_POSTS'            => 'What\'s New',
     'MYSPOT_NEWEST_USER'          => 'Newest User',
     'MYSPOT_NOTHING_ACTIVE'       => 'There are no active topics at this time.',
-//    'MYSPOT_NOTHING_UNANSWERED'   => 'Congratulations! Every topic has at least one reply!',
-//    'MYSPOT_NOTHING_UNREAD'       => 'You\'re all caught up! Why not post a couple replies, or start a new conversation to get things going.',
-//    'MYSPOT_NOTHING_NEW'          => 'Welcome back! Nothing new to report since your last visit.',
     'MYSPOT_RECORD'               => 'Online Users Record',
-//    'MYSPOT_SPECIAL_REPORT'       => '#tsnSpecialReport',
     'MYSPOT_TOPIC_VIEWS_COMMENTS' => '%1$s Views :: %2$s Comments',
-//    'MYSPOT_UNREAD_POSTS'         => 'Unread Posts',
-//    'MYSPOT_WHATS_HAPPENING'      => 'From around the forums',
     'ON'                          => 'on',
     'ONLINE_NOW'                  => 'Online Now',
 
@@ -76,10 +69,9 @@ $lang = array_merge($lang, [
     'MYSPOT_RECORD_USERS'         => 'Record Users',
     'MYSPOT_RECORD_ONLINE_USERS'  => '<strong>%1$s</strong> Users on<br />%2$s',
     'TSNSPECIALREPORT'            => '#tsnSpecialReport',
-    'START_THE_CONVERSATION' => 'How about starting a new discussion in the forums?',
-    'TSNBLOG'                => 'tsnBlog',
-    'TSNFORUMS'              => 'tsnForums',
-
+    'START_THE_CONVERSATION'      => 'How about starting a new discussion in the forums?',
+    'TSNBLOG'                     => 'tsnBlog',
+    'TSNFORUMS'                   => 'tsnForums',
 
     // Need Verification: General
     'ABOUT'                       => 'About',
@@ -101,8 +93,8 @@ $lang = array_merge($lang, [
     'SINCE_YOUR_LAST_VISIT'    => 'Since you were last here...',
     'SMILIES'                  => 'Emojis',
 
-    'URLS'                   => 'URLs',
-    'VIEW_PROFILE'           => 'View Profile',
-    'VISITED'                => 'Last Visited',
+    'URLS'         => 'URLs',
+    'VIEW_PROFILE' => 'View Profile',
+    'VISITED'      => 'Last Visited',
 
 ]);

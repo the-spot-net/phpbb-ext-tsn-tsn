@@ -1,0 +1,73 @@
+{#
+    This template injects a series of Statistic Cards
+    It's possible that this template should actually be split into several specific
+    cards that get called in their appropriate spots.
+ #}
+{% if birthdays %}
+    <div class="mdc-card mdc-card--outlined tsn-card tsn-card--stat">
+        <span class="mdc-typography--overline">{{ lang('BIRTHDAYS') }}</span>
+        <div class="mdc-chip-set" role="grid">
+            {% for user in birthdays %}
+                <a class="mdc-chip" role="row" href="{{ user.URL }}" title="{{ user.NAME }} ({{ user.AGE }})">
+                    <div class="mdc-chip__ripple"></div>
+                    {{ user.I_AVATAR_IMG }}
+                    <div role="gridcell">
+                        <span role="button" {% if user.COLOR %} style="color:{{ user.COLOR }}" {% endif %} class="mdc-chip__text">{{ user.NAME }} ({{ user.AGE }})</span>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+{% if online_avatars %}
+    <div class="mdc-card mdc-card--outlined tsn-card tsn-card--stat">
+        <span class="mdc-typography--overline">{{ lang('ONLINE_NOW') }}</span>
+        <p class="text-left">
+            {% for user in online_avatars %}
+                {{ user.I_AVATAR_IMG }}
+            {% endfor %}
+        </p>
+    </div>
+{% endif %}
+
+<div class="mdc-card mdc-card--outlined tsn-card tsn-card--stat tsn-card--new-user">
+    {{ NEWEST_USER_AVATAR }}
+    <div class="mdc-layout-grid__inner">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8 mdc-layout-grid__cell--align-top">
+            <span class="mdc-typography--overline">{{ lang('MYSPOT_NEWEST_USER') }}</span>
+            <h5 class="mdc-typography--headline5">{{ NEWEST_USER_NAME }}</h5>
+        </div>
+    </div>
+</div>
+
+<div class="mdc-card mdc-card--outlined tsn-card tsn-card--stat">
+    <span class="mdc-typography--overline">{{ lang('MYSPOT_RECORD') }}</span>
+    <h4 class="mdc-typography--headline4">{{ ONLINE_RECORD_COUNT }}</h4>
+    <p class="mdc-typography--body2">{{ ONLINE_RECORD_DATE }}</p>
+</div>
+
+<div class="mdc-card mdc-card--outlined tsn-card tsn-card--stat">
+    <span class="mdc-typography--overline">{{ lang('STATISTICS') }}</span>
+    <h4 class="mdc-typography--headline4">{{ TOTAL_FORUM_TOPICS }}</h4>
+    <p class="mdc-typography--body2">{{ lang('TOPICS') }}</p>
+    <h4 class="mdc-typography--headline4">{{ TOTAL_FORUM_POSTS }}</h4>
+    <p class="mdc-typography--body2">{{ lang('POSTS') }}</p>
+    <h4 class="mdc-typography--headline4">{{ TOTAL_FORUM_USERS }}</h4>
+    <p class="mdc-typography--body2">{{ lang('USERS') }}</p>
+</div>
+
+<div class="mdc-card mdc-card--outlined tsn-card tsn-card--stat">
+    <span class="mdc-typography--overline">{{ lang('MYSPOT_LEGEND') }}</span>
+    <div class="mdc-chip-set" role="grid">
+        {% for usergroup in usergroups %}
+            <a href="{{ usergroup.URL }}" class="mdc-chip" role="row" title="{{ usergroup.NAME }}">
+                <div class="mdc-chip__ripple"></div>
+                <i class="material-icons mdc-chip__icon mdc-chip__icon--leading" style="color:{{ usergroup.COLOR }}">group</i>
+                <span role="gridcell">
+                                <span role="button" class="mdc-chip__text">{{ usergroup.NAME }}</span>
+                            </span>
+            </a>
+        {% endfor %}
+    </div>
+</div>

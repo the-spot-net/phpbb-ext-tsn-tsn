@@ -1,0 +1,84 @@
+.tsn-card--topic {
+  position: relative;
+  cursor: pointer;
+  @include transition-default();
+
+  &:hover {
+    @extend .mdc-elevation--z4;
+    @include transition-default();
+  }
+
+  .tsn-card--topic__content {
+    padding-left: rem-calc(76);
+
+    .tsn-card--topic__avatar {
+      position: absolute;
+      left: 0;
+      margin-left: rem-calc(10);
+
+      .avatar {
+        width: rem-calc(40);
+        height: rem-calc(40);
+      }
+    }
+
+    .tsn-card--topic__excerpt {
+      @include text-overflow(2);
+      @include transition-default();
+    }
+
+    .tsn-card--topic__post {
+      display: none;
+      @include transition-default();
+    }
+
+    .tsn-card--topic__replies {
+      @include transition-default();
+    }
+
+    &.tsn-card--topic__content--first {
+
+      .tsn-card--topic__avatar {
+        margin-left: 0;
+
+        .avatar {
+          width: rem-calc(60);
+          height: rem-calc(60);
+        }
+      }
+
+      .tsn-card--topic__excerpt {
+        @include text-overflow(3);
+      }
+    }
+  }
+
+  .tsn-card--topic__post-divider {
+    overflow: visible;
+    height: 0;
+    border-bottom: $default-border-width solid $mdc-theme-primary;
+    margin: $double-vertical 0;
+    padding-left: rem-calc(76);
+
+    .tsn-card--topic__meta {
+      position: absolute;
+      left: rem-calc(76);
+      background-color: $white;
+      transform: translateY(-50%);
+    }
+  }
+
+  &.expanded {
+
+    .tsn-card--topic__excerpt {
+      display: none;
+      @include transition-default();
+    }
+
+    .tsn-card--topic__post {
+      display: inline-block;
+      @include transition-default();
+    }
+
+  }
+}

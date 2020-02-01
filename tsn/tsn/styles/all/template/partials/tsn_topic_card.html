@@ -1,0 +1,31 @@
+{#
+    This template puts a Topic Card with the first & last post excerpts, if the last post in the topic is not also the first
+    This template also requires a `topic` blockvar to be sent
+    e.g. {% for topic in topics %}
+#}
+<div class="mdc-card tsn-card tsn-card--topic {% if topic.S_UNREAD_TOPIC and not S_IS_BOT %}unread{% endif %}" data-js="js--tsn-card js--tsn-topic-card" data-topic-id="{{ topic.TOPIC_ID }}">
+    <div class="tsn-card--topic__content tsn-card--topic__content--first" data-js="js--tsn-topic-card-post" data-post-id="{{ topic.FIRST_POST_ID }}" tabindex="0">
+        <span class="tsn-card--topic__avatar" data-js="js--tsn-topic-card-avatar">{{ topic.I_FIRST_POST_AUTHOR_AVATAR }}</span>
+        <div class="mdc-typography--overline">{{ topic.FORUM_NAME }}</div>
+        <h5 class="mdc-typography--headline5 tsn-card--topic__title">{{ topic.FIRST_POST_SUBJECT }}</h5>
+        <div class="mdc-typography--caption">{{ topic.FIRST_POST_AUTHOR_COLOR }}&nbsp;&mdash;&nbsp;{{ topic.FIRST_POST_TIME }}&nbsp;::&nbsp;{{ topic.VIEWS }}&nbsp;{{ lang('VIEWS') }}</div>
+        <div class="mdc-typography--body1 tsn-card--topic__excerpt" data-js="js--tsn-topic-card-post-excerpt">{{ topic.FIRST_POST_EXCERPT }}</div>
+        <div class="mdc-typography--body1 tsn-card--topic__post" data-js="js--tsn-topic-card-post-body"></div>
+    </div>
+    <div class="tsn-card--topic__replies{% if topic.COMMENT_COUNT == 0 %} is-hidden{% endif %}">
+        <div class="tsn-card--topic__post-divider" data-js="js--tsn-topic-card-inner-post-container">
+            <button class="mdc-button mdc-button--outlined mdc-card__action mdc-card__action--button tsn-card--topic__meta" data-js="js--tsn-topic-card-meta" tabindex="-">
+                <div class="mdc-button__ripple"></div>
+                <span data-js="js--tsn-topic-card-meta-comments">{{ topic.COMMENT_COUNT }} {{ lang('COMMENTS') }}</span>
+                <span data-js="js--tsn-topic-card-meta-new">{% if topic.NEW_COUNT %}, {{ topic.NEW_COUNT }} {{ lang('NEW') }}{% endif %}</span>
+            </button>
+        </div>
+        <div class="tsn-card--topic__content" data-js="js--tsn-topic-card-post" data-post-id="{{ topic.LAST_POST_ID }}" tabindex="0">
+            <span class="tsn-card--topic__avatar" data-js="js--tsn-topic-card-avatar">{{ topic.I_LAST_POST_AUTHOR_AVATAR }}</span>
+            <h6 class="mdc-typography--headline6 tsn-card--topic__title">{{ topic.LAST_POST_SUBJECT }}</h6>
+            <div class="mdc-typography--caption">{{ topic.LAST_POST_AUTHOR_COLOR }}&nbsp;&mdash;&nbsp;{{ topic.LAST_POST_TIME }}</div>
+            <div class="mdc-typography--body1 tsn-card--topic__excerpt">{{ topic.LAST_POST_EXCERPT }}</div>
+            <div class="mdc-typography--body1 tsn-card--topic__post" data-js="js--tsn-topic-card-post-body"></div>
+        </div>
+    </div>
+</div>

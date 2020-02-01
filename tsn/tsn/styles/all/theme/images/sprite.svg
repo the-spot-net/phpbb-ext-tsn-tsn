@@ -1,0 +1,70 @@
+<svg style="width:0;height:0;visibility:hidden;position:absolute;">
+    <symbol id="logo-2020" viewBox="0 0 1000 1000">
+        <title>the-spot.net</title>
+        <desc>tsnLogo 2020</desc>
+        <defs>
+            <path d="M38.2105985,442.009202 C-30.9552827,355.417757 3.70385883,167.946657 63.6012736,121.590505 C175.320244,35.1283167 520.633425,-36.0758382 657.74307,19.8702835 C780.697921,70.0406932 866.239631,351.040288 698.36815,467.439257 C566.33664,558.987456 119.460759,543.729423 38.2105985,442.009202 Z" id="path-1"></path>
+            <filter x="-0.9%" y="-0.9%" width="101.8%" height="102.7%" filterUnits="objectBoundingBox" id="filter-2">
+                <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+                <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+                <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+            </filter>
+            <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+                <stop stop-color="#003366" offset="0%"></stop>
+                <stop stop-color="#587EAA" offset="100%"></stop>
+            </linearGradient>
+            <path d="M51.9216752,410.619727 C-10.2841173,333.014188 20.8873118,164.997635 74.7573138,123.452027 C175.234123,45.9623303 485.798808,-17.8527141 609.111256,32.287678 C719.693292,77.2517243 796.627031,329.090984 645.648278,433.410815 C526.902957,515.458729 124.995719,501.784077 51.9216752,410.619727 Z" id="path-4"></path>
+            <ellipse id="path-5" cx="147" cy="47" rx="147" ry="47"></ellipse>
+            <filter x="-2.4%" y="-5.3%" width="104.8%" height="114.9%" filterUnits="objectBoundingBox" id="filter-6">
+                <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+                <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+                <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+            </filter>
+            <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-7">
+                <stop stop-color="#FBD249" stop-opacity="0" offset="0%"></stop>
+                <stop stop-color="#FBC02D" offset="100%"></stop>
+            </linearGradient>
+            <ellipse id="path-8" cx="194" cy="62" rx="194" ry="62"></ellipse>
+            <filter x="-1.8%" y="-4.0%" width="103.6%" height="111.3%" filterUnits="objectBoundingBox" id="filter-9">
+                <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+                <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+                <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+            </filter>
+            <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-10">
+                <stop stop-color="#FBD249" stop-opacity="0" offset="0%"></stop>
+                <stop stop-color="#FBC02D" offset="100%"></stop>
+            </linearGradient>
+        </defs>
+        <g id="Base-Logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="tsn-Logo" transform="translate(13.000000, 236.000000)">
+                <g id="Blue-Orb" transform="translate(87.000000, 0.000000)">
+                    <g id="Base">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                        <use fill="#003366" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                    <g id="Indention">
+                        <use fill="#587EAA" xlink:href="#path-4"></use>
+                        <use fill="url(#linearGradient-3)" xlink:href="#path-4"></use>
+                    </g>
+                </g>
+                <g id="Lesser-Orb" transform="translate(1.000000, 314.000000)">
+                    <g id="Base">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-6)" xlink:href="#path-5"></use>
+                        <use fill="#F5A623" fill-rule="evenodd" xlink:href="#path-5"></use>
+                    </g>
+                    <ellipse id="Indention" fill="url(#linearGradient-7)" cx="137.033898" cy="42.0526316" rx="132.050847" ry="42.0526316"></ellipse>
+                </g>
+                <g id="Greater-Orb" transform="translate(583.000000, 104.000000)">
+                    <g id="Base">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-9)" xlink:href="#path-8"></use>
+                        <use fill="#F5A623" fill-rule="evenodd" xlink:href="#path-8"></use>
+                    </g>
+                    <ellipse id="Indention" fill="url(#linearGradient-10)" cx="179.076923" cy="54.56" rx="174.102564" ry="54.56"></ellipse>
+                </g>
+            </g>
+        </g>
+    </symbol>
+    <symbol id="sprite">
+        <title>sprite</title>
+    </symbol>
+</svg>

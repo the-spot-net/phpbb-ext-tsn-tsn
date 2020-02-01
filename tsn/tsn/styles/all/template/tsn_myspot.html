@@ -1,0 +1,41 @@
+{% include '@tsn_tsn/shellHeader.html' %}
+
+<div class="mdc-layout-grid" data-js="js--tsn-myspot">
+    <div class="mdc-layout-grid__inner">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9-desktop mdc-layout-grid__cell--span-5-tablet mdc-layout-grid__cell--span-12-phone">
+            <div class="mdc-layout-grid__inner">
+
+                {% if specialreport %}
+                    {% for topic in specialreport %}
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                            {% include '@tsn_tsn/partials/tsn_special_report.html' %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell--span-12">
+                            <div class="tsn-card-collection">
+                                <div data-js="js--tsn-myspot-card-list">
+                                    {% include '@tsn_tsn/partials/tsn_myspot_feed.html' %}
+                                </div>
+                                {# TODO Add a placeholder card here. Push it down when the feed is apended, hide it when the feed is exhausted, and reveal it if the feed is refreshed #}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-3-tablet mdc-layout-grid__cell--span-12-phone">
+            {% include '@tsn_tsn/partials/tsn_login_cta.html' %}
+            {% include '@tsn_tsn/partials/tsn_myspot_statistics.html' %}
+        </div>
+    </div>
+</div>
+
+<script>
+  window.tsnSettings = { myspot: { t: {{ TIME_NOW }}, p: 1 } };
+</script>
+
+{% include '@tsn_tsn/shellFooter.html' %}

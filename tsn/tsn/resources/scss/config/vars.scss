@@ -1,0 +1,134 @@
+// Default Base Values for various things
+$base-text-size: 16;
+$base-margin: $base-text-size;
+
+// Border Variables
+$default-border-width: rem-calc(1);
+
+// Variable Calculations for Vertical Spacing (padding, margins)
+$triple-vertical: rem-calc($base-margin * 3);
+$double-vertical: rem-calc($base-margin * 2);
+$full-vertical: rem-calc($base-margin);
+$three-quarter-vertical: rem-calc($base-margin * 0.75);
+$half-vertical: rem-calc($base-margin * 0.5);
+$quarter-vertical: rem-calc($base-margin  * 0.25);
+$eighth-vertical: rem-calc($base-margin * 0.125);
+
+// Variable Calculations for Vertical Spacing with Border subtracted (padding, margins)
+$triple-vertical-bordered: rem-calc($triple-vertical - $default-border-width);
+$double-vertical-bordered: rem-calc($double-vertical - $default-border-width);
+$full-vertical-bordered: rem-calc($full-vertical - $default-border-width);
+$three-quarter-vertical-bordered: rem-calc($three-quarter-vertical - $default-border-width);
+$half-vertical-bordered: rem-calc($half-vertical - $default-border-width);
+$quarter-vertical-bordered: rem-calc($quarter-vertical - $default-border-width);
+
+// Variable Calculations for side Spacing (padding, margins)
+$triple-side: rem-calc($base-margin * 3);
+$double-side: rem-calc($base-margin * 2);
+$full-side: rem-calc($base-margin);
+$three-quarter-side: rem-calc($base-margin * 0.75);
+$half-side: rem-calc($base-margin * 0.5);
+$quarter-side: rem-calc($base-margin * 0.25);
+$eighth-side: rem-calc($base-margin * 0.125);
+
+// Variable Calculations for side Spacing with Border subtracted (padding, margins)
+$triple-side-bordered: rem-calc($triple-side -$default-border-width);
+$double-side-bordered: rem-calc($double-side - $default-border-width);
+$full-side-bordered: rem-calc($full-side - $default-border-width);
+$three-quarter-side-bordered: rem-calc($three-quarter-side - $default-border-width);
+$half-side-bordered: rem-calc($half-side - $default-border-width);
+$quarter-side-bordered: rem-calc($quarter-side - $default-border-width);
+
+// Responsive Breakpoints
+ // These have to be px, because MDC mixins also use px
+$xlarge-desktop-min: 1440px; // tsn
+$desktop-min: 1200px; // 840px
+$tablet-min: 640px; // 480px;
+$phone-min: 0px;
+
+$bp-small-max: rem-calc($tablet-min - 1);
+$bp-medium-min: rem-calc($tablet-min);
+$bp-medium-max: rem-calc($desktop-min - 1);
+$bp-large-min: rem-calc($desktop-min);
+$bp-large-max: rem-calc($xlarge-desktop-min - 1);
+$bp-x-large-min: rem-calc($xlarge-desktop-min);
+
+// Small
+$mq-phone-max: "all and (max-width: #{$bp-small-max})";
+$mq-phone-only: "all and (min-width: 0) and (max-width: #{$bp-small-max})";
+$mq-phone-min: "all and (min-width: 0)";
+
+// Medium
+$mq-tablet-max: "all and (max-width: #{$bp-medium-max})";
+$mq-tablet-only: "all and (min-width: #{$bp-medium-min}) and (max-width: #{$bp-medium-max})";
+$mq-tablet-min: "all and (min-width: #{$bp-medium-min})";
+
+// Large
+$mq-desktop-max: "all and (max-width: #{$bp-large-max})";
+$mq-desktop-only: "all and (min-width: #{$bp-large-min}) and (max-width: #{$bp-large-max})";
+$mq-desktop-min: "all and (min-width: #{$bp-large-min})";
+
+// Extra Large
+$mq-x-desktop-min: "all and (min-width: #{$bp-x-large-min})";
+
+// Blacks
+$black: #000;
+$light-black: lighten($black, 15%);
+$lighter-black: lighten($black, 25%);
+
+// Greys
+$grey: #a9a6a7;
+$dark-grey: darken($grey, 15%);
+$light-grey: lighten($grey, 15%);
+$lighter-grey: lighten($grey, 25%);
+
+// Blues
+$blue: #1f75ae;
+$dark-blue: darken($blue, 15%);
+$light-blue: lighten($blue, 15%);
+$very-dark-blue: #001a49;
+
+// Greens
+$green: #72bc44;
+$dark-green: darken($green, 15%);
+$light-green: lighten($green, 15%);
+
+// Yellows
+$yellow: #fcb040;
+$dark-yellow: darken($yellow, 15%);
+$light-yellow: lighten($yellow, 15%);
+
+// Oranges
+$orange: #f79433;
+$dark-orange: darken($orange, 15%);
+$light-orange: lighten($orange, 15%);
+
+// Reds
+$red: #e63c4d;
+$crimson: #af2f4e;
+$pantone: #ed2726;
+$pantone-hover: #db2322;
+$dark-red: darken($red, 15%);
+$light-red: lighten($red, 15%);
+
+// Pinks
+$pink: #f37b83;
+$dark-pink: darken($pink, 15%);
+$light-pink: lighten($pink, 15%);
+
+// Purples
+$purple: #a05ea5;
+$dark-purple: darken($purple, 15%);
+$light-purple: lighten($purple, 15%);
+$very-light-purple: lighten($purple, 23%);
+
+// Whites
+$white: #fff;
+$dark-white: darken($white, 15%);
+
+// Brands
+$facebook-blue: #3b5998;
+$twitter-blue: #00a0d1;
+
+// Element Heights;
+$footer-height: $double-vertical;

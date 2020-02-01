@@ -1,0 +1,80 @@
+{% include 'overall_header.html' %}
+
+<h1>{{ lang('ACP_TSN_TITLE') }}</h1>
+
+{% if S_ERROR %}
+<div class="errorbox">
+    <h3>{{ lang('WARNING') }}</h3>
+    <p>{{ ERROR_MSG }}</p>
+</div>
+{% endif %}
+
+<form id="tsn_tsn_acp" name="tsn_tsn_acp" method="post" action="{{ U_ACTION }}">
+<fieldset>
+    <legend>{{ ACP_TSN_PLUGIN }}</legend>
+    <dl>
+        <dt><label>{{ lang('ACP_TSN_ENABLE_EXTENSION') ~ lang('COLON') }}</label></dt>
+        <dd><label><input class="radio" name="tsn_enable_extension" type="radio" value="1" {% if ACP_TSN_ENABLE_EXTENSION %}checked="checked" {% endif %}/> {{ lang('YES') }}</label>
+            <input class="radio" name="tsn_enable_extension" type="radio" value="0" {% if not ACP_TSN_ENABLE_EXTENSION %}checked="checked" {% endif %}/> {{ lang('NO') }}
+        </dd>
+    </dl>
+</fieldset>
+    <fieldset>
+        <legend>{{ lang('ACP_TSN_MYSPOT_SETTINGS') }}</legend>
+
+        <dl>
+            <dt><label>{{ lang('ACP_TSN_ENABLE_MYSPOT') ~ lang('COLON') }}</label></dt>
+            <dd><input class="radio" name="tsn_enable_myspot" type="radio" value="1" {% if ACP_TSN_ENABLE_MYSPOT %}checked="checked" {% endif %}/> {{ lang('YES') }} &nbsp;
+                <input class="radio" name="tsn_enable_myspot" type="radio" value="0" {% if not ACP_TSN_ENABLE_MYSPOT %}checked="checked" {% endif %}/> {{ lang('NO') }}
+            </dd>
+        </dl>
+        <dl>
+            <dt><label>{{ lang('ACP_TSN_ENABLE_MINI_PROFILE') ~ lang('COLON') }}</label></dt>
+            <dd><input class="radio" name="tsn_enable_miniprofile" type="radio" value="1" {% if ACP_TSN_ENABLE_MINIPROFILE %}checked="checked" {% endif %}/> {{ lang('YES') }} &nbsp;
+                <input class="radio" name="tsn_enable_miniprofile" type="radio" value="0" {% if not ACP_TSN_ENABLE_MINIPROFILE %}checked="checked" {% endif %}/> {{ lang('NO') }}
+            </dd>
+        </dl>
+        <dl>
+            <dt><label>{{ lang('ACP_TSN_ENABLE_MINI_FORUMS') ~ lang('COLON') }}</label></dt>
+            <dd><input class="radio" name="tsn_enable_miniforums" type="radio" value="1" {% if ACP_TSN_ENABLE_MINIFORUMS %}checked="checked" {% endif %}/> {{ lang('YES') }} &nbsp;
+                <input class="radio" name="tsn_enable_miniforums" type="radio" value="0" {% if not ACP_TSN_ENABLE_MINIFORUMS %}checked="checked" {% endif %}/> {{ lang('NO') }}
+            </dd>
+        </dl>
+        <dl>
+            <dt><label>{{ lang('ACP_TSN_ENABLE_NEW_POSTS') ~ lang('COLON') }}</label></dt>
+            <dd><input class="radio" name="tsn_enable_newposts" type="radio" value="1" {% if ACP_TSN_ENABLE_NEWPOSTS %}checked="checked" {% endif %}/> {{ lang('YES') }} &nbsp;
+                <input class="radio" name="tsn_enable_newposts" type="radio" value="0" {% if not ACP_TSN_ENABLE_NEWPOSTS %}checked="checked" {% endif %}/> {{ lang('NO') }}
+            </dd>
+        </dl>
+    </fieldset>
+    <fieldset>
+        <legend>{{ lang('ACP_TSN_MYSPOT_SPECIAL_REPORT_SETTINGS') }}</legend>
+		<dl>
+			<dt><label>{{ lang('ACP_TSN_ENABLE_SPECIAL_REPORT') ~ lang('COLON') }}</label></dt>
+			<dd><input class="radio" name="tsn_enable_specialreport" type="radio" value="1" {% if ACP_TSN_ENABLE_SPECIALREPORT %}checked="checked" {% endif %}/> {{ lang('YES') }} &nbsp;
+				<input class="radio" name="tsn_enable_specialreport" type="radio" value="0" {% if not ACP_TSN_ENABLE_SPECIALREPORT %}checked="checked" {% endif %}/> {{ lang('NO') }}
+			</dd>
+		</dl>
+        <dl>
+            <dt><label>{{ lang('ACP_TSN_SPECIAL_REPORT_FORUM_ID') ~ lang('COLON') }}</label></dt>
+            <dd>
+                <input class="text" name="tsn_specialreport_forumid" type="number" value="{{ V_ACP_TSN_SPECIALREPORT_FORUMID }}">
+            </dd>
+        </dl>
+        <dl>
+            <dt><label>{{ lang('ACP_TSN_SPECIAL_REPORT_EXCERPT_WORDS') ~ lang('COLON') }}</label></dt>
+            <dd>
+                <input class="text" name="tsn_specialreport_excerpt_words" type="number" value="{{ V_ACP_TSN_SPECIALREPORT_WORDCOUNT }}">
+            </dd>
+        </dl>
+    </fieldset>
+
+    <fieldset class="submit-buttons">
+        <input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}"/>&nbsp;
+        <input class="button2" type="submit" id="preview" name="preview" value="{{ lang('PREVIEW') }}"/>
+        {{ S_FORM_TOKEN }}
+    </fieldset>
+
+</form>
+
+{% include 'overall_footer.html' %}

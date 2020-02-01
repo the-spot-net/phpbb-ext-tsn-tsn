@@ -1,0 +1,45 @@
+tsn_tsn_index:
+    pattern: /tsn
+    defaults: { _controller: tsn.tsn.controller.main:doIndex }
+
+tsn_tsn_login:
+    pattern: /tsn/login
+    defaults: { _controller: tsn.tsn.controller.main:doLogin }
+
+tsn_tsn_ajax:
+    pattern: /tsn/ajax/{route}
+    defaults: { _controller: tsn.tsn.controller.ajax:doIndex, route: "index" }
+
+tsn_tsn_forum:
+    pattern: /tsn/forum/{id}
+    defaults: { _controller: tsn.tsn.controller.forum:doIndex }
+    requirements:
+        id: \d+
+
+tsn_tsn_post:
+    pattern: /tsn/post/{id}
+    # defaults: { _controller: tsn.tsn.controller.post:viewTopicPost }
+    defaults: { _controller: tsn.tsn.controller.post:doIndex }
+    requirements:
+        id: \d+
+
+tsn_tsn_topic:
+    pattern: /tsn/topic/{id}
+    # defaults: { _controller: tsn.tsn.controller.topic:viewTopic }
+    defaults: { _controller: tsn.tsn.controller.topic:doIndex }
+    requirements:
+        id: \d+
+
+tsn_tsn_user:
+    pattern: /tsn/user/{id}
+    #    defaults: { _controller: tsn.tsn.controller.user:viewProfile }
+    defaults: { _controller: tsn.tsn.controller.main:doIndex }
+    requirements:
+        id: \d+
+
+tsn_tsn_member:
+    pattern: /tsn/member/{id}
+    #    defaults: { _controller: tsn.tsn.controller.member:viewMember }
+    defaults: { _controller: tsn.tsn.controller.main:doIndex }
+    requirements:
+        id: \d+

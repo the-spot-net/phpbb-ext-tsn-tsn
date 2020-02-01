@@ -1,0 +1,5 @@
+{% for _svg in svg %}
+    <svg xmlns="http://www.w3.org/2000/svg" class="{{ _svg.T_CLASSES }}" data-js="{{ _svg.T_JS_SELECTORS }}" {{ _svg.T_JS_DATA }}>
+        <use xlink:href="#{{ _svg.T_ELEMENT_ID }}"/>
+    </svg>
+{% endfor %}

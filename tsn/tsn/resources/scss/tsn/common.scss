@@ -1,0 +1,145 @@
+.tsn-content-area {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: $xlarge-desktop-min;
+}
+
+.avatar {
+  // All avatars are now rounded
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.mdc-card,
+.mdc-card--outlined {
+  &.tsn-card {
+    &.unread {
+      border-left: rem-calc(3) solid $mdc-theme-secondary;
+    }
+  }
+
+  // Give Stat Cards a rounded top-right corner
+  &.tsn-card--stat {
+    @include mdc-card-shape-radius(0 $full-side 0 0, false);
+  }
+}
+
+// Handle Forum/User Images in the navigation drawer
+.mdc-drawer {
+  .mdc-drawer__header {
+    padding-top: $full-vertical;
+
+    .tsn-image--drawer-header-logo,
+    .avatar {
+      width: $triple-side;
+      height: $triple-vertical;
+    }
+  }
+
+  .tsn-image--navigation {
+    min-width: $double-side;
+    height: $double-vertical;
+  }
+}
+
+// User Avatar in a Chip leading icon role
+.mdc-chip {
+  .avatar {
+    @extend .mdc-chip__icon;
+    @extend .mdc-chip__icon--leading;
+  }
+}
+
+.mdc-fab {
+
+  &.tsn-fab--absolute {
+    position: fixed;
+    bottom: rem-calc($triple-vertical + 1rem);
+    right: 1rem;
+  }
+
+  @media #{$mq-tablet-min} {
+    &.tsn-fab--absolute {
+      bottom: rem-calc($double-vertical + 1.5rem);
+      right: 1.5rem;
+    }
+  }
+
+  .second-icon,
+  .first-icon {
+    left: 0;
+    margin-left: 16px;
+    margin-top: 16px;
+    position: absolute;
+    top: 0;
+    -webkit-transition: all .2s cubic-bezier(.4, 0, .2, 1);
+    transition: all .2s cubic-bezier(.4, 0, .2, 1);
+  }
+
+  .second-icon,
+  &:hover .first-icon {
+    opacity: 0;
+    -webkit-transform: rotate(225deg);
+    transform: rotate(225deg);
+  }
+
+  &:hover .second-icon {
+    opacity: 1;
+    visibility: visible;
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.tsn-mimic-container {
+  position: absolute;
+  overflow: hidden;
+  @include transition-default();
+
+  &.tsn-mimic-container__is-active {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    @include transition-default();
+
+    & ~ main {
+      opacity: 0;
+      overflow: hidden;
+      @include transition-default();
+    }
+  }
+
+  &.tsn-mimic-container__is-ready {
+    overflow-y: auto;
+
+    & ~ main {
+      display: none;
+    }
+  }
+
+  .tsn-mimic-card {
+    position: absolute;
+    @include transition-default();
+
+    // Using Important to override all the on-element styles while active
+    &.tsn-mimic-card__is-active {
+      // Put it below the header
+      top: calc(#{$mdc-top-app-bar-row-height} + #{$full-vertical}) !important;
+
+      // Horizontally center, without swinging left/right with 0px values
+      left: 50% !important;
+      transform: translateX(-50%);
+      margin-left: auto;
+      margin-right: auto;
+
+      // As much height is required, but keep the width in the normal space or as a card when smaller
+      height: auto !important;
+      width: 100vw !important;
+      max-width: $xlarge-desktop-min;
+
+      @include mdc-elevation(8);
+      @include transition(.5s);
+    }
+  }
+}

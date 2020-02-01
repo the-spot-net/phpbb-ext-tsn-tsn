@@ -1,0 +1,9 @@
+{#
+    This template spools up a page of Topic Cards for the MySpot Feed
+    This template requires a `topics` blockvar to iterate over
+#}
+{% if topics %}
+    {% for topic in topics %}
+        {% include '@tsn_tsn/partials/tsn_topic_card.html' %}
+    {% endfor %}
+{% endif %}

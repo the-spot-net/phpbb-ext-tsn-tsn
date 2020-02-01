@@ -1,0 +1,87 @@
+// Material Design color variables
+
+// Primary Color Gradient
+$mdc-theme-primary-900: rgba(0, 35, 79, 1); // #00234f
+$mdc-theme-primary-800: rgba(0, 51, 102, 1); // #003366
+$mdc-theme-primary-700: rgba(8, 60, 114, 1); // #083c72
+$mdc-theme-primary-600: rgba(21, 69, 125, 1); // #15457D
+$mdc-theme-primary-500: rgba(29, 77, 134, 1); // #1d4d86
+$mdc-theme-primary-400: rgba(69, 101, 149, 1); // #456595
+$mdc-theme-primary-300: rgba(103, 128, 166, 1); // #6780a6
+$mdc-theme-primary-200: rgba(145, 163, 191, 1); // #91a3bf
+$mdc-theme-primary-100: rgba(188, 199, 217, 1); // #bcc7d9
+$mdc-theme-primary-50: rgba(229, 233, 239, 1); // #e5e9ef
+
+// Secondary Color Gradient
+$mdc-theme-secondary-900: rgba(245, 127, 23, 1); // #f57f17
+$mdc-theme-secondary-800: rgba(249, 168, 37, 1); // #F9A825
+$mdc-theme-secondary-700: rgba(251, 192, 45, 1); // #FBC02D
+$mdc-theme-secondary-600: rgba(253, 216, 53, 1); // #FDD835
+$mdc-theme-secondary-500: rgba(255, 235, 59, 1); // #FFEB3B
+$mdc-theme-secondary-400: rgba(255, 238, 88, 1); // #FFEE58
+$mdc-theme-secondary-300: rgba(255, 241, 118, 1); // #FFF176
+$mdc-theme-secondary-200: rgba(255, 245, 157, 1); // #FFF59D
+$mdc-theme-secondary-100: rgba(255, 249, 196, 1); // #FFF9C4
+$mdc-theme-secondary-50: rgba(255, 253, 231, 1); // #FFFDE7
+
+$mdc-theme-primary: $mdc-theme-primary-800;
+$mdc-theme-secondary: $mdc-theme-secondary-700;
+$mdc-theme-surface: #f5f5f5;
+$mdc-theme-background: #e1e1e1;
+
+$mdc-theme-on-primary: $white;
+$mdc-theme-on-secondary: $black;
+$mdc-theme-on-surface: $black;
+
+// Set the font family global override variable
+$mdc-typography-font-family: unquote("Lato, Helvetica, sans-serif");
+
+// Use variables instead of hard-coded values
+$mdc-layout-grid-breakpoints: (
+        desktop: $desktop-min,
+        tablet: $tablet-min,
+        phone: $phone-min,
+);
+
+$mdc-layout-grid-default-column-span: 1; // 4;
+
+// Import the Material Design component styles
+@import "~@material/animation/variables";
+@import "~@material/animation/functions";
+@import "~@material/button/mdc-button";
+@import "~@material/button/mixins";
+@import "~@material/card/mdc-card";
+@import "~@material/checkbox/mdc-checkbox";
+@import "~@material/chips/mdc-chips";
+@import "~@material/dialog/mdc-dialog";
+@import "~@material/drawer/mdc-drawer";
+@import "~@material/elevation/mdc-elevation";
+@import "~@material/fab/mdc-fab";
+@import "~@material/floating-label/mdc-floating-label";
+@import "~@material/form-field/mdc-form-field";
+@import "~@material/icon-button/mdc-icon-button";
+@import "~@material/layout-grid/mdc-layout-grid";
+@import "~@material/line-ripple/mdc-line-ripple";
+@import "~@material/list/mdc-list";
+@import "~@material/menu-surface/mdc-menu-surface";
+@import "~@material/menu/mdc-menu";
+@import "~@material/notched-outline/mdc-notched-outline";
+@import "~@material/radio/mdc-radio";
+@import "~@material/select/mdc-select";
+@import "~@material/select/helper-text/mdc-select-helper-text";
+@import "~@material/select/icon/mdc-select-icon";
+@import "~@material/shape/mixins";
+@import "~@material/shape/functions";
+@import "~@material/snackbar/mdc-snackbar";
+@import "~@material/switch/mdc-switch";
+@import "~@material/tab-bar/mdc-tab-bar";
+@import "~@material/tab-scroller/mdc-tab-scroller";
+@import "~@material/tab-indicator/mdc-tab-indicator";
+@import "~@material/tab/mdc-tab";
+@import "~@material/textfield/mdc-text-field";
+@import "~@material/textfield/character-counter/mdc-text-field-character-counter";
+@import "~@material/textfield/helper-text/mdc-text-field-helper-text";
+@import "~@material/textfield/icon/mdc-text-field-icon";
+@import "~@material/top-app-bar/mdc-top-app-bar";
+@import "~@material/touch-target/mdc-touch-target";
+@import "~@material/typography/mdc-typography";

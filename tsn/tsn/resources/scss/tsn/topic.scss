@@ -1,10 +1,12 @@
+@use "@material/elevation";
+
 .tsn-card--topic {
   position: relative;
   cursor: pointer;
   @include transition-default();
 
   &:hover {
-    @extend .mdc-elevation--z4;
+    @include elevation.elevation(4);
     @include transition-default();
   }
 

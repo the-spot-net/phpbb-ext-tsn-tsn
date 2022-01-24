@@ -1,3 +1,8 @@
+@use "@material/card";
+@use "@material/chips";
+@use "@material/elevation";
+@use "@material/tab-scroller";
+
 .tsn-content-area {
   margin-left: auto;
   margin-right: auto;
@@ -20,7 +25,7 @@
 
   // Give Stat Cards a rounded top-right corner
   &.tsn-card--stat {
-    @include mdc-card-shape-radius(0 $full-side 0 0, false);
+    @include card.shape-radius(0 $full-side 0 0, false);
   }
 }
 
@@ -45,8 +50,12 @@
 // User Avatar in a Chip leading icon role
 .mdc-chip {
   .avatar {
-    @extend .mdc-chip__icon;
-    @extend .mdc-chip__icon--leading;
+    // Old style extensions
+    //@extend .mdc-chip__icon;
+    //@extend .mdc-chip__icon--leading;
+    // Probable new style extensions = but they don't import
+    //@extend .mdc-evolution-chip__icon;
+    //@extend .mdc-evolution-chip--with-primary-icon;
   }
 }
 
@@ -125,7 +134,7 @@
     // Using Important to override all the on-element styles while active
     &.tsn-mimic-card__is-active {
       // Put it below the header
-      top: calc(#{$mdc-top-app-bar-row-height} + #{$full-vertical}) !important;
+      top: calc(#{$appbar-height} + #{$full-vertical}) !important;
 
       // Horizontally center, without swinging left/right with 0px values
       left: 50% !important;
@@ -138,8 +147,8 @@
       width: 100vw !important;
       max-width: $xlarge-desktop-min;
 
-      @include mdc-elevation(8);
-      @include transition(.5s);
+      @include elevation.elevation(8);
+      @include tab-scroller.transition(.5s);
     }
   }
 }

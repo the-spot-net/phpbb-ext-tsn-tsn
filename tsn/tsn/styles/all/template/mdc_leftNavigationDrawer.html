@@ -1,3 +1,4 @@
+<!-- @formatter:off -->
 <aside class="mdc-drawer mdc-drawer--modal mdc-top-app-bar--fixed-adjust mdc-theme--surface mdc-theme--on-surface">
     <div class="mdc-drawer__header">
         {% if S_USER_LOGGED_IN %}
@@ -5,7 +6,7 @@
             <h6 class="mdc-drawer__title mdc-typography--headline6">{{ CURRENT_USERNAME_FULL }}</h6>
             <span class="mdc-drawer__subtitle mdc-typography--body2">{% if RANK_TITLE %}{{ RANK_TITLE }}{% endif %}</span>
         {% else %}
-            <img alt="site logo" class="tsn-image--drawer-header-logo" src="{{ T_EXT_PATH }}/images/tsn-13.png">
+            <img alt="site logo" class="tsn-image--drawer-header-logo" src="{{ T_EXT_PATH }}/images/tsn9-trans.png">
             <h6 class="mdc-drawer__title mdc-typography--headline6">{{ lang('WELCOME_VISITOR') }}</h6>
             <p class="mdc-drawer__subtitle mdc-typography--body2">{{ lang('JOIN_THE_DISCUSSION') }}</p>
             <div>
@@ -26,31 +27,36 @@
             </div>
         {% endif %}
     </div>
-    <hr class="mdc-list-divider">
-    <nav class="mdc-drawer__content">
-        <div class="mdc-list">
-            <a aria-current="page" class="mdc-list-item mdc-list-item--activated" href="{{ U_TSN_INDEX }}">
-                <i aria-hidden="true" class="material-icons mdc-list-item__graphic">home</i>
-                <span class="mdc-list-item__text">My Spot</span>
+    <hr class="mdc-deprecated-list-divider">
+    <div class="mdc-drawer__content">
+        <div class="mdc-deprecated-list mdc-deprecated-list--icon-list">
+            <a aria-current="page" class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="{{ U_TSN_INDEX }}">
+                <span class="mdc-deprecated-list-item__ripple"></span>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">home</i>
+                <span class="mdc-deprecated-list-item__text">My Spot</span>
             </a>
         </div>
-        <div class="mdc-list">
-            <div class="mdc-list-group">
+        <div class="mdc-deprecated-list mdc-deprecated-list--icon-list">
+            <div class="mdc-deprecated-list-group">
                 {% for row in forumrow %}
                     {% if row.S_IS_CAT %}
-                        <hr class="mdc-list-divider">
-                        <h6 class="mdc-list-group__subheader">{{ row.FORUM_NAME }}</h6>
+                        <hr class="mdc-deprecated-list-divider">
+                        <h6 class="mdc-deprecated-list-group__subheader">{{ row.FORUM_NAME }}</h6>
                     {% elseif row.S_IS_LINK %}
-                        <a class="mdc-list-item" href="{{ row.U_VIEWFORUM }}" target="_blank">
-                            {% if row.FORUM_IMAGE_SRC %}<img alt="{{ row.FORUM_FOLDER_IMG_ALT }}" class="mdc-list-item__graphic tsn-image--navigation" src="{{ row.FORUM_IMAGE_SRC }}"/>{% endif %}
-                            <span class="mdc-list-item__text">{{ row.FORUM_NAME }}</span>
-                            <i aria-hidden="true" class="material-icons mdc-list-item__meta">open_in_new</i>
+                        <a class="mdc-deprecated-list-item " href="{{ row.U_VIEWFORUM }}" target="_blank">
+                            {% if row.FORUM_IMAGE_SRC %}<img alt="{{ row.FORUM_FOLDER_IMG_ALT }}" class="mdc-deprecated-list-item__graphic tsn-image--navigation" src="{{ row.FORUM_IMAGE_SRC }}"/>{% endif %}
+                            <span class="mdc-deprecated-list-item__text">{{ row.FORUM_NAME }}</span>
+                            <i aria-hidden="true" class="material-icons mdc-deprecated-list-item__meta">open_in_new</i>
                         </a>
                     {% else %}
-                        {% if row.S_NO_CAT %}{{ lang('FORUMS') }}{% endif %}
-                        <a class="mdc-list-item" href="{{ row.U_VIEWFORUM }}">
-                            <i aria-hidden="true" class="material-icons mdc-list-item__graphic">{% if row.S_UNREAD_FORUM %}fiber_new{% endif %}</i>
-                            <span class="mdc-list-item__text">{{ row.FORUM_NAME }}</span>
+                        {% if row.S_NO_CAT %}
+                            <hr class="mdc-deprecated-list-divider">
+                            <h6 class="mdc-deprecated-list-group__subheader">{{ lang('FORUMS') }}</h6>
+                        {% endif %}
+                        <a class="mdc-deprecated-list-item mdc-deprecated-list-item--with-leading-icon" href="{{ row.U_VIEWFORUM }}">
+                            <span class="mdc-deprecated-list-item__ripple"></span>
+                            <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">{% if row.S_UNREAD_FORUM %}fiber_new{% endif %}</i>
+                            <span class="mdc-deprecated-list-item__text">{{ row.FORUM_NAME }}</span>
                         </a>
                     {% endif %}
                 {% else %}
@@ -58,6 +64,7 @@
                 {% endfor %}
             </div>
         </div>
-    </nav>
+    </div>
 </aside>
 <div class="mdc-drawer-scrim"></div>
+<!-- @formatter:on -->

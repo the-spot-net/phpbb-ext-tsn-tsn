@@ -1,3 +1,7 @@
+@use "@material/drawer";
+@use "@material/list";
+@use "@material/card";
+
 // Styles for the Top App Bar
 .mdc-top-app-bar {
   z-index: 7;
@@ -5,14 +9,14 @@
 
 // Styles for the left drawer
 .mdc-drawer {
-  @include mdc-drawer-divider-color($mdc-theme-primary);
-  @include mdc-drawer-surface-fill-color($white);
+  @include drawer.divider-color($mdc-theme-primary);
+  @include drawer.surface-fill-color($white);
 }
 
 // Styles for the Cards
 .mdc-card,
 .mdc-card--outlined {
-  @include mdc-card-fill-color($white);
+  @include card.fill-color($white);
   padding: $full-vertical $full-side;
   margin-top: $half-vertical;
   margin-bottom: $half-vertical;

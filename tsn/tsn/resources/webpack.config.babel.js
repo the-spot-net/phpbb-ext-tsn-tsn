@@ -1,7 +1,9 @@
 const glob = require('glob');
 const path = require('path');
-const webpack = require('webpack');
+const ESLintWebpackPlugin = require('eslint-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const sass = require('sass');
+const webpack = require('webpack');
 
 // Directory Variables
 const directories = {
@@ -31,24 +33,28 @@ const files = {
 };
 
 module.exports = function (env = {}) {
-  const { development } = env;
-  const isDev = development === true;
+  const isDev = env.MODE === 'development';
 
-  return {
-    // Strip out the empty ones
-    entry: [Object.keys(files).forEach((key) => (files[key].length === 0) && delete files[key]), files][1],
-    mode: (isDev) ? 'development' : 'production',
+  // Strip out the empty ones
+  Object.keys(files)
+    .forEach((key) => (files[key].length === 0) && delete files[key]);
+
+  const config = {
+    entry: files,
+    mode: 'production',
     module: {
       rules: [
         {
-          test: /\.s[ac]ss$/,
+          test: /\.(sa|sc|c)ss$/,
           use: [
             MiniCssExtractPlugin.loader,
-            'css-loader',
-            'sass-loader',
+            { loader: 'css-loader' },
             {
               loader: 'sass-loader',
               options: {
+                implementation: sass,
+                // See https://github.com/webpack-contrib/sass-loader/issues/804
+                // webpackImporter: false,
                 sassOptions: {
                   includePaths: glob.sync('node_modules').map((d) => path.join(__dirname, d))
                 }
@@ -57,28 +63,35 @@ module.exports = function (env = {}) {
           ]
         },
         {
+          /** @note Consider doing more of the examples here https://webpack.js.org/guides/asset-modules/ */
           test: /\.(jpg|gif|jpeg|png|woff(2)?|eot|ttf|svg)(\?[\w=.]+)?$/,
-          loader: 'url-loader',
-          options: {
-            limit: 100000
-          }
+          dependency: { not: ['url'] },
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 100000
+              }
+            }
+          ],
+          type: 'javascript/auto'
         },
+        // {
+        //   test: require.resolve('jquery'),
+        //   loader: 'expose-loader',
+        //   options: {
+        //     exposes: ['$', 'jQuery']
+        //   }
+        // },
         {
-          // Lint-check the javascript
-          test: /\.js$/,
-          enforce: 'pre',
-          loader: 'eslint-loader',
-          exclude: directories.js_lint_exclusions,
-          options: {
-            emitWarning: true,
-            fix: true
-          }
-        },
-        {
-          // Compile the javascript
           test: /\.js$/,
           loader: 'babel-loader',
           exclude: directories.js_compile_exclusions
+          // },
+          // // Bring in modernizr - this is not part of package.json anymore, possibly not even needed without IE11 support
+          // {
+          //   loader: 'webpack-modernizr-loader',
+          //   test: /\.modernizrrc\.js$/
         }
       ]
     },
@@ -88,6 +101,12 @@ module.exports = function (env = {}) {
     },
     performance: { hints: false },
     plugins: [
+      // Lint-check the javascript
+      new ESLintWebpackPlugin({
+        exclude: directories.js_lint_exclusions,
+        emitWarning: true,
+        fix: true
+      }),
       new webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery'
@@ -99,7 +118,6 @@ module.exports = function (env = {}) {
     stats: {
       all: false,
       modules: true,
-      maxModules: 0,
       errors: true,
       warnings: true,
       moduleTrace: true,
@@ -107,9 +125,11 @@ module.exports = function (env = {}) {
       builtAt: true,
       timings: true
     },
-    watch: isDev,
+    watch: isDev, // Despite what webpack says, this is still needed.
     watchOptions: {
       ignored: directories.watchIgnore
     }
   };
+
+  return config;
 };

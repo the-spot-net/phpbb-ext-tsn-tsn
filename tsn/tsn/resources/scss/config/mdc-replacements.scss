@@ -1,3 +1,5 @@
+@use "@material/typography";
+
 /*
  * Material Tooltips (NYI in Web repo)
  */
@@ -7,7 +9,7 @@
   }
 
   &:before {
-    @extend .mdc-typography--caption;
+    @include typography.typography('caption');
 
     content: attr(data-md-tooltip);
     text-transform: initial;

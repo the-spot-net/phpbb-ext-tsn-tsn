@@ -11,6 +11,8 @@
     .mdc-card__media-content {
       top: unset;
       padding: $full-vertical $full-side;
+      text-shadow: 0 0 5px #222;
+      background-color: rgba($mdc-theme-primary, 0.6);
     }
   }
 }

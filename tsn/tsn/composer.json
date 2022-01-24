@@ -25,6 +25,11 @@
         }
     },
     "require-dev": {
-        "phing/phing": "2.4.*"
+        "phing/phing": "^2.4.14"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
     }
 }

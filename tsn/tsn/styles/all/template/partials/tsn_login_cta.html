@@ -1,10 +1,10 @@
 {# If the user isn't logged in, inject this card somehwere for a Login CTA #}
 {% if not S_USER_LOGGED_IN %}
     <div class="mdc-card tsn-card tsn-card--login-cta">
-        <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{{ T_EXT_PATH }}/images/tsn-13.png');">
+        <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{{ T_EXT_PATH }}/images/tsn9.png');">
             <div class="mdc-card__media-content">
                 <h4 class="mdc-typography--headline4">{{ lang('WELCOME_VISITOR') }}</h4>
-                <span class="mdc-typography--body2">{{ lang('JOIN_THE_DISCUSSION') }}</span>
+                <span class="mdc-typography--body1">{{ lang('JOIN_THE_DISCUSSION') }}</span>
             </div>
         </div>
         <div class="mdc-card__actions">
